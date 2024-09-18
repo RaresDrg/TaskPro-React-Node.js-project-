@@ -180,6 +180,8 @@ async function updateUserProfile(req, res, next) {
     let result = await usersService.updateUser(userId, updates);
 
     if (req.file) {
+      throw error("cacanescu");
+
       req.file.id = userId;
       req.file.owner = name.toUpperCase();
 

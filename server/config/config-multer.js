@@ -1,17 +1,7 @@
 import multer from "multer";
 import path from "path";
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "/public");
-  },
-  filename: (req, file, cb) => {
-    const fileExtension = path.extname(file.originalname);
-    const fileUniqueName = `${req.user.id}${fileExtension}`;
-
-    cb(null, fileUniqueName);
-  },
-});
+const storage = multer.memoryStorage();
 
 const filterProfilePhoto = (req, file, cb) => {
   const fileExtension = path.extname(file.originalname);
