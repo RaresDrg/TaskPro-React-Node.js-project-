@@ -1,11 +1,21 @@
 import multer from "multer";
 import path from "path";
+import fs from "fs/promises";
 
-const profilePhotoUploadDir = path.join(process.cwd(), "public/profile-photos");
+const publicDir = path.join(process.cwd(), "public");
+await checkFolder(publicDir);
+
+async function checkFolder(folderPath) {
+  try {
+    await fs.access(folderPath);
+  } catch (error) {
+    await fs.mkdir(folderPath);
+  }
+}
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, profilePhotoUploadDir);
+    cb(null, publicDir);
   },
   filename: (req, file, cb) => {
     const fileExtension = path.extname(file.originalname);

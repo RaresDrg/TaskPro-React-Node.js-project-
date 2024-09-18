@@ -165,8 +165,6 @@ async function updateUserProfile(req, res, next) {
     const { name, email, password } = req.body;
     const hasAllRequiredFields = name && email && password;
 
-    throw Error("NUU");
-
     if (!hasAllRequiredFields) {
       res.status(400).json({
         status: "failed",
