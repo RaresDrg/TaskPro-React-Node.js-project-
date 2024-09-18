@@ -31,6 +31,7 @@ const filterProfilePhoto = (req, file, cb) => {
 
 const validateUploadedPhoto = multer({
   // storage: storage,
+  dest: { dest: "./public" },
   limits: { fileSize: 5000000 },
   fileFilter: filterProfilePhoto,
 }).single("profilePhoto");
