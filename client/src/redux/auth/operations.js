@@ -2,7 +2,8 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 // todo: => verccel
-axios.defaults.baseURL = "http://localhost:3000";
+// axios.defaults.baseURL = "http://localhost:3000";
+axios.defaults.baseURL = "https://taskproserver.vercel.app";
 
 // todo: => verificat timpul de intarziere de la login, register, logout.
 
