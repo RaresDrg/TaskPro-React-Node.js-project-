@@ -1,7 +1,7 @@
 import usersService from "../service/usersService.js";
 import utils from "../utils/utils.js";
 import uploadOnCloudinary from "../config/config-cloudinary.js";
-import fs from "fs/promises";
+// import fs from "fs/promises";
 
 async function register(req, res, next) {
   try {

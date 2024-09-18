@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs/promises";
 
 const publicDir = path.join(process.cwd(), "public");
-await checkFolder(publicDir);
+checkFolder(publicDir);
 
 async function checkFolder(folderPath) {
   try {
