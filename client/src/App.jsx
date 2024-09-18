@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { Suspense, lazy, useEffect } from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useDispatch } from "react-redux";
 import { refreshUser } from "./redux/auth/operations";
@@ -32,7 +32,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(refreshUser());
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

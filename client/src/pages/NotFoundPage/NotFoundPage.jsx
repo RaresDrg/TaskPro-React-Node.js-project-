@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import useAuth from "../../hooks/useAuth";
 import notFoundBgVideo from "../../assets/video/notFoundBgVideo.mp4";
 import UseAnimations from "react-useanimations";

@@ -31,7 +31,7 @@ const BurgerMenu = ({ className: styles }) => {
       document.removeEventListener("mousedown", handleClose);
       document.body.style.overflow = "auto";
     };
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className={styles} ref={burgerMenuRef}>
