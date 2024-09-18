@@ -14,9 +14,9 @@ async function checkFolder(folderPath) {
 }
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, publicDir);
-  },
+  // destination: (req, file, cb) => {
+  //   cb(null, publicDir);
+  // },
   filename: (req, file, cb) => {
     const fileExtension = path.extname(file.originalname);
     const fileUniqueName = `${req.user.id}${fileExtension}`;
