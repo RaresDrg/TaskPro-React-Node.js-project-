@@ -14,14 +14,10 @@ import fs from "fs/promises";
 // }
 
 const storage = multer.diskStorage({
-  destination: async (req, file, cb) => {
+  destination: (req, file, cb) => {
     const publicDir = path.join(process.cwd(), "public");
 
-    try {
-      await fs.access(publicDir);
-    } catch (error) {
-      await fs.mkdir(publicDir);
-    }
+    fs.mkdir(publicDir);
 
     cb(null, publicDir);
   },
