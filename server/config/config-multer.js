@@ -1,17 +1,17 @@
 import multer from "multer";
 import path from "path";
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, publicDir);
-//   },
-//   filename: (req, file, cb) => {
-//     const fileExtension = path.extname(file.originalname);
-//     const fileUniqueName = `${req.user.id}${fileExtension}`;
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./public");
+  },
+  filename: (req, file, cb) => {
+    const fileExtension = path.extname(file.originalname);
+    const fileUniqueName = `${req.user.id}${fileExtension}`;
 
-//     cb(null, fileUniqueName);
-//   },
-// });
+    cb(null, fileUniqueName);
+  },
+});
 
 const filterProfilePhoto = (req, file, cb) => {
   const fileExtension = path.extname(file.originalname);
@@ -30,8 +30,7 @@ const filterProfilePhoto = (req, file, cb) => {
 };
 
 const validateUploadedPhoto = multer({
-  // storage: storage,
-  dest: { dest: "./public" },
+  storage: storage,
   limits: { fileSize: 5000000 },
   fileFilter: filterProfilePhoto,
 }).single("profilePhoto");
