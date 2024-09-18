@@ -186,7 +186,7 @@ async function updateUserProfile(req, res, next) {
       updates.profilePhotoUrl = await uploadOnCloudinary(req.file);
       result = await usersService.updateUser(userId, updates);
 
-      await fs.unlink(req.file.path);
+      // await fs.unlink(req.file.path);
     }
 
     res.status(200).json({
