@@ -1,24 +1,13 @@
 import multer from "multer";
 import path from "path";
-import fs from "fs/promises";
+import fs from "fs";
 
-// const publicDir = path.join(process.cwd(), "public");
-// checkFolder(publicDir);
+const publicDir = path.join(process.cwd(), "public");
 
-// async function checkFolder(folderPath) {
-//   try {
-//     await fs.access(folderPath);
-//   } catch (error) {
-//     await fs.mkdir(folderPath);
-//   }
-// }
+fs.mkdirSync(publicDir);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const publicDir = path.join(process.cwd(), "public");
-
-    fs.mkdir(publicDir);
-
     cb(null, publicDir);
   },
   filename: (req, file, cb) => {
