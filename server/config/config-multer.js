@@ -14,7 +14,9 @@ import path from "path";
 // }
 
 const storage = multer.diskStorage({
-  destination: "/public",
+  destination: (req, file, cb) => {
+    cb(null, "./public");
+  },
   filename: (req, file, cb) => {
     const fileExtension = path.extname(file.originalname);
     const fileUniqueName = `${req.user.id}${fileExtension}`;
