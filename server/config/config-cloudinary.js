@@ -3,7 +3,7 @@ import { configDotenv } from "dotenv";
 
 configDotenv({ path: "../environment/.env" });
 
-const uploadOnCloudinary = async (file) => {
+const uploadOnCloudinary = async (file, fileId, fileName) => {
   try {
     cloudinary.config({
       cloud_name: process.env.CLOUD_NAME,
@@ -11,15 +11,31 @@ const uploadOnCloudinary = async (file) => {
       api_secret: process.env.API_SECRET,
     });
 
-    const result = await cloudinary.uploader.upload(file.path, {
-      resource_type: "image",
-      public_id: file.id,
-      display_name: file.owner,
+    const uploadResult = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          // asset_folder: "upload_profile",
+          resource_type: "image",
+          public_id: fileId,
+          display_name: fileName,
+        },
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+
+      uploadStream.end(file.buffer);
     });
 
-    return result.secure_url;
+    console.log(uploadResult);
+
+    return uploadResult.secure_url;
   } catch (error) {
-    console.log("cacat");
+    return error;
   }
 };
 

@@ -1,7 +1,6 @@
 import usersService from "../service/usersService.js";
 import utils from "../utils/utils.js";
 import uploadOnCloudinary from "../config/config-cloudinary.js";
-// import fs from "fs/promises";
 
 async function register(req, res, next) {
   try {
@@ -180,15 +179,12 @@ async function updateUserProfile(req, res, next) {
     let result = await usersService.updateUser(userId, updates);
 
     if (req.file) {
-      throw error("cacanescu dorian");
-
-      req.file.id = userId;
-      req.file.owner = name.toUpperCase();
-
-      updates.profilePhotoUrl = await uploadOnCloudinary(req.file);
+      updates.profilePhotoUrl = await uploadOnCloudinary(
+        req.file,
+        userId,
+        name
+      );
       result = await usersService.updateUser(userId, updates);
-
-      // await fs.unlink(req.file.path);
     }
 
     res.status(200).json({
