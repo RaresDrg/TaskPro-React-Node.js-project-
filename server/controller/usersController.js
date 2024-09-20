@@ -184,6 +184,7 @@ async function updateUserProfile(req, res, next) {
         userId,
         name
       );
+
       result = await usersService.updateUser(userId, updates);
     }
 

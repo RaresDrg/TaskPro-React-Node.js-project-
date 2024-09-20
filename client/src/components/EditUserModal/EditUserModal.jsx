@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../redux/auth/operations";
-import { toggleEditUserModal } from "../../redux/modals/slice";
+import { openEditUserModal } from "../../redux/modals/slice";
 import { toast } from "react-toastify";
 
 import CloseBtn from "../common/CloseBtn/CloseBtn.styled";
@@ -41,7 +41,7 @@ const EditUserModal = ({ className: styles }) => {
 
   function closeModal() {
     modalRef.current.classList.remove("visible");
-    setTimeout(() => dispatch(toggleEditUserModal()), 500);
+    setTimeout(() => dispatch(openEditUserModal(false)), 500);
   }
 
   const initialValues = {
@@ -74,6 +74,7 @@ const EditUserModal = ({ className: styles }) => {
     const { name, email, password, profilePhoto } = values;
     const { setSubmitting, setFieldError, resetForm } = formikBag;
 
+    document.body.style.pointerEvents = "none";
     setSubmitting(true);
 
     dispatch(updateUser({ name: name.trim(), email, password, profilePhoto }))
@@ -92,7 +93,10 @@ const EditUserModal = ({ className: styles }) => {
           setFieldError("email", "Invalid email address");
         }
       })
-      .finally(() => setSubmitting(false));
+      .finally(() => {
+        setSubmitting(false);
+        document.body.style.pointerEvents = "auto";
+      });
   };
 
   return (

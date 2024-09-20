@@ -1,7 +1,7 @@
 import useAuth from "../../hooks/useAuth";
 import icons from "../../assets/icons/icons.svg";
 import { useDispatch } from "react-redux";
-import { toggleEditUserModal } from "../../redux/modals/slice";
+import { openEditUserModal } from "../../redux/modals/slice";
 
 const UserInfo = ({ className: styles }) => {
   const { user, theme } = useAuth();
@@ -15,7 +15,7 @@ const UserInfo = ({ className: styles }) => {
 
       <div
         className={`user-photo ${theme}`}
-        onClick={() => dispatch(toggleEditUserModal())}
+        onClick={() => dispatch(openEditUserModal(true))}
       >
         {user.profilePhotoUrl ? (
           <img src={user.profilePhotoUrl} alt="profile" />

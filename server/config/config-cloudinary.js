@@ -14,7 +14,6 @@ const uploadOnCloudinary = async (file, fileId, fileName) => {
     const uploadResult = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          // asset_folder: "upload_profile",
           resource_type: "image",
           public_id: fileId,
           display_name: fileName,
@@ -30,8 +29,6 @@ const uploadOnCloudinary = async (file, fileId, fileName) => {
 
       uploadStream.end(file.buffer);
     });
-
-    console.log(uploadResult);
 
     return uploadResult.secure_url;
   } catch (error) {

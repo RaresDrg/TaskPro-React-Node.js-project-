@@ -3,11 +3,10 @@ import useAuth from "../../hooks/useAuth";
 
 const RestrictedRoutes = () => {
   const { isLoggedIn } = useAuth();
-  const shouldRedirect = isLoggedIn;
 
   // todo: => test: {repalce: true}
 
-  return shouldRedirect ? <Navigate to={"/dashboard"} /> : <Outlet />;
+  return isLoggedIn ? <Navigate to={"/dashboard"} /> : <Outlet />;
 };
 
 export default RestrictedRoutes;

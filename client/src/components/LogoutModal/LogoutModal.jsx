@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/auth/operations";
-import { toggleLogoutModal } from "../../redux/modals/slice";
+import { openLogoutModal } from "../../redux/modals/slice";
 import { toast } from "react-toastify";
 import CloseBtn from "../common/CloseBtn/CloseBtn.styled";
 import FormButton from "../common/FormButton/FormButton.styled";
@@ -31,7 +31,7 @@ const LogoutModal = ({ className: styles }) => {
 
   function closeModal() {
     modalRef.current.classList.remove("visible");
-    setTimeout(() => dispatch(toggleLogoutModal()), 500);
+    setTimeout(() => dispatch(openLogoutModal(false)), 500);
   }
 
   function handleExit() {
@@ -44,7 +44,7 @@ const LogoutModal = ({ className: styles }) => {
         const errorNotification =
           error?.response?.data?.message || "Internal server error";
         toast.error(errorNotification);
-        dispatch(toggleLogoutModal());
+        dispatch(openLogoutModal(true));
       });
   }
 

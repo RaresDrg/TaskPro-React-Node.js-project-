@@ -1,7 +1,7 @@
 import useAuth from "../../hooks/useAuth";
 import icons from "../../assets/icons/icons.svg";
 import { useDispatch } from "react-redux";
-import { toggleBurgerMenu } from "../../redux/modals/slice";
+import { openBurgerMenu } from "../../redux/modals/slice";
 
 const BurgerMenuBtn = ({ className: styles }) => {
   const dispatch = useDispatch();
@@ -10,7 +10,7 @@ const BurgerMenuBtn = ({ className: styles }) => {
   return (
     <button
       type="button"
-      onClick={() => dispatch(toggleBurgerMenu())}
+      onClick={() => dispatch(openBurgerMenu(true))}
       className={`${styles}`}
     >
       <svg className={`${theme}`}>
