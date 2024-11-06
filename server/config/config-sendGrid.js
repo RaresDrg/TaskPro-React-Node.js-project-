@@ -4,7 +4,7 @@ import { configDotenv } from "dotenv";
 configDotenv({ path: "./environment/.env" });
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-async function sendConfirmationEmail(userEmail, username, comment) {
+async function sendEmail(userEmail, username, comment) {
   const msg = {
     to: userEmail,
     from: process.env.EMAIL,
@@ -25,4 +25,4 @@ async function sendConfirmationEmail(userEmail, username, comment) {
     .catch((error) => console.log(error?.response?.body?.errors[0]?.message));
 }
 
-export default sendConfirmationEmail;
+export default sendEmail;

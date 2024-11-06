@@ -1,8 +1,7 @@
 import usersService from "../service/usersService.js";
 import utils from "../utils/utils.js";
 import uploadOnCloudinary from "../config/config-cloudinary.js";
-// import sendConfirmationEmail from "../config/config-sendgrid.js";
-// test
+import sendEmail from "../config/config-sendGrid.js";
 
 async function register(req, res, next) {
   try {
@@ -219,7 +218,7 @@ async function reachCustomerSupport(req, res, next) {
     }
 
     const { name, email } = req.user;
-    // await sendConfirmationEmail(email, name, comment);
+    await sendEmail(email, name, comment);
 
     res.status(200).json({
       status: "succes",
