@@ -35,7 +35,7 @@ const Modals = () => {
   const modals = useModals();
 
   return (
-    <Suspense fallback={<LoadingSpinner />}>
+    <Suspense>
       {modals.isBurgerMenuOpen && <BurgerMenu />}
       {modals.isEditUserModalOpen && <EditUserModal />}
       {modals.isNeedHelpModalOpen && <NeedHelpModal />}
