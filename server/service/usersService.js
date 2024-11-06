@@ -20,15 +20,14 @@ async function addUsertoDB(data) {
   return User.create(newUser);
 }
 
-function findUser(data) {
-  return User.findOne(data);
-}
+async function addUserToken(data) {
+  const paylaod = { email: data.email, id: data.id };
+  const secret = process.env.JWT_SECRET;
+  const token = jwt.sign(paylaod, secret, { expiresIn: "1h" });
 
-function updateUser(userId, updates) {
-  return User.findByIdAndUpdate(userId, updates, {
-    new: true,
-    runValidators: true,
-  });
+  await User.findByIdAndUpdate(data.id, { token });
+
+  return token;
 }
 
 async function checkUserLoginData(data) {
@@ -45,14 +44,15 @@ async function checkUserLoginData(data) {
   return user;
 }
 
-async function addUserToken(data) {
-  const paylaod = { email: data.email, id: data.id };
-  const secret = process.env.JWT_SECRET;
-  const token = jwt.sign(paylaod, secret, { expiresIn: "1h" });
+function findUser(data) {
+  return User.findOne(data);
+}
 
-  await User.findByIdAndUpdate(data.id, { token });
-
-  return token;
+function updateUser(userId, updates) {
+  return User.findByIdAndUpdate(userId, updates, {
+    new: true,
+    runValidators: true,
+  });
 }
 
 async function validateData(data) {

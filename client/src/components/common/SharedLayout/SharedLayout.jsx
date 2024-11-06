@@ -1,12 +1,13 @@
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
-import useResponsive from "../../../hooks/useResponsive";
+import { useReactResponsive } from "../../../hooks/hooks";
 import Header from "../../Header/Header.styled";
 import LeftSidebar from "../../LeftSidebar/LeftSidebar.styled";
-import Modals from "../Modals/Modals";
+import Modals from "../../Modals/Modals";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner.styled";
 
 const SharedLayout = () => {
-  const { isOnDesktop } = useResponsive();
+  const { isOnDesktop } = useReactResponsive();
 
   return (
     <>
@@ -14,7 +15,7 @@ const SharedLayout = () => {
       <Header />
       <Modals />
 
-      <Suspense>
+      <Suspense fallback={<LoadingSpinner />}>
         <Outlet />
       </Suspense>
     </>

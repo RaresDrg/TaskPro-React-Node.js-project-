@@ -1,27 +1,18 @@
-import useAuth from "../../hooks/useAuth";
 import { LogoOnSidebar as Logo } from "../common/Logo/Logo.styled";
 import MyBoards from "../MyBoards/MyBoards.styled";
-import ProjectsList from "../ProjectsList/ProjectsList.styled";
+import BoardsList from "../BoardsList/BoardsList.styled";
 import NeedHelp from "../NeedHelp/NeedHelp.styled";
 import LogoutBtn from "../LogoutBtn/LogoutBtn.styled";
+import { useBoards } from "../../hooks/hooks";
 
 const LeftSidebar = ({ className: styles }) => {
-  const { theme } = useAuth();
-
-  // todo: => projects
-  const projects = [
-    { name: "Project 1 care testez sa vad", icon: "icon-puzzlePiece", id: 1 },
-    { name: "Project 2", icon: "icon-puzzlePiece", id: 2 },
-    { name: "Project 3", icon: "icon-puzzlePiece", id: 3 },
-    { name: "Project 4", icon: "icon-puzzlePiece", id: 4 },
-  ];
-  // const projects = null;
+  const { boardsList } = useBoards();
 
   return (
-    <aside className={`${styles} ${theme}`}>
+    <aside className={styles}>
       <Logo />
       <MyBoards />
-      {projects && <ProjectsList projects={projects} />}
+      {boardsList && <BoardsList boards={boardsList} />}
       <NeedHelp />
       <LogoutBtn />
     </aside>

@@ -3,6 +3,7 @@ import BurgerMenu from "./BurgerMenu";
 
 const StyledBurgerMenu = styled(BurgerMenu)`
   position: fixed;
+  z-index: 100;
   top: 0;
   left: 0;
   height: 100dvh;
@@ -10,26 +11,51 @@ const StyledBurgerMenu = styled(BurgerMenu)`
   overflow: auto;
   background: var(--modal-bg);
   backdrop-filter: var(--modal-blur);
-  opacity: 0;
-  visibility: hidden;
-  transition: var(--transition);
+  animation: fadeIn 0.35s ease-in-out;
 
   & > aside {
-    width: 0;
+    animation: slideIn 0.35s ease-in-out;
   }
 
-  &.visible {
-    opacity: 1;
-    visibility: visible;
+  &.hidden {
+    animation: fadeOut 0.35s ease-in-out forwards;
 
     & > aside {
-      width: 225px;
+      animation: slideOut 0.35s ease-in-out;
     }
   }
 
-  @media (min-width: 768px) {
-    &.visible > aside {
-      width: 260px;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(-260px);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  @keyframes slideOut {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-260px);
     }
   }
 `;

@@ -1,21 +1,10 @@
 import { useSelector } from "react-redux";
-import modalsSelectors from "../redux/modals/selectors";
+import { selectModals } from "../redux/modals/selectors";
 
-// todo: => poate fac o foarma mai buna cu state => modals, etc si renunt la selectors.js, din redux
 const useModals = () => {
-  const isBurgerMenuOpen = useSelector(modalsSelectors.selectIsBurgerMenuOpen);
-  const isLogoutModalOpen = useSelector(
-    modalsSelectors.selectIsLogoutModalOpen
-  );
-  const isEditUserModalOpen = useSelector(
-    modalsSelectors.selectIsEditUserModalOpen
-  );
+  const modals = useSelector(selectModals);
 
-  return {
-    isBurgerMenuOpen,
-    isLogoutModalOpen,
-    isEditUserModalOpen,
-  };
+  return modals;
 };
 
 export default useModals;

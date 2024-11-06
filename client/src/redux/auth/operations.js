@@ -2,22 +2,21 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 // todo: => verccel
-// axios.defaults.baseURL = "http://localhost:3000";
-axios.defaults.baseURL = "https://taskproserver.vercel.app";
-
-// todo: => verificat timpul de intarziere de la login, register, logout.
+axios.defaults.baseURL = "http://localhost:3000";
+// axios.defaults.baseURL = "https://taskproserver.vercel.app";
 
 const utils = {
   setAuthHeader: (token) =>
     (axios.defaults.headers.common.Authorization = `Bearer ${token}`),
   clearAuthHeader: () => delete axios.defaults.headers.common.Authorization,
+  delay: (time) => new Promise((resolve) => setTimeout(resolve, time)),
 };
 
 const register = createAsyncThunk(
   "auth/register",
   async (userData, thunkAPI) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2500));
+      await utils.delay(2500);
       const response = await axios.post("/api/users/register", userData);
 
       utils.setAuthHeader(response.data.data.token);
@@ -31,7 +30,7 @@ const register = createAsyncThunk(
 
 const login = createAsyncThunk("auth/login", async (userData, thunkAPI) => {
   try {
-    await new Promise((resolve) => setTimeout(resolve, 2500));
+    await utils.delay(2500);
     const response = await axios.post("/api/users/login", userData);
 
     utils.setAuthHeader(response.data.data.token);
@@ -44,14 +43,14 @@ const login = createAsyncThunk("auth/login", async (userData, thunkAPI) => {
 
 const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await utils.delay(1500);
     const response = await axios.get("/api/users/logout");
-
-    utils.clearAuthHeader();
 
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
+  } finally {
+    utils.clearAuthHeader();
   }
 });
 
@@ -76,24 +75,12 @@ const refreshUser = createAsyncThunk(
   }
 );
 
-const updateTheme = createAsyncThunk(
-  "auth/updateTheme",
-  async (data, thunkAPI) => {
-    try {
-      const response = await axios.patch("/api/users/theme", { theme: data });
-
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
-
 const updateUser = createAsyncThunk(
   "auth/updateUserProfile",
-  async (userData, thunkAPI) => {
+  async (updates, thunkAPI) => {
     try {
-      const response = await axios.put("/api/users/profile", userData, {
+      await utils.delay(1500);
+      const response = await axios.put("/api/users/profile", updates, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -106,4 +93,13 @@ const updateUser = createAsyncThunk(
   }
 );
 
-export { register, login, logout, refreshUser, updateTheme, updateUser };
+export { register, login, logout, refreshUser, updateUser };
+
+const updateTheme = (theme) => axios.patch("/api/users/theme", { theme });
+const reachCustomerSupport = async (comment) => {
+  await utils.delay(1500);
+  const response = await axios.post("/api/users/support", comment);
+  return response.data;
+};
+
+export { reachCustomerSupport, updateTheme };

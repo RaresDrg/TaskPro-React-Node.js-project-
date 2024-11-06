@@ -36,16 +36,11 @@ const StyledNotFoundPage = styled(NotFoundPage)`
       transition: var(--transition);
 
       &:hover {
-        background-color: red;
-      }
-
-      &.dark:hover,
-      &.light:hover {
-        background-color: var(--green-color-active);
-      }
-
-      &.violet:hover {
-        background-color: var(--violet-color-active);
+        background-color: ${({ theme: { theme } }) =>
+          (theme === "dark" && "var(--green-color-active)") ||
+          (theme === "light" && "var(--green-color-active)") ||
+          (theme === "violet" && "var(--violet-color-active)") ||
+          (theme === null && "red")};
       }
 
       & {

@@ -1,5 +1,5 @@
 import icons from "../../../assets/icons/icons.svg";
-import useAuth from "../../../hooks/useAuth";
+import { useAuth } from "../../../hooks/hooks";
 
 const Logo = ({ className: styles }) => {
   const { theme } = useAuth();

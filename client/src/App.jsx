@@ -1,60 +1,78 @@
-import { Route, Routes } from "react-router-dom";
-import { useEffect } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useState, lazy, Suspense } from "react";
+import { ThemeProvider } from "styled-components";
+import { Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { refreshUser } from "./redux/auth/operations";
-import useAuth from "./hooks/useAuth";
-
-import Notification from "./components/common/Notification/Notification";
-import LoadingScreen from "./components/common/LoadingScreen/LoadingScreen.styled";
-
-import HomePage from "./pages/HomePage/HomePage.styled";
-import RegisterPage from "./pages/RegisterPage/RegisterPage.styled";
-import LoginPage from "./pages/LoginPage/LoginPage.styled";
-import SharedLayout from "./components/common/SharedLayout/SharedLayout";
-import DashboardPage from "./pages/DashboardPage/DashboardPage.styled";
-import ProjectPage from "./pages/ProjectPage/ProjectPage.styled";
-import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.styled";
+import { getBoardsList } from "./redux/boards/operations";
+import { useAuth, useBoards } from "./hooks/hooks";
 
 import ProtectedRoutes from "./pages/ProtectedRoutes/ProtectedRoutes";
 import RestrictedRoutes from "./pages/RestrictedRoutes/RestrictedRoutes";
+import SharedLayout from "./components/common/SharedLayout/SharedLayout";
+import LoadingSpinner from "./components/common/LoadingSpinner/LoadingSpinner.styled";
+import Notification from "./components/common/Notification/Notification";
 
-// todo: => problema cu restrcitionarea, se vede la project page
-// todo: => verificat si restrictionat paginile care nu exista  */
-// todo: => de rectificat putin, la cum trimit functiile, gen in logout btn cum trimit functie de close catre close BTN
-// todo: => verificat pe lordicon, daca pot sa adaug nitte iconiste mai misto
-// todo: => lasy imports, si suspense
-// propTypes: => acolo unde primesc props: ex: form button
+const HomePage = lazy(() => import("./pages/HomePage/HomePage.styled"));
+const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage.styled"));
+const RegisterPage = lazy(() =>
+  import("./pages/RegisterPage/RegisterPage.styled")
+);
+const DashboardPage = lazy(() =>
+  import("./pages/DashboardPage/DashboardPage.styled")
+);
+const BoardPage = lazy(() => import("./pages/BoardPage/BoardPage.styled"));
+const NotFoundPage = lazy(() =>
+  import("./pages/NotFoundPage/NotFoundPage.styled")
+);
+const LoadingScreen = lazy(() =>
+  import("./components/common/LoadingScreen/LoadingScreen.styled")
+);
 
 const App = () => {
+  const [shouldWait, setShouldWait] = useState(true);
   const dispatch = useDispatch();
-  const { isLoading } = useAuth();
+
+  const { isLoading, isLoggedIn, theme } = useAuth();
+  const { board } = useBoards();
 
   useEffect(() => {
-    dispatch(refreshUser());
+    dispatch(refreshUser())
+      .unwrap()
+      .catch(() => setShouldWait(false));
   }, [dispatch]);
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(getBoardsList())
+        .unwrap()
+        .finally(() => setShouldWait(false));
+    }
+  }, [isLoggedIn]);
+
+  if (shouldWait) return <LoadingSpinner />;
+
   return (
-    <>
+    <ThemeProvider theme={{ theme }}>
       <Routes>
         <Route element={<RestrictedRoutes />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
         </Route>
+
         <Route element={<ProtectedRoutes />}>
           <Route path="/dashboard" element={<SharedLayout />}>
             <Route index element={<DashboardPage />} />
-            <Route path=":projectId" element={<ProjectPage />} />
+            <Route path=":boardId" element={<BoardPage board={board} />} />
           </Route>
         </Route>
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      {isLoading && createPortal(<LoadingScreen />, document.body)}
-
+      <Suspense>{isLoading && <LoadingScreen />}</Suspense>
       <Notification />
-    </>
+    </ThemeProvider>
   );
 };
 

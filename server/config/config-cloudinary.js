@@ -3,7 +3,7 @@ import { configDotenv } from "dotenv";
 
 configDotenv({ path: "../environment/.env" });
 
-const uploadOnCloudinary = async (file, fileId, fileName) => {
+const uploadOnCloudinary = async (file, userId, name) => {
   try {
     cloudinary.config({
       cloud_name: process.env.CLOUD_NAME,
@@ -15,8 +15,8 @@ const uploadOnCloudinary = async (file, fileId, fileName) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           resource_type: "image",
-          public_id: fileId,
-          display_name: fileName,
+          public_id: userId,
+          display_name: name,
         },
         (error, result) => {
           if (error) {

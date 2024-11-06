@@ -1,12 +1,20 @@
+import { Suspense } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/hooks";
+import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner.styled";
+
+// *intrebare: {repalce: true} ?
 
 const RestrictedRoutes = () => {
   const { isLoggedIn } = useAuth();
 
-  // todo: => test: {repalce: true}
-
-  return isLoggedIn ? <Navigate to={"/dashboard"} /> : <Outlet />;
+  return isLoggedIn ? (
+    <Navigate to={"/dashboard"} />
+  ) : (
+    <Suspense fallback={<LoadingSpinner />}>
+      <Outlet />
+    </Suspense>
+  );
 };
 
 export default RestrictedRoutes;

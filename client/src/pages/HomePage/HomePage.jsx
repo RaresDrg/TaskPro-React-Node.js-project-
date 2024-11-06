@@ -10,7 +10,7 @@ const HomePage = ({ className: styles }) => {
 
   return (
     <section className={styles}>
-      <Container className={`animate__animated animate__backInDown`}>
+      <Container className={`animate__animated animate__fadeInDown`}>
         <img src={homePageImg} alt="computer" />
         <Logo />
         <p>

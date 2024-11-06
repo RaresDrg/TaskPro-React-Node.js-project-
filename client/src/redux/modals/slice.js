@@ -1,28 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  isBurgerMenuOpen: false,
-  isLogoutModalOpen: false,
   isEditUserModalOpen: false,
+  isBurgerMenuOpen: false,
+  isNeedHelpModalOpen: false,
+  isLogoutModalOpen: false,
+  isFiltersModalOpen: false,
+  isCreateBoardModalOpen: false,
+  isEditBoardModalOpen: false,
+  isDeleteBoardModalOpen: false,
+  isAddColumnModalOpen: false,
+  isEditColumnModalOpen: false,
+  isDeleteColumnModalOpen: false,
+  isAddCardModalOpen: false,
+  isEditCardModalOpen: false,
+  isDeleteCardModalOpen: false,
 };
 
 const modalsSlice = createSlice({
   name: "modals",
   initialState,
   reducers: {
-    openBurgerMenu: (state, action) => {
-      state.isBurgerMenuOpen = action.payload;
+    setModalOpen: (state, action) => {
+      state[`is${action.payload}Open`] = true;
     },
-    openLogoutModal: (state, action) => {
-      state.isLogoutModalOpen = action.payload;
-    },
-    openEditUserModal: (state, action) => {
-      state.isEditUserModalOpen = action.payload;
+    setModalClose: (state, action) => {
+      state[`is${action.payload}Open`] = false;
     },
   },
 });
 
-export const { openBurgerMenu, openLogoutModal, openEditUserModal } =
-  modalsSlice.actions;
-
+export const { setModalOpen, setModalClose } = modalsSlice.actions;
 export const modalsReducer = modalsSlice.reducer;

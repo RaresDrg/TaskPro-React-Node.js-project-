@@ -3,18 +3,11 @@ import Header from "./Header";
 
 const StyledHeader = styled(Header)`
   padding: 14px 0px;
-  /*todo: => verificat sa nu "strice", la theme dropdown  */
-  /* border-bottom: 1px solid grey; */
+  background-color: ${({ theme: { theme } }) =>
+    (theme === "dark" && "var(--header-bg-black)") ||
+    (theme === "light" && "var(--header-bg-white)") ||
+    (theme === "violet" && "var(--header-bg-white)")};
   transition: var(--transition);
-
-  &.dark {
-    background-color: var(--header-bg-black);
-  }
-
-  &.light,
-  &.violet {
-    background-color: var(--header-bg-white);
-  }
 
   & > div {
     display: flex;
@@ -26,10 +19,9 @@ const StyledHeader = styled(Header)`
     padding: 18px 0px;
   }
 
-  /* todo= > parte din primul todo de mai sus */
-  /* @media (min-width: 1440px) {
-    border: none;
-  } */
+  @media (min-width: 1440px) {
+    margin-left: 260px;
+  }
 `;
 
 export default StyledHeader;

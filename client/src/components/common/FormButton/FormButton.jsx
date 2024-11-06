@@ -1,22 +1,20 @@
 import PropTypes from "prop-types";
 
-const FormButton = ({
-  className: styles,
-  type,
-  text,
-  handlerFunction,
-  isDisabled,
-  variant,
-}) => {
+const FormButton = (props) => {
+  function handleClick(e) {
+    e.stopPropagation();
+    props.handlerFunction && props.handlerFunction();
+  }
+
   return (
     <button
-      type={type}
-      className={styles}
-      onClick={handlerFunction}
-      disabled={isDisabled}
-      data-variant={variant}
+      type={props.type}
+      className={props.className}
+      onClick={handleClick}
+      disabled={props.isDisabled}
+      data-variant={props.variant}
     >
-      {text}
+      {props.text}
     </button>
   );
 };

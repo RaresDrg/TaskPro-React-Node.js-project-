@@ -1,20 +1,17 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form, Formik, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import UseAnimations from "react-useanimations";
-import visibility from "react-useanimations/lib/visibility";
 import { useDispatch } from "react-redux";
 import { register } from "../../redux/auth/operations";
 import { toast } from "react-toastify";
-import FormButton from "../common/FormButton/FormButton.styled";
+import { capitalize, getRegex } from "../../utils/utils";
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
 import AuthNavigation from "../common/AuthNavigation/AuthNavigation.styled";
+import FormTextField from "../common/FormTextField/FormTextField.styled";
+import FormPasswordField from "../common/FormPasswordField/FormPasswordField.styled";
+import FormButton from "../common/FormButton/FormButton.styled";
 import "animate.css";
 
 const RegisterForm = ({ className: styles }) => {
-  const [passwordIsVisible, setPasswordIsVisible] = useState(false);
-  const [confimPasswordIsVisible, setConfimPasswordIsVisible] = useState(false);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -25,8 +22,8 @@ const RegisterForm = ({ className: styles }) => {
     confirmPassword: "",
   };
 
-  const emailRegex = /^([\w-.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+  const emailRegex = getRegex("email");
+  const passwordRegex = getRegex("password");
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -48,16 +45,18 @@ const RegisterForm = ({ className: styles }) => {
   });
 
   const handleSubmit = (values, formikBag) => {
-    const { name, email, password } = values;
     const { setSubmitting, setFieldError, resetForm } = formikBag;
+    const { email, password } = values;
 
     setSubmitting(true);
 
-    dispatch(register({ name: name.trim(), email, password }))
+    const name = capitalize(values.name);
+
+    dispatch(register({ name, email, password }))
       .unwrap()
       .then(() => {
         resetForm();
-        navigate("/dashboard");
+        navigate("/dashboard", { replace: true });
         toast.success(`Welcome, ${name} !`);
       })
       .catch((error) => {
@@ -81,105 +80,40 @@ const RegisterForm = ({ className: styles }) => {
         onSubmit={handleSubmit}
       >
         {({ isSubmitting, errors, values, touched }) => (
-          <Form autoComplete="off">
-            <div
-              className={`field ${
-                touched.name && errors.name ? "onError" : ""
-              }`}
-            >
-              <Field
-                id="nameInput"
-                type="text"
-                name="name"
-                placeholder="Please, enter your name !"
-              />
-              <ErrorMessage className="error" name="name" component="span" />
-            </div>
-
-            <div
-              className={`field ${
-                touched.email && errors.email ? "onError" : ""
-              }`}
-            >
-              <Field
-                id="emailInput"
-                type="email"
-                name="email"
-                placeholder="Please, enter your email !"
-              />
-              <ErrorMessage className="error" name="email" component="span" />
-            </div>
-
-            <div
-              className={`field ${
-                touched.password && errors.password ? "onError" : ""
-              }`}
-            >
-              <Field
-                id="passwordInput"
-                type={passwordIsVisible ? "text" : "password"}
-                name="password"
-                placeholder="Please, enter your password !"
-              />
-              <ErrorMessage
-                className="error"
-                name="password"
-                component="span"
-              />
-              {values.password && (
-                <UseAnimations
-                  animation={visibility}
-                  onClick={() => {
-                    !passwordIsVisible &&
-                      document.querySelector("#passwordInput").focus();
-                    setPasswordIsVisible((prev) => !prev);
-                  }}
-                  size={30}
-                  className="showPassword"
-                  strokeColor="var(--text-color-white)"
-                  speed={2}
-                />
-              )}
-            </div>
-
-            <div
-              className={`field ${
-                touched.confirmPassword &&
-                (errors.confirmPassword || errors.password)
-                  ? "onError"
-                  : ""
-              }`}
-            >
-              <Field
-                id="confirmPasswordInput"
-                type={confimPasswordIsVisible ? "text" : "password"}
-                name="confirmPassword"
-                placeholder="Please, confirm your password !"
-              />
-              <ErrorMessage
-                className="error"
-                name="confirmPassword"
-                component="span"
-              />
-              {values.confirmPassword && (
-                <UseAnimations
-                  animation={visibility}
-                  onClick={() => {
-                    !confimPasswordIsVisible &&
-                      document.querySelector("#confirmPasswordInput").focus();
-                    setConfimPasswordIsVisible((prev) => !prev);
-                  }}
-                  size={30}
-                  className="showPassword"
-                  strokeColor="var(--text-color-white)"
-                  speed={2}
-                />
-              )}
-            </div>
-
+          <Form>
+            <FormTextField
+              id="nameInput"
+              name="name"
+              placeholder="Name"
+              errors={(errors.name && touched.name) || null}
+            />
+            <FormTextField
+              id="emailInput"
+              name="email"
+              placeholder="Email"
+              errors={(errors.email && touched.email) || null}
+            />
+            <FormPasswordField
+              id="passwordInput"
+              name="password"
+              placeholder="Password"
+              errors={(errors.password && touched.password) || null}
+              values={values.password || null}
+            />
+            <FormPasswordField
+              id="confirmPasswordInput"
+              name="confirmPassword"
+              placeholder="Please, confirm your password"
+              errors={
+                (touched.confirmPassword &&
+                  (errors.confirmPassword || errors.password)) ||
+                null
+              }
+              values={values.confirmPassword || null}
+            />
             <FormButton
               type={"submit"}
-              text={isSubmitting ? "Loading..." : "Register Now"}
+              text={isSubmitting ? "Loading..." : "Register"}
               isDisabled={
                 isSubmitting ||
                 (errors.name && touched.name) ||

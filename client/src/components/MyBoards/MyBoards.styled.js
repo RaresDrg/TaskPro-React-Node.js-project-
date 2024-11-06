@@ -11,15 +11,11 @@ const StyledMyBoards = styled(MyBoards)`
       line-height: 18px;
       letter-spacing: -0.02em;
       opacity: 0.5;
+      color: ${({ theme: { theme } }) =>
+        (theme === "dark" && "var(--text-color-white)") ||
+        (theme === "light" && "var(--text-color-black)") ||
+        (theme === "violet" && "var(--text-color-white)")};
       transition: var(--transition);
-
-      &.dark,
-      &.violet {
-        color: var(--text-color-white);
-      }
-      &.light {
-        color: var(--text-color-black);
-      }
     }
 
     & > div {
@@ -28,17 +24,15 @@ const StyledMyBoards = styled(MyBoards)`
       display: flex;
       align-items: center;
       justify-content: space-between;
+      border-top: ${({ theme: { theme } }) =>
+        (theme === "dark" && "1px solid #ffffff1a") ||
+        (theme === "light" && "1px solid #1616161a") ||
+        (theme === "violet" && "1px solid #ffffff1a")};
+      border-bottom: ${({ theme: { theme } }) =>
+        (theme === "dark" && "1px solid #ffffff1a") ||
+        (theme === "light" && "1px solid #1616161a") ||
+        (theme === "violet" && "1px solid #ffffff1a")};
       transition: var(--transition);
-
-      &.dark,
-      &.violet {
-        border-top: 1px solid #ffffff1a;
-        border-bottom: 1px solid #ffffff1a;
-      }
-      &.light {
-        border-top: 1px solid #1616161a;
-        border-bottom: 1px solid #1616161a;
-      }
 
       & {
         & > span {
@@ -47,59 +41,39 @@ const StyledMyBoards = styled(MyBoards)`
           line-height: 21px;
           letter-spacing: -0.02em;
           width: 76px;
+          color: ${({ theme: { theme } }) =>
+            (theme === "dark" && "var(--text-color-white)") ||
+            (theme === "light" && "var(--text-color-black)") ||
+            (theme === "violet" && "var(--text-color-white)")};
           transition: var(--transition);
-
-          &.dark,
-          &.violet {
-            color: var(--text-color-white);
-          }
-          &.light {
-            color: var(--text-color-black);
-          }
         }
 
-        & > button.create-btn {
+        & > svg.create-btn {
           width: 40px;
           height: 36px;
           border-radius: 6px;
           padding: 8px 10px;
+          cursor: pointer;
+          border: 0.5px solid transparent;
+          stroke: var(--text-color-black);
+          background-color: ${({ theme: { theme } }) =>
+            (theme === "dark" && "var(--green-color)") ||
+            (theme === "light" && "var(--green-color)") ||
+            (theme === "violet" && "var(--violet-color)")};
           transition: var(--transition);
 
-          &.dark,
-          &.light {
-            background-color: var(--green-color);
-
-            &:hover {
-              background-color: var(--green-color-active);
-              box-shadow: 0px 0px 16px 0px var(--green-color-active);
-            }
-          }
-
-          &.violet {
-            background-color: var(--violet-color);
-
-            &:hover {
-              background-color: var(--violet-color-active);
-              box-shadow: 0px 0px 16px 0px var(--violet-color);
-            }
-          }
-
-          & {
-            svg {
-              stroke: var(--text-color-black);
-              transition: var(--transition);
-            }
-          }
-
           &:hover {
+            background-color: ${({ theme: { theme } }) =>
+              (theme === "dark" && "var(--green-color-active)") ||
+              (theme === "light" && "var(--green-color-active)") ||
+              (theme === "violet" && "var(--violet-color-active)")};
+            box-shadow: ${({ theme: { theme } }) =>
+              (theme === "dark" && "0px 0px 16px 0px var(--green-color)") ||
+              (theme === "light" && "0px 0px 16px 0px var(--green-color)") ||
+              (theme === "violet" && "0px 0px 16px 0px var(--violet-color)")};
             transform: scale(1.15);
             border: 0.5px solid var(--text-color-white);
-
-            & {
-              svg {
-                stroke: var(--text-color-white);
-              }
-            }
+            stroke: var(--text-color-white);
           }
         }
       }

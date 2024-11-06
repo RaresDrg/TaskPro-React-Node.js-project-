@@ -1,19 +1,17 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form, Formik, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import UseAnimations from "react-useanimations";
-import visibility from "react-useanimations/lib/visibility";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/auth/operations";
 import { toast } from "react-toastify";
-import FormButton from "../common/FormButton/FormButton.styled";
+import { getRegex } from "../../utils/utils";
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
 import AuthNavigation from "../common/AuthNavigation/AuthNavigation.styled";
+import FormTextField from "../common/FormTextField/FormTextField.styled";
+import FormPasswordField from "../common/FormPasswordField/FormPasswordField.styled";
+import FormButton from "../common/FormButton/FormButton.styled";
 import "animate.css";
 
 const LoginForm = ({ className: styles }) => {
-  const [passwordIsVisible, setPasswordIsVisible] = useState(false);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,24 +20,18 @@ const LoginForm = ({ className: styles }) => {
     password: "",
   };
 
-  const emailRegex = /^([\w-.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+  const emailRegex = getRegex("email");
 
   const validationSchema = Yup.object({
     email: Yup.string()
       .matches(emailRegex, { message: "Invalid email address" })
       .required("Required *"),
-    password: Yup.string()
-      .min(8, "Password must be at least 8 characters")
-      .matches(passwordRegex, {
-        message: "must include an uppercase, a lowercase, a digit",
-      })
-      .required("Required *"),
+    password: Yup.string().required("Required *"),
   });
 
   const handleSubmit = (values, formikBag) => {
-    const { email, password } = values;
     const { setSubmitting, setFieldError, resetForm } = formikBag;
+    const { email, password } = values;
 
     setSubmitting(true);
 
@@ -47,7 +39,7 @@ const LoginForm = ({ className: styles }) => {
       .unwrap()
       .then((value) => {
         resetForm();
-        navigate("/dashboard");
+        navigate("/dashboard", { replace: true });
         toast.success(`Welcome, ${value.data.user.name} !`);
       })
       .catch((error) => {
@@ -75,56 +67,23 @@ const LoginForm = ({ className: styles }) => {
         onSubmit={handleSubmit}
       >
         {({ isSubmitting, errors, values, touched }) => (
-          <Form autoComplete="off">
-            <div
-              className={`field ${
-                touched.email && errors.email ? "onError" : ""
-              }`}
-            >
-              <Field
-                id="emailInput"
-                type="email"
-                name="email"
-                placeholder="Please, enter your email !"
-              />
-              <ErrorMessage className="error" name="email" component="span" />
-            </div>
-
-            <div
-              className={`field ${
-                touched.password && errors.password ? "onError" : ""
-              }`}
-            >
-              <Field
-                id="passwordInput"
-                type={passwordIsVisible ? "text" : "password"}
-                name="password"
-                placeholder="Please, enter your password !"
-              />
-              <ErrorMessage
-                className="error"
-                name="password"
-                component="span"
-              />
-              {values.password && (
-                <UseAnimations
-                  animation={visibility}
-                  onClick={() => {
-                    !passwordIsVisible &&
-                      document.querySelector("#passwordInput").focus();
-                    setPasswordIsVisible((prev) => !prev);
-                  }}
-                  size={30}
-                  className="showPassword"
-                  strokeColor="var(--text-color-white)"
-                  speed={2}
-                />
-              )}
-            </div>
-
+          <Form>
+            <FormTextField
+              id="emailInput"
+              name="email"
+              placeholder="Email"
+              errors={(errors.email && touched.email) || null}
+            />
+            <FormPasswordField
+              id="passwordInput"
+              name="password"
+              placeholder="Password"
+              errors={(errors.password && touched.password) || null}
+              values={values.password || null}
+            />
             <FormButton
               type={"submit"}
-              text={isSubmitting ? "Loading..." : "Log In Now"}
+              text={isSubmitting ? "Loading..." : "Log In"}
               isDisabled={
                 isSubmitting ||
                 (errors.email && touched.email) ||

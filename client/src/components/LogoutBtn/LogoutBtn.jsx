@@ -1,17 +1,15 @@
-import useAuth from "../../hooks/useAuth";
 import icons from "../../assets/icons/icons.svg";
 import { useDispatch } from "react-redux";
-import { openLogoutModal } from "../../redux/modals/slice";
+import { setModalOpen } from "../../redux/modals/slice";
 
 const LogoutBtn = ({ className: styles }) => {
   const dispatch = useDispatch();
-  const { theme } = useAuth();
 
   return (
     <button
       type="button"
-      onMouseDown={() => dispatch(openLogoutModal(true))}
-      className={`${styles} ${theme}`}
+      className={styles}
+      onClick={() => dispatch(setModalOpen("LogoutModal"))}
       data-secondary-action="close burger menu"
     >
       <svg>

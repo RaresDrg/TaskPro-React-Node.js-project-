@@ -5,61 +5,11 @@ const StyledNeedHelp = styled(NeedHelp)`
   margin: auto 14px 24px 14px;
   padding: 14px;
   border-radius: 8px;
+  background-color: ${({ theme: { theme } }) =>
+    (theme === "dark" && "#1f1f1f") ||
+    (theme === "light" && "#f6f6f7") ||
+    (theme === "violet" && "#ecedfd66")};
   transition: var(--transition);
-
-  &.dark {
-    background-color: #1f1f1f;
-
-    & {
-      p {
-        color: var(--text-color-white);
-
-        b {
-          color: var(--green-color-active);
-        }
-      }
-
-      button {
-        color: var(--text-color-white);
-      }
-    }
-  }
-
-  &.light {
-    background-color: #f6f6f7;
-
-    & {
-      p {
-        color: var(--text-color-black);
-
-        b {
-          color: var(--green-color-active);
-        }
-      }
-
-      button {
-        color: var(--text-color-black);
-      }
-    }
-  }
-
-  &.violet {
-    background-color: #ecedfd66;
-
-    & {
-      p {
-        color: var(--text-color-white);
-
-        b {
-          color: var(--violet-color-active);
-        }
-      }
-
-      button {
-        color: var(--text-color-white);
-      }
-    }
-  }
 
   & {
     p {
@@ -69,9 +19,17 @@ const StyledNeedHelp = styled(NeedHelp)`
       letter-spacing: -0.02em;
       margin-top: 14px;
       margin-bottom: 18px;
+      color: ${({ theme: { theme } }) =>
+        (theme === "dark" && "var(--text-color-white)") ||
+        (theme === "light" && "var(--text-color-black)") ||
+        (theme === "violet" && "var(--text-color-white)")};
       transition: var(--transition);
 
       b {
+        color: ${({ theme: { theme } }) =>
+          (theme === "dark" && "var(--green-color-active)") ||
+          (theme === "light" && "var(--green-color-active)") ||
+          (theme === "violet" && "var(--violet-color-active)")};
         transition: var(--transition);
       }
     }
@@ -86,6 +44,11 @@ const StyledNeedHelp = styled(NeedHelp)`
         svg {
           width: 20px;
           height: 20px;
+          color: ${({ theme: { theme } }) =>
+            (theme === "dark" && "var(--text-color-white)") ||
+            (theme === "light" && "var(--text-color-black)") ||
+            (theme === "violet" && "var(--text-color-white)")};
+          transition: var(--transition);
         }
 
         span {
@@ -93,12 +56,22 @@ const StyledNeedHelp = styled(NeedHelp)`
           font-weight: 500;
           line-height: 18px;
           letter-spacing: -0.02em;
+          color: ${({ theme: { theme } }) =>
+            (theme === "dark" && "var(--text-color-white)") ||
+            (theme === "light" && "var(--text-color-black)") ||
+            (theme === "violet" && "var(--text-color-white)")};
+          transition: var(--transition);
         }
       }
 
       &:hover {
-        transform: scale(1.1);
-        color: grey;
+        opacity: 0.5;
+
+        & {
+          svg {
+            transform: rotateY(360deg);
+          }
+        }
       }
     }
   }

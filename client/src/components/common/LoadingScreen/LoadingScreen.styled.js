@@ -21,7 +21,7 @@ const StyledLoadingScreen = styled(LoadingScreen)`
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: contrast(80%) brightness(35%);
+      filter: contrast(65%) brightness(25%);
     }
 
     h1 {
@@ -33,6 +33,7 @@ const StyledLoadingScreen = styled(LoadingScreen)`
       font-size: 45px;
       font-weight: 900;
       letter-spacing: 0.04em;
+      opacity: 0.7;
 
       & > div {
         margin-top: 8px;

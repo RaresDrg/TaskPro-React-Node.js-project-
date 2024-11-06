@@ -18,7 +18,7 @@ const StyledFormButton = styled(FormButton)`
     (props.variant === "violetBtn" && "var(--violet-color)") ||
     (props.variant === "redBtn" && "var(--dashboard-page-bg-white)")};
   border: ${(props) =>
-    props.variant === "redBtn" ? "1px solid grey" : "none"};
+    props.variant === "redBtn" ? "1px solid grey" : "1px solid transparent"};
   transition: var(--transition);
 
   &:before {
@@ -40,7 +40,6 @@ const StyledFormButton = styled(FormButton)`
   &:disabled {
     background-color: grey;
     opacity: 0.7;
-    box-shadow: none;
     cursor: not-allowed;
   }
 

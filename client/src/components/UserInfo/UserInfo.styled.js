@@ -8,7 +8,7 @@ const StyledUserInfo = styled(UserInfo)`
 
   & {
     .username {
-      cursor: pointer;
+      cursor: alias;
       font-size: 14px;
       font-weight: bold;
       line-height: 21px;
@@ -17,16 +17,11 @@ const StyledUserInfo = styled(UserInfo)`
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 140px;
+      color: ${({ theme: { theme } }) =>
+        (theme === "dark" && "var(--text-color-white)") ||
+        (theme === "light" && "var(--text-color-black)") ||
+        (theme === "violet" && "var(--text-color-black)")};
       transition: var(--transition);
-
-      &.dark {
-        color: var(--text-color-white);
-      }
-
-      &.light,
-      &.violet {
-        color: var(--text-color-black);
-      }
 
       &:hover {
         transform: scale(0.9);
@@ -45,18 +40,7 @@ const StyledUserInfo = styled(UserInfo)`
 
       &:hover {
         transform: scale(1.15);
-
-        &:has(> svg.dark) {
-          box-shadow: var(--green-color) 0px 0px 10px 0px;
-        }
-
-        &:has(> svg.light) {
-          box-shadow: var(--green-color-active) 0px 0px 10px 0px;
-        }
-
-        &:has(> svg.violet) {
-          box-shadow: var(--violet-color-active) 0px 0px 10px 0px;
-        }
+        box-shadow: 0px 0px 10px 0px grey;
       }
 
       &:active {

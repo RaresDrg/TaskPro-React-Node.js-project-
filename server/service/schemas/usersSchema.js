@@ -4,7 +4,7 @@ const schema = new Schema(
   {
     name: {
       type: String,
-      minlength: [3, "Name must be at least 3 characters"],
+      minlength: [3, "Name must be at least 3 characters long"],
       maxlength: [50, "Name must be less than 50 characters long"],
       required: [true, "=> this field is required"],
     },
@@ -18,7 +18,7 @@ const schema = new Schema(
       type: String,
       match: [
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
-        "=> Password must be at least 8 characters and must include an uppercase, a lowercase and a digit",
+        "=> Password must be at least 8 characters long and must include an uppercase, a lowercase and a digit",
       ],
       required: [true, "=> this field is required"],
     },

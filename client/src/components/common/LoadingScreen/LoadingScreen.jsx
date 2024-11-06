@@ -6,11 +6,6 @@ import "animate.css";
 const LoadingScreen = ({ className: styles }) => {
   useEffect(() => {
     document.querySelector("video").playbackRate = 2;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = "auto";
-    };
   }, []);
 
   return (
@@ -18,7 +13,7 @@ const LoadingScreen = ({ className: styles }) => {
       <video autoPlay={true} muted={true} loop={true}>
         <source src={loadingScreen} type="video/mp4" />
       </video>
-      <h1 className="animate__animated animate__flash animate__infinite animate__slow">
+      <h1 className="animate__animated animate__pulse animate__infinite">
         Loading
         <ThreeDots
           visible={true}

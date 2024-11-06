@@ -8,50 +8,20 @@ const StyledLogoutBtn = styled(LogoutBtn)`
   margin-left: 24px;
   opacity: 0.7;
   width: fit-content;
+  color: ${({ theme: { theme } }) =>
+    (theme === "dark" && "var(--text-color-white)") ||
+    (theme === "light" && "var(--text-color-black)") ||
+    (theme === "violet" && "var(--text-color-white)")};
   transition: var(--transition);
-
-  &.dark {
-    color: var(--text-color-white);
-
-    svg {
-      stroke: var(--green-color-active);
-    }
-  }
-
-  &.light {
-    color: var(--text-color-black);
-
-    svg {
-      stroke: var(--green-color-active);
-    }
-  }
-
-  &.violet {
-    color: var(--text-color-white);
-
-    svg {
-      stroke: var(--text-color-white);
-    }
-  }
-
-  &:hover {
-    opacity: 1;
-
-    svg {
-      stroke: red;
-      transform: scale(1.15);
-    }
-
-    span:after {
-      width: 100%;
-      background-color: red;
-    }
-  }
 
   & {
     svg {
       width: 32px;
       height: 32px;
+      stroke: ${({ theme: { theme } }) =>
+        (theme === "dark" && "var(--green-color-active)") ||
+        (theme === "light" && "var(--green-color-active)") ||
+        (theme === "violet" && "var(--text-color-white)")};
       transition: var(--transition);
     }
 
@@ -69,6 +39,20 @@ const StyledLogoutBtn = styled(LogoutBtn)`
         border-radius: 50%;
         transition: var(--transition);
       }
+    }
+  }
+
+  &:hover {
+    opacity: 1;
+
+    svg {
+      stroke: red;
+      transform: scale(1.15);
+    }
+
+    span:after {
+      width: 100%;
+      background-color: red;
     }
   }
 

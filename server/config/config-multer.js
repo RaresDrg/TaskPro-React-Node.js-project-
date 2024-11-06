@@ -1,16 +1,13 @@
 import multer from "multer";
 import path from "path";
 
-const storage = multer.memoryStorage();
-
 const filterProfilePhoto = (req, file, cb) => {
   const fileExtension = path.extname(file.originalname);
   const availableExtensions = [".jpeg", ".png"];
 
   if (!availableExtensions.includes(fileExtension)) {
-    const error = `You must enter a file with one of these extensions: ${availableExtensions.join(
-      ", "
-    )}`;
+    const extensionsString = availableExtensions.join(", ");
+    const error = `You must enter a file with one of these extensions: ${extensionsString}`;
 
     cb(new Error(error));
     return;
@@ -20,7 +17,7 @@ const filterProfilePhoto = (req, file, cb) => {
 };
 
 const validateUploadedPhoto = multer({
-  storage: storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 5000000 },
   fileFilter: filterProfilePhoto,
 }).single("profilePhoto");

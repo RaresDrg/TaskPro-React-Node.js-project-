@@ -1,23 +1,22 @@
-import useAuth from "../../hooks/useAuth";
 import icons from "../../assets/icons/icons.svg";
+import { useDispatch } from "react-redux";
+import { setModalOpen } from "../../redux/modals/slice";
 
 const MyBoards = ({ className: styles }) => {
-  const { theme } = useAuth();
+  const dispatch = useDispatch();
 
   return (
     <div className={styles}>
-      <span className={theme}>My Boards</span>
-      <div className={theme}>
-        <span className={theme}>Create a new board</span>
-        <button
-          type="button"
-          className={`${theme} create-btn`}
+      <span>My Boards</span>
+      <div>
+        <span>Create a new board</span>
+        <svg
+          className="create-btn"
+          onClick={() => dispatch(setModalOpen("CreateBoardModal"))}
           data-secondary-action="close burger menu"
         >
-          <svg>
-            <use href={`${icons}#icon-plus`}></use>
-          </svg>
-        </button>
+          <use href={`${icons}#icon-plus`}></use>
+        </svg>
       </div>
     </div>
   );

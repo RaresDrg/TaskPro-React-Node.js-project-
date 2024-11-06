@@ -1,7 +1,7 @@
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Slide } from "react-toastify";
-import useAuth from "../../../hooks/useAuth";
+import { useAuth } from "../../../hooks/hooks";
 
 const Notification = () => {
   const { theme } = useAuth();

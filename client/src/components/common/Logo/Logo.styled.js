@@ -42,11 +42,6 @@ const LogoOnSidebar = styled(Logo)`
   gap: 8px;
   width: fit-content;
   margin-left: 14px;
-  transition: var(--transition);
-
-  &:hover {
-    transform: scale(1.05);
-  }
 
   & {
     svg {
@@ -59,16 +54,11 @@ const LogoOnSidebar = styled(Logo)`
       font-weight: 600;
       line-height: 24px;
       letter-spacing: -0.04em;
+      color: ${({ theme: { theme } }) =>
+        (theme === "dark" && "var(--text-color-white)") ||
+        (theme === "light" && "var(--text-color-black)") ||
+        (theme === "violet" && "var(--text-color-white)")};
       transition: var(--transition);
-
-      &.dark,
-      &.violet {
-        color: var(--text-color-white);
-      }
-
-      &.light {
-        color: var(--text-color-black);
-      }
     }
   }
 
