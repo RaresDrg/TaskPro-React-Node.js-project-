@@ -1,13 +1,25 @@
 export function getBg(variant, name) {
   switch (variant) {
     case "micro":
-      return `/${name}_micro.png`;
+      return new URL(
+        `../assets/images/backgrounds/micro/${name}_micro.png`,
+        import.meta.url
+      ).href;
     case "mobile":
-      return `/src/assets/images/backgrounds/mobile/${name}_mobile.jpg`;
+      return new URL(
+        `../assets/images/backgrounds/mobile/${name}_mobile.jpg`,
+        import.meta.url
+      ).href;
     case "tablet":
-      return `/src/assets/images/backgrounds/tablet/${name}_tablet.jpg`;
+      return new URL(
+        `../assets/images/backgrounds/tablet/${name}_tablet.jpg`,
+        import.meta.url
+      ).href;
     case "desktop":
-      return `/src/assets/images/backgrounds/desktop/${name}_desktop.jpg`;
+      return new URL(
+        `../assets/images/backgrounds/desktop/${name}_desktop.jpg`,
+        import.meta.url
+      ).href;
     default:
       return "none";
   }
