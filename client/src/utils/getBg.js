@@ -1,11 +1,7 @@
-import a from "../assets/images/backgrounds/micro/bg-1_micro.png";
-
-console.log(a);
-
 export function getBg(variant, name) {
   switch (variant) {
     case "micro":
-      return a;
+      return `/assets/${name}_micro.png`;
     case "mobile":
       return `images/backgrounds/mobile/${name}_mobile.jpg`;
     case "tablet":
