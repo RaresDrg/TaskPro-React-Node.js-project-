@@ -4,7 +4,7 @@ import b from "../assets/images/backgrounds/desktop/bg-1_desktop.jpg";
 export function getBg(variant, name) {
   switch (variant) {
     case "micro":
-      return a;
+      // return a;
       return `/assets/${name}_micro.png`;
     case "mobile":
       return b;
