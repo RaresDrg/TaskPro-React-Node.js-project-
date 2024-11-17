@@ -2,7 +2,6 @@ import multer from "multer";
 import path from "path";
 
 const filterProfilePhoto = (req, file, cb) => {
-  console.log(file);
   const fileExtension = path.extname(file.originalname);
   const availableExtensions = [".jpeg", ".png"];
 
@@ -10,7 +9,7 @@ const filterProfilePhoto = (req, file, cb) => {
     const extensionsString = availableExtensions.join(", ");
     const error = `You must enter a file with one of these extensions: ${extensionsString}`;
 
-    cb(new Error(file));
+    cb(new Error(fileExtension));
     return;
   }
 
