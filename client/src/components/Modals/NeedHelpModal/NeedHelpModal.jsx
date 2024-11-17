@@ -40,6 +40,7 @@ const NeedHelpModal = ({ className: styles }) => {
       .oneOf([`${user.email}`], "Must provide the right email for this account")
       .required("Required *"),
     comment: Yup.string()
+      .trim()
       .min(10, "It must be at least 10 characters long")
       .max(400, "It must be less than 400 characters long")
       .required("Required *"),

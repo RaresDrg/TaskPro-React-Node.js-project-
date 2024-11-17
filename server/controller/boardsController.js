@@ -4,7 +4,12 @@ import utils from "../utils/utils.js";
 async function addBoard(req, res, next) {
   try {
     const owner = req.user.id;
-    const { title, icon, background } = req.body;
+    const { title, icon } = req.body;
+    const background = {
+      value: req.body.background,
+      sources: utils.getBackgroundSrc(req.body.background),
+    };
+
     const newBoard = { title, icon, background, owner };
     const result = await boardsService.addBoardToDB(newBoard);
 
@@ -44,15 +49,11 @@ async function getBoardsList(req, res, next) {
     const owner = req.user.id;
     const boardsList = await boardsService.getBoardsListFromDB(owner);
 
-    if (boardsList.length === 0) {
-      res.status(404).json({
-        code: 404,
-        message: "There are no saved data in the database",
-      });
-      return;
-    }
-
-    res.status(200).json({ status: "success", code: 200, data: boardsList });
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: boardsList.length > 0 ? boardsList : null,
+    });
   } catch (error) {
     next(error);
   }
@@ -119,7 +120,12 @@ async function updateBoard(req, res, next) {
     }
 
     const owner = req.user.id;
-    const { title, icon, background } = req.body;
+    const { title, icon } = req.body;
+    const background = {
+      value: req.body.background,
+      sources: utils.getBackgroundSrc(req.body.background),
+    };
+
     const updates = { title, icon, background };
     const result = await boardsService.updateBoardInDB(boardId, owner, updates);
 

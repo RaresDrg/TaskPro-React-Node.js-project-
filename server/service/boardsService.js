@@ -16,11 +16,11 @@ async function addBoardToDB(newBoard) {
 }
 
 async function getBoardsListFromDB(owner) {
-  return Board.find({ owner });
+  return Board.find({ owner }, { _id: 1, title: 1, icon: 1 });
 }
 
 async function getBoardFromDB(boardId) {
-  return Board.findOne({ _id: boardId });
+  return Board.findOne({ _id: boardId }, { owner: 0 });
 }
 
 function deleteBoardFromDB(boardId) {

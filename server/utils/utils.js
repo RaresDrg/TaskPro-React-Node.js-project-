@@ -71,12 +71,31 @@ function handleBoardsSchema(property) {
   }
 }
 
+function getBackgroundSrc(background) {
+  if (background === "bg-default") return null;
+
+  const baseURL =
+    "https://res.cloudinary.com/db73szjbz/image/upload/TaskPro/assets/backgrounds/";
+
+  const backgroundSrc = {
+    mobile: `${baseURL}/mobile/${background}`,
+    tablet: `${baseURL}/tablet/${background}`,
+    desktop: `${baseURL}/desktop/${background}`,
+    mobile_2x: `${baseURL}/mobile/${background}-2x`,
+    tablet_2x: `${baseURL}/tablet/${background}-2x`,
+    desktop_2x: `${baseURL}/desktop/${background}-2x`,
+  };
+
+  return backgroundSrc;
+}
+
 const utils = {
   handleInvalidIdError,
   handleValidationError,
   handleDuplicateEmail,
   encrypt,
   handleBoardsSchema,
+  getBackgroundSrc,
 };
 
 export default utils;

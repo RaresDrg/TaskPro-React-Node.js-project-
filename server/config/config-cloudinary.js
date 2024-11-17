@@ -17,6 +17,7 @@ const uploadOnCloudinary = async (file, userId, name) => {
           resource_type: "image",
           public_id: userId,
           display_name: name,
+          asset_folder: "TaskPro/users",
         },
         (error, result) => {
           if (error) {

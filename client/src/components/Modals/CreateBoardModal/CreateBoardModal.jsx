@@ -38,6 +38,7 @@ const CreateBoardModal = () => {
 
   const validationSchema = Yup.object({
     title: Yup.string()
+      .trim()
       .min(3, "Title must be at least 3 characters long")
       .max(50, "Title must be less than 50 characters long")
       .required("Required *"),

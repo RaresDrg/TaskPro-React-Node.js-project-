@@ -1,6 +1,5 @@
 import { lazy, Suspense } from "react";
 import { useModals } from "../../hooks/hooks";
-import LoadingSpinner from "../common/LoadingSpinner/LoadingSpinner.styled";
 
 const BurgerMenu = lazy(() => import("../BurgerMenu/BurgerMenu.styled"));
 const LogoutModal = lazy(() => import("./LogoutModal/LogoutModal.styled"));

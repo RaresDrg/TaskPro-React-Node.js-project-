@@ -40,6 +40,7 @@ const EditUserModal = ({ className: styles }) => {
 
   const validationSchema = Yup.object({
     name: Yup.string()
+      .trim()
       .min(3, "Name must be at least 3 characters long")
       .max(50, "Name must be less than 50 characters long")
       .required("Required *"),

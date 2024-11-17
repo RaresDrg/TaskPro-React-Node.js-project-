@@ -2,10 +2,12 @@ import styled from "styled-components";
 import MyBoards from "./MyBoards";
 
 const StyledMyBoards = styled(MyBoards)`
-  margin: 70px 14px 40px 14px;
+  margin-top: 70px;
+  margin-bottom: 40px;
 
   & {
     & > span {
+      margin-left: 14px;
       font-size: 12px;
       font-weight: 400;
       line-height: 18px;
@@ -19,7 +21,7 @@ const StyledMyBoards = styled(MyBoards)`
     }
 
     & > div {
-      margin-top: 8px;
+      margin: 8px 14px 0 14px;
       padding: 14px 0;
       display: flex;
       align-items: center;
@@ -78,10 +80,27 @@ const StyledMyBoards = styled(MyBoards)`
         }
       }
     }
+
+    .boards-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 40px;
+    }
   }
 
   @media (min-width: 768px) {
-    margin: 60px 24px 40px 24px;
+    margin-top: 60px;
+
+    & {
+      & > span {
+        margin-left: 24px;
+      }
+
+      & > div {
+        margin: 8px 24px 0 24px;
+      }
+    }
   }
 `;
 

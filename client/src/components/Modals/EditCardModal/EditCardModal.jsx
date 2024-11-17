@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { updateBoardColumnCard } from "../../../redux/boards/operations";
 import { setModalClose } from "../../../redux/modals/slice";
 import { toast } from "react-toastify";
-import { capitalize, formatDate } from "../../../utils/utils";
+import { capitalize } from "../../../utils/utils";
 import { useAuth, useBoards } from "../../../hooks/hooks";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -37,10 +37,12 @@ const EditCardModal = ({ className: styles }) => {
 
   const validationSchema = Yup.object({
     title: Yup.string()
+      .trim()
       .min(3, "It must be at least 3 characters long")
       .max(50, "It must be less than 50 characters long")
       .required("Required *"),
     description: Yup.string()
+      .trim()
       .min(5, "It must be at least 5 characters long")
       .max(400, "It must be less than 400 characters long")
       .required("Required *"),
@@ -63,7 +65,7 @@ const EditCardModal = ({ className: styles }) => {
       title: capitalize(title),
       description: description.trim().toLowerCase(),
       priority,
-      deadline: formatDate(deadline),
+      deadline: deadline.toDateString(),
     };
 
     dispatch(updateBoardColumnCard({ boardId, columnId, cardId, updates }))

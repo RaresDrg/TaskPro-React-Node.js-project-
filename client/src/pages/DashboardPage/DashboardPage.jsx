@@ -12,7 +12,12 @@ const DashboardPage = ({ className: styles }) => {
   return (
     <section className={styles}>
       <Container>
-        {!boardsList ? (
+        {boardsList ? (
+          <p>
+            You can select a board from the list by clicking on it and relevant
+            project information will be displayed here.
+          </p>
+        ) : (
           <p>
             Before starting your project, it is essential{" "}
             <b onClick={() => dispatch(setModalOpen("CreateBoardModal"))}>
@@ -21,11 +26,6 @@ const DashboardPage = ({ className: styles }) => {
             to visualize and track all the necessary tasks and milestones. This
             board serves as a powerful tool to organize the workflow and ensure
             effective collaboration among team members.
-          </p>
-        ) : (
-          <p>
-            You can select a board from the list by clicking on it and relevant
-            project information will be displayed here.
           </p>
         )}
       </Container>

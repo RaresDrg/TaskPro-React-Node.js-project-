@@ -1,9 +1,12 @@
 import icons from "../../assets/icons/icons.svg";
 import { useDispatch } from "react-redux";
 import { setModalOpen } from "../../redux/modals/slice";
+import { useBoards } from "../../hooks/hooks";
+import BoardItem from "../BoardItem/BoardItem.styled";
 
 const MyBoards = ({ className: styles }) => {
   const dispatch = useDispatch();
+  const { boardsList } = useBoards();
 
   return (
     <div className={styles}>
@@ -18,6 +21,14 @@ const MyBoards = ({ className: styles }) => {
           <use href={`${icons}#icon-plus`}></use>
         </svg>
       </div>
+
+      {boardsList && (
+        <ul className="boards-list">
+          {boardsList.map((item) => (
+            <BoardItem key={item["_id"]} board={item} />
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { Field } from "formik";
-import { getBgOptions, getBg } from "../../../utils/utils";
+import { getBgOptions } from "../../../utils/utils";
 
 const FormBackgroundField = ({ className: styles }) => {
   const bgOptions = getBgOptions();
@@ -12,7 +12,10 @@ const FormBackgroundField = ({ className: styles }) => {
           <div key={item}>
             <Field type={"radio"} id={item} value={item} name="background" />
             <label htmlFor={item}>
-              <img src={getBg("micro", item)} alt="background" />
+              <img
+                src={`https://res.cloudinary.com/db73szjbz/image/upload/TaskPro/assets/backgrounds/micro/${item}`}
+                alt="background"
+              />
             </label>
           </div>
         ))}

@@ -8,12 +8,14 @@ const priorityOptions = utils.handleBoardsSchema("priority");
 const cardSchema = new Schema({
   title: {
     type: String,
+    trim: true,
     minlength: [3, "Title must be at least 3 characters long"],
     maxlength: [50, "Title must be less than 50 characters long"],
     required: [true, "=> this field is required"],
   },
   description: {
     type: String,
+    trim: true,
     minlength: [5, "Description must be at least 5 characters long"],
     maxlength: [400, "Description must be less than 400 characters long"],
     required: [true, "=> this field is required"],
@@ -35,6 +37,7 @@ const cardSchema = new Schema({
 const columnSchema = new Schema({
   title: {
     type: String,
+    trim: true,
     minlength: [3, "Title must be at least 3 characters long"],
     maxlength: [50, "Title must be less than 50 characters long"],
     required: [true, "=> this field is required"],
@@ -48,6 +51,7 @@ const schema = new Schema(
   {
     title: {
       type: String,
+      trim: true,
       minlength: [3, "Title must be at least 3 characters long"],
       maxlength: [50, "Title must be less than 50 characters long"],
       required: [true, "=> this field is required"],
@@ -61,12 +65,18 @@ const schema = new Schema(
       required: [true, "=> this field is required"],
     },
     background: {
-      type: String,
-      enum: {
-        values: bgOptions,
-        message: `=> it should be one of these: ${bgOptions.join(", ")}`,
+      value: {
+        type: String,
+        enum: {
+          values: bgOptions,
+          message: `=> it should be one of these: ${bgOptions.join(", ")}`,
+        },
+        required: [true, "=> this field is required"],
       },
-      required: [true, "=> this field is required"],
+      sources: {
+        type: Object,
+        default: null,
+      },
     },
     columns: {
       type: [columnSchema],

@@ -2,8 +2,8 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 // todo: => verccel
-// axios.defaults.baseURL = "http://localhost:3000";
-axios.defaults.baseURL = "https://taskproserver.vercel.app";
+axios.defaults.baseURL = "http://localhost:3000";
+// axios.defaults.baseURL = "https://taskproserver.vercel.app";
 
 const utils = {
   setAuthHeader: (token) =>
@@ -79,7 +79,6 @@ const updateUser = createAsyncThunk(
   "auth/updateUserProfile",
   async (updates, thunkAPI) => {
     try {
-      await utils.delay(1500);
       const response = await axios.put("/api/users/profile", updates, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -97,7 +96,6 @@ export { register, login, logout, refreshUser, updateUser };
 
 const updateTheme = (theme) => axios.patch("/api/users/theme", { theme });
 const reachCustomerSupport = async (comment) => {
-  await utils.delay(1500);
   const response = await axios.post("/api/users/support", comment);
   return response.data;
 };

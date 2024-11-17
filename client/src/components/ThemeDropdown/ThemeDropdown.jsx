@@ -26,16 +26,16 @@ const ThemeDropdown = ({ className: styles }) => {
   function handleClose(e) {
     if (e.target !== document.querySelector(".dropdown-list")) {
       setIsOpen(false);
+
+      if (
+        e.target.nodeName === "LI" &&
+        !e.target.classList.contains("active")
+      ) {
+        const theme = e.target.textContent;
+        dispatch(setTheme(theme));
+        updateTheme(theme);
+      }
     }
-  }
-
-  function handleClick(e) {
-    if (e.target.nodeName === "UL") return;
-    if (e.target.classList.contains("active")) return;
-
-    const theme = e.target.textContent;
-    dispatch(setTheme(theme));
-    updateTheme(theme);
   }
 
   return (
@@ -51,10 +51,7 @@ const ThemeDropdown = ({ className: styles }) => {
         </svg>
       </button>
 
-      <ul
-        className={`dropdown-list ${isOpen ? "visible" : ""}`}
-        onClick={handleClick}
-      >
+      <ul className={`dropdown-list ${isOpen ? "visible" : ""}`}>
         <li className={theme === "light" ? "active" : ""}>light</li>
         <li className={theme === "dark" ? "active" : ""}>dark</li>
         <li className={theme === "violet" ? "active" : ""}>violet</li>

@@ -4,7 +4,6 @@ import { useReactResponsive } from "../../../hooks/hooks";
 import Header from "../../Header/Header.styled";
 import LeftSidebar from "../../LeftSidebar/LeftSidebar.styled";
 import Modals from "../../Modals/Modals";
-import LoadingSpinner from "../LoadingSpinner/LoadingSpinner.styled";
 
 const SharedLayout = () => {
   const { isOnDesktop } = useReactResponsive();
@@ -15,7 +14,7 @@ const SharedLayout = () => {
       <Header />
       <Modals />
 
-      <Suspense fallback={<LoadingSpinner />}>
+      <Suspense>
         <Outlet />
       </Suspense>
     </>

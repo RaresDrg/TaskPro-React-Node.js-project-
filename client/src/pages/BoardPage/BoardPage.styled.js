@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import BoardPage from "./BoardPage";
-import { getBg } from "../../utils/utils";
 
 const StyledBoardPage = styled(BoardPage)`
   height: calc(100dvh - 60px);
@@ -8,9 +7,9 @@ const StyledBoardPage = styled(BoardPage)`
   overflow: hidden;
   border-top: 1px solid grey;
   background-image: ${({ board }) =>
-    (board?.background === undefined && "none") ||
-    (board.background === "bg-default" && "none") ||
-    (board.background && `url(${getBg("mobile", board.background)})`)};
+    !board || board.background.value === "bg-default"
+      ? "none"
+      : `url(${board.background.sources.mobile})`};
   background-position: center;
   background-size: cover;
   background-color: ${({ theme: { theme } }) =>
@@ -89,9 +88,9 @@ const StyledBoardPage = styled(BoardPage)`
   @media (min-width: 768px) {
     height: calc(100dvh - 68px);
     background-image: ${({ board }) =>
-      (board?.background === undefined && "none") ||
-      (board.background === "bg-default" && "none") ||
-      (board.background && `url(${getBg("tablet", board.background)})`)};
+      !board || board.background.value === "bg-default"
+        ? "none"
+        : `url(${board.background.sources.tablet})`};
     padding: 26px 0 32px 0;
 
     & > div > h1 {
@@ -104,9 +103,9 @@ const StyledBoardPage = styled(BoardPage)`
   @media (min-width: 1440px) {
     margin-left: 260px;
     background-image: ${({ board }) =>
-      (board?.background === undefined && "none") ||
-      (board.background === "bg-default" && "none") ||
-      (board.background && `url(${getBg("desktop", board.background)})`)};
+      !board || board.background.value === "bg-default"
+        ? "none"
+        : `url(${board.background.sources.desktop})`};
     padding: 14px 0 24px 0;
 
     & > div > h1 {
@@ -120,25 +119,22 @@ const StyledBoardPage = styled(BoardPage)`
     (min-resolution: 192dpi),
     (min-resolution: 2dppx) {
     background-image: ${({ board }) =>
-      (board?.background === undefined && "none") ||
-      (board.background === "bg-default" && "none") ||
-      (board.background &&
-        `url(${getBg("mobile", `${board.background}-2x`)})`)};
+      !board || board.background.value === "bg-default"
+        ? "none"
+        : `url(${board.background.sources.mobile_2x})`};
 
     @media (min-width: 768px) {
       background-image: ${({ board }) =>
-        (board?.background === undefined && "none") ||
-        (board.background === "bg-default" && "none") ||
-        (board.background &&
-          `url(${getBg("tablet", `${board.background}-2x`)})`)};
+        !board || board.background.value === "bg-default"
+          ? "none"
+          : `url(${board.background.sources.tablet_2x})`};
     }
 
     @media (min-width: 1440px) {
       background-image: ${({ board }) =>
-        (board?.background === undefined && "none") ||
-        (board.background === "bg-default" && "none") ||
-        (board.background &&
-          `url(${getBg("desktop", `${board.background}-2x`)})`)};
+        !board || board.background.value === "bg-default"
+          ? "none"
+          : `url(${board.background.sources.desktop_2x})`};
     }
   }
 `;

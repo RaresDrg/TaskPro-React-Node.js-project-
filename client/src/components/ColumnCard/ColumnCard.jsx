@@ -10,7 +10,7 @@ const ColumnCard = ({ className: styles, card }) => {
   const dispatch = useDispatch();
 
   const today = new Date().toDateString();
-  const deadline = new Date(card.deadline).toDateString();
+  const deadline = card.deadline;
 
   const isDeadlineTime = today === deadline;
   const overdue = new Date(today).getTime() > new Date(deadline).getTime();
@@ -26,9 +26,7 @@ const ColumnCard = ({ className: styles, card }) => {
         </div>
         <div className="deadline">
           <span>Deadline</span>
-          <span className={overdue ? "red" : ""}>
-            {card.deadline.split("/").reverse().join("/")}
-          </span>
+          <span className={overdue ? "red" : ""}>{deadline}</span>
         </div>
         <div className="action-icons">
           {isDeadlineTime && (
