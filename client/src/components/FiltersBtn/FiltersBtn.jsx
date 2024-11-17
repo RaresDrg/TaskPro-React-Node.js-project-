@@ -1,20 +1,22 @@
 import icons from "../../assets/icons/icons.svg";
 import { useDispatch } from "react-redux";
 import { setModalOpen } from "../../redux/modals/slice";
+import { useBoards } from "../../hooks/hooks";
 
 const FiltersBtn = ({ className: styles }) => {
   const dispatch = useDispatch();
+  const { filter } = useBoards();
 
   return (
     <button
       type="button"
-      className={styles}
+      className={`${styles} ${filter ? "active" : ""}`}
       onClick={() => dispatch(setModalOpen("FiltersModal"))}
     >
       <svg width="16" height="16">
         <use href={`${icons}#icon-filter`}></use>
       </svg>
-      <span>Filters</span>
+      <span>{filter ?? "Filters"}</span>
     </button>
   );
 };

@@ -16,14 +16,16 @@ const StyledFiltersBtn = styled(FiltersBtn)`
   background-color: #f5f5f5;
   border: 0.5px solid grey;
   border-radius: 20px;
-  padding: 0 10px;
+  padding: 1px 10px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   opacity: 0.7;
   transition: var(--transition);
 
-  &:hover {
+  &:hover,
+  &.active {
     opacity: 1;
     border-radius: 0px 40px;
+    text-transform: capitalize;
   }
 
   @media (min-width: 768px) {
