@@ -2,6 +2,7 @@ import multer from "multer";
 import path from "path";
 
 const filterProfilePhoto = (req, file, cb) => {
+  console.log(file);
   const fileExtension = path.extname(file.originalname);
   const availableExtensions = [".jpeg", ".png"];
 
