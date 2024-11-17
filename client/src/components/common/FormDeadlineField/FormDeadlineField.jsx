@@ -13,6 +13,7 @@ const FormDeadlineField = ({ className: styles, date, handlerFunctions }) => {
       {value}
     </span>
   ));
+  DateInput.displayName = "DateInput";
 
   const calendarIcon = (
     <svg>
