@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useState, lazy } from "react";
 import { ThemeProvider } from "styled-components";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -9,6 +9,7 @@ import { useAuth, useBoards } from "./hooks/hooks";
 import ProtectedRoutes from "./pages/ProtectedRoutes/ProtectedRoutes";
 import RestrictedRoutes from "./pages/RestrictedRoutes/RestrictedRoutes";
 import SharedLayout from "./components/common/SharedLayout/SharedLayout";
+import LoadingScreen from "./components/common/LoadingScreen/LoadingScreen.styled";
 import LoadingSpinner from "./components/common/LoadingSpinner/LoadingSpinner.styled";
 import Notification from "./components/common/Notification/Notification";
 
@@ -23,9 +24,6 @@ const DashboardPage = lazy(() =>
 const BoardPage = lazy(() => import("./pages/BoardPage/BoardPage.styled"));
 const NotFoundPage = lazy(() =>
   import("./pages/NotFoundPage/NotFoundPage.styled")
-);
-const LoadingScreen = lazy(() =>
-  import("./components/common/LoadingScreen/LoadingScreen.styled")
 );
 
 const App = () => {
@@ -70,7 +68,7 @@ const App = () => {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      <Suspense>{isLoading && <LoadingScreen />}</Suspense>
+      {isLoading && <LoadingScreen />}
       <Notification />
     </ThemeProvider>
   );

@@ -2,8 +2,8 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 // todo: => verccel
-// axios.defaults.baseURL = "http://localhost:3000";
-axios.defaults.baseURL = "https://taskproserver.vercel.app";
+axios.defaults.baseURL = "http://localhost:3000";
+// axios.defaults.baseURL = "https://taskproserver.vercel.app";
 
 const utils = {
   setAuthHeader: (token) =>

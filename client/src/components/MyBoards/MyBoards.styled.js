@@ -73,7 +73,7 @@ const StyledMyBoards = styled(MyBoards)`
               (theme === "dark" && "0px 0px 16px 0px var(--green-color)") ||
               (theme === "light" && "0px 0px 16px 0px var(--green-color)") ||
               (theme === "violet" && "0px 0px 16px 0px var(--violet-color)")};
-            transform: scale(1.15);
+            transform: scale(1.1);
             border: 0.5px solid var(--text-color-white);
             stroke: var(--text-color-white);
           }

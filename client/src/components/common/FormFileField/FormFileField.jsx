@@ -39,7 +39,7 @@ const FormFileField = ({ className: styles, setFieldValue }) => {
         id="fileInput"
         type="file"
         name="profilePhoto"
-        accept="image/png, image/jpeg"
+        accept="image/*"
         value=""
         onChange={handleFileUploaded}
       />

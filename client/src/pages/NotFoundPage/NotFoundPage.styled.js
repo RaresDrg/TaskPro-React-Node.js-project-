@@ -22,7 +22,7 @@ const StyledNotFoundPage = styled(NotFoundPage)`
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: contrast(80%) brightness(70%);
+      filter: contrast(99%) brightness(32%);
     }
 
     .go-back-btn {

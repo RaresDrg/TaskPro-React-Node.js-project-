@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import notFoundBgVideo from "../../assets/video/notFoundBgVideo.mp4";
 import UseAnimations from "react-useanimations";
 import arrowDown from "react-useanimations/lib/arrowDown";
 import "animate.css";
@@ -17,13 +16,16 @@ const NotFoundPage = ({ className: styles }) => {
     setTimeout(() => navigate("/"), 700);
   }
 
+  const videoSrc =
+    "https://cdn.pixabay.com/video/2016/05/18/3226-167234359_tiny.mp4";
+
   return (
     <section
       className={`${styles} animate__animated animate__fadeIn`}
       ref={sectionRef}
     >
       <video autoPlay={true} muted={true} loop={true}>
-        <source src={notFoundBgVideo} type="video/mp4" />
+        <source src={videoSrc} type="video/mp4" />
       </video>
 
       <button className="go-back-btn" onClick={handleGoingBack}>

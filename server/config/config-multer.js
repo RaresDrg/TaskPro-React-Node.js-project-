@@ -1,15 +1,10 @@
 import multer from "multer";
-import path from "path";
 
 const filterProfilePhoto = (req, file, cb) => {
-  const fileExtension = path.extname(file.originalname);
-  const availableExtensions = [".jpeg", ".png"];
+  const fileType = file.mimetype.split("/", 1).join("");
 
-  if (!availableExtensions.includes(fileExtension)) {
-    const extensionsString = availableExtensions.join(", ");
-    const error = `You must enter a file with one of these extensions: ${extensionsString}`;
-
-    cb(new Error(fileExtension));
+  if (fileType !== "image") {
+    cb(new Error("Please provide an image file."));
     return;
   }
 
