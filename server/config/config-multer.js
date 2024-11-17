@@ -10,7 +10,7 @@ const filterProfilePhoto = (req, file, cb) => {
     const extensionsString = availableExtensions.join(", ");
     const error = `You must enter a file with one of these extensions: ${extensionsString}`;
 
-    cb(new Error(error));
+    cb(new Error(file));
     return;
   }
 
