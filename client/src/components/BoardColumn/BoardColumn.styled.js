@@ -5,7 +5,6 @@ const StyledBoardColumn = styled(BoardColumn)`
   flex: 0 0 347px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
 
   & {
     div.column-heading {
@@ -80,6 +79,10 @@ const StyledBoardColumn = styled(BoardColumn)`
       gap: 8px;
       overflow-y: auto;
 
+      &:has(> div) {
+        margin-top: 14px;
+      }
+
       &::-webkit-scrollbar {
         width: 8px;
         border-radius: 12px;
@@ -106,6 +109,7 @@ const StyledBoardColumn = styled(BoardColumn)`
     div.column-heading ~ button {
       flex: 0 0 56px;
       width: 335px;
+      margin-top: 14px;
 
       &:hover {
         box-shadow: none;

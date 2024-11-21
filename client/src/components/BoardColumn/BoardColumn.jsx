@@ -38,13 +38,11 @@ const BoardColumn = ({ className: styles, column }) => {
         </div>
       </div>
 
-      {column.cards.length > 0 && (
-        <div className="cards-list">
-          {column.cards.map((item) => (
-            <ColumnCard key={item["_id"]} card={item} />
-          ))}
-        </div>
-      )}
+      <div className="cards-list">
+        {column.cards.map((item) => (
+          <ColumnCard key={item["_id"]} card={item} />
+        ))}
+      </div>
 
       <FormButton
         type="button"

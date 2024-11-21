@@ -30,14 +30,15 @@ const BoardPage = ({ className: styles }) => {
 
   if (shouldWait) return <LoadingSpinner />;
 
-  const boardColumns = !filter
-    ? board.columns
-    : board.columns.map((column) => {
-        return {
-          ...column,
-          cards: column.cards.filter((card) => card.priority === filter),
-        };
-      });
+  let boardColumns = board.columns;
+  // const boardColumns = !filter
+  //   ? board.columns
+  //   : board.columns.map((column) => {
+  //       return {
+  //         ...column,
+  //         cards: column.cards.filter((card) => card.priority === filter),
+  //       };
+  //     });
 
   const showFilterBtn = board.columns.some((column) => column.cards.length > 0);
 
