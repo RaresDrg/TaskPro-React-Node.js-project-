@@ -133,7 +133,6 @@ const EditUserModal = ({ className: styles }) => {
         </Formik>
       </Modal>
 
-      {/* intrebare: pt performanta, import lazy si suspense ? */}
       {isLoading && createPortal(<LoadingSpinner />, document.body)}
     </>
   );

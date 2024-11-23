@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import { useReactResponsive } from "../../../hooks/hooks";
 import Header from "../../Header/Header.styled";
@@ -14,9 +13,7 @@ const SharedLayout = () => {
       <Header />
       <Modals />
 
-      <Suspense>
-        <Outlet />
-      </Suspense>
+      <Outlet />
     </>
   );
 };

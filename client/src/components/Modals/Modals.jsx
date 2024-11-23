@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
 import { useModals } from "../../hooks/hooks";
 
 const BurgerMenu = lazy(() => import("../BurgerMenu/BurgerMenu.styled"));
@@ -34,7 +34,7 @@ const Modals = () => {
   const modals = useModals();
 
   return (
-    <Suspense>
+    <>
       {modals.isBurgerMenuOpen && <BurgerMenu />}
       {modals.isEditUserModalOpen && <EditUserModal />}
       {modals.isNeedHelpModalOpen && <NeedHelpModal />}
@@ -49,7 +49,7 @@ const Modals = () => {
       {modals.isAddCardModalOpen && <AddCardModal />}
       {modals.isEditCardModalOpen && <EditCardModal />}
       {modals.isDeleteCardModalOpen && <DeleteCardModal />}
-    </Suspense>
+    </>
   );
 };
 
