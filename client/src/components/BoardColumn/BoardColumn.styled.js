@@ -79,8 +79,13 @@ const StyledBoardColumn = styled(BoardColumn)`
       gap: 8px;
       overflow-y: auto;
 
+      &:not(:has(> div)) {
+        height: 14px;
+      }
+
       &:has(> div) {
         margin-top: 14px;
+        margin-bottom: 14px;
       }
 
       &::-webkit-scrollbar {
@@ -109,7 +114,6 @@ const StyledBoardColumn = styled(BoardColumn)`
     div.column-heading ~ button {
       flex: 0 0 56px;
       width: 335px;
-      margin-top: 14px;
 
       &:hover {
         box-shadow: none;
