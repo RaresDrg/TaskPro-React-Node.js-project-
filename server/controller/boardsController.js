@@ -165,6 +165,52 @@ async function updateBoard(req, res, next) {
   }
 }
 
+async function updateBoardColumns(req, res, next) {
+  try {
+    const { boardId } = req.params;
+    const targetedBoard = await boardsService.getBoardFromDB(boardId);
+
+    if (!targetedBoard) {
+      res.status(404).json({ code: 404, message: "Not found" });
+      return;
+    }
+
+    const { columns } = req.body;
+    const isReqValid = Array.isArray(columns) && columns.length > 0;
+
+    if (!isReqValid) {
+      res.status(400).json({
+        status: "failed",
+        code: 400,
+        message:
+          "In order to update your board's columns, you have to provide an array of objects, containing the new columns.",
+      });
+      return;
+    }
+
+    const result = await boardsService.updateBoardColumnsInDB(boardId, columns);
+
+    res.status(200).json({
+      status: "succes",
+      code: 200,
+      message: "The board's columns have been successfully updated",
+      data: result.columns,
+    });
+  } catch (error) {
+    if (error.name === "CastError") {
+      utils.handleInvalidIdError(res);
+      return;
+    }
+
+    if (error.name === "ValidationError") {
+      utils.handleValidationError(res, error.message);
+      return;
+    }
+
+    next(error);
+  }
+}
+
 async function addColumn(req, res, next) {
   try {
     const { boardId } = req.params;
@@ -457,6 +503,7 @@ const boardsController = {
   getBoard,
   deleteBoard,
   updateBoard,
+  updateBoardColumns,
   addColumn,
   deleteColumn,
   updateColumn,

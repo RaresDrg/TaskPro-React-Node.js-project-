@@ -45,6 +45,14 @@ async function updateBoardInDB(boardId, owner, updates) {
   });
 }
 
+async function updateBoardColumnsInDB(boardId, updates) {
+  return Board.findOneAndUpdate(
+    { _id: boardId },
+    { columns: updates },
+    { new: true, runValidators: true }
+  );
+}
+
 async function addBoardColumnToDB(boardId, newColumn) {
   const alreadyExistingColumn = await Board.findOne({
     _id: boardId,
@@ -171,6 +179,7 @@ const boardsService = {
   getBoardFromDB,
   deleteBoardFromDB,
   updateBoardInDB,
+  updateBoardColumnsInDB,
   addBoardColumnToDB,
   getBoardColumnFromDB,
   updateBoardColumnInDB,

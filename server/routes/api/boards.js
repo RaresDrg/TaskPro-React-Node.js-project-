@@ -8,6 +8,7 @@ router.get("/", boardsController.getBoardsList);
 router.get("/:boardId", boardsController.getBoard);
 router.delete("/:boardId", boardsController.deleteBoard);
 router.put("/:boardId", boardsController.updateBoard);
+router.patch("/:boardId/columns", boardsController.updateBoardColumns);
 
 router.post("/:boardId/columns", boardsController.addColumn);
 router.delete("/:boardId/columns/:columnId", boardsController.deleteColumn);

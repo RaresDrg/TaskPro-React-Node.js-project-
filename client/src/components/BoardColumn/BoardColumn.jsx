@@ -2,16 +2,22 @@ import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { setTargetedColumn } from "../../redux/boards/slice";
 import { setModalOpen } from "../../redux/modals/slice";
-import { useAuth } from "../../hooks/hooks";
+import { useAuth, useBoards } from "../../hooks/hooks";
 import icons from "../../assets/icons/icons.svg";
 import UseAnimations from "react-useanimations";
 import trash2 from "react-useanimations/lib/trash2";
+import { Droppable } from "@hello-pangea/dnd";
 import ColumnCard from "../ColumnCard/ColumnCard.styled";
 import FormButton from "../common/FormButton/FormButton.styled";
 
 const BoardColumn = ({ className: styles, column }) => {
   const { theme } = useAuth();
+  const { filter } = useBoards();
   const dispatch = useDispatch();
+
+  const cardsList = !filter
+    ? column.cards
+    : column.cards.filter((card) => card.priority === filter);
 
   return (
     <div className={styles}>
@@ -38,11 +44,20 @@ const BoardColumn = ({ className: styles, column }) => {
         </div>
       </div>
 
-      <div className="cards-list">
-        {column.cards.map((item) => (
-          <ColumnCard key={item["_id"]} card={item} />
-        ))}
-      </div>
+      <Droppable droppableId={column["_id"]}>
+        {(provided) => (
+          <div
+            className="cards-list"
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {cardsList.map((card, index) => (
+              <ColumnCard key={card["_id"]} card={card} index={index} />
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
 
       <FormButton
         type="button"
