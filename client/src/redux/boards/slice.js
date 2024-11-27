@@ -5,7 +5,6 @@ import {
   getBoard,
   deleteBoard,
   updateBoard,
-  updateBoardColumns,
   addBoardColumn,
   updateBoardColumn,
   deleteBoardColumn,
@@ -98,14 +97,6 @@ const boardsSlice = createSlice({
         utils.handleFulfilled(state);
         state.board = action.payload.data.board;
         state.boardsList = action.payload.data.boardsList;
-      })
-      // *Update board columns
-      .addCase(updateBoardColumns.rejected, (state) => {
-        state.error = "Internal server error. Try again later.";
-      })
-      .addCase(updateBoardColumns.fulfilled, (state, action) => {
-        state.error = null;
-        state.board.columns = action.payload.data;
       })
 
       // *Add board column

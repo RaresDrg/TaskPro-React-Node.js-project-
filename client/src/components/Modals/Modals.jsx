@@ -1,24 +1,18 @@
 import { lazy } from "react";
 import { useModals } from "../../hooks/hooks";
+import CreateBoardModal from "./CreateBoardModal/CreateBoardModal";
+import EditBoardModal from "./EditBoardModal/EditBoardModal";
+import DeleteBoardModal from "./DeleteBoardModal/DeleteBoardModal.styled";
+import LogoutModal from "./LogoutModal/LogoutModal.styled";
+import NeedHelpModal from "./NeedHelpModal/NeedHelpModal.styled";
 
 const BurgerMenu = lazy(() => import("../BurgerMenu/BurgerMenu.styled"));
-const LogoutModal = lazy(() => import("./LogoutModal/LogoutModal.styled"));
 const FiltersModal = lazy(() => import("./FiltersModal/FiltersModal.styled"));
-const EditBoardModal = lazy(() => import("./EditBoardModal/EditBoardModal"));
 const AddColumnModal = lazy(() => import("./AddColumnModal/AddColumnModal"));
 const EditColumnModal = lazy(() => import("./EditColumnModal/EditColumnModal"));
 const AddCardModal = lazy(() => import("./AddCardModal/AddCardModal.styled"));
 const EditUserModal = lazy(() =>
   import("./EditUserModal/EditUserModal.styled")
-);
-const NeedHelpModal = lazy(() =>
-  import("./NeedHelpModal/NeedHelpModal.styled")
-);
-const CreateBoardModal = lazy(() =>
-  import("./CreateBoardModal/CreateBoardModal")
-);
-const DeleteBoardModal = lazy(() =>
-  import("./DeleteBoardModal/DeleteBoardModal.styled")
 );
 const DeleteColumnModal = lazy(() =>
   import("./DeleteColumnModal/DeleteColumnModal.styled")

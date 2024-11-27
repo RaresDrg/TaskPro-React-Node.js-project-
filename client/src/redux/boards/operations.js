@@ -66,21 +66,6 @@ const updateBoard = createAsyncThunk(
   }
 );
 
-const updateBoardColumns = createAsyncThunk(
-  "boards/updateBoardColumns",
-  async ({ boardId, updatedColumns }, thunkAPI) => {
-    try {
-      const response = await axios.patch(`/api/boards/${boardId}/columns`, {
-        columns: updatedColumns,
-      });
-
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
-
 const addBoardColumn = createAsyncThunk(
   "boards/addBoardColumn",
   async ({ boardId, newColumn }, thunkAPI) => {
@@ -181,11 +166,16 @@ export {
   getBoard,
   deleteBoard,
   updateBoard,
-  updateBoardColumns,
   addBoardColumn,
   deleteBoardColumn,
   updateBoardColumn,
   addBoardColumnCard,
   deleteBoardColumnCard,
   updateBoardColumnCard,
+};
+
+export const updateBoardColumns = (boardId, updatedColumns) => {
+  axios.patch(`/api/boards/${boardId}/columns`, {
+    columns: updatedColumns,
+  });
 };

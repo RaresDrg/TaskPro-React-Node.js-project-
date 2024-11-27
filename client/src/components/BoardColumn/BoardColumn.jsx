@@ -20,55 +20,55 @@ const BoardColumn = ({ className: styles, column }) => {
     : column.cards.filter((card) => card.priority === filter);
 
   return (
-    <div className={styles}>
-      <div className="column-heading">
-        <h3 title={column.title}>{column.title}</h3>
-        <div className="action-icons">
-          <svg
-            onClick={() => {
-              dispatch(setTargetedColumn(column));
-              dispatch(setModalOpen("EditColumnModal"));
-            }}
-          >
-            <use href={`${icons}#icon-pencil`}></use>
-          </svg>
-          <UseAnimations
-            animation={trash2}
-            size={21}
-            strokeColor="currentColor"
-            onClick={() => {
-              dispatch(setTargetedColumn(column));
-              dispatch(setModalOpen("DeleteColumnModal"));
-            }}
-          />
-        </div>
-      </div>
+    <Droppable droppableId={column["_id"]}>
+      {(provided) => (
+        <div
+          className={styles}
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+        >
+          <div className="column-heading">
+            <h3 title={column.title}>{column.title}</h3>
+            <div className="action-icons">
+              <svg
+                onClick={() => {
+                  dispatch(setTargetedColumn(column));
+                  dispatch(setModalOpen("EditColumnModal"));
+                }}
+              >
+                <use href={`${icons}#icon-pencil`}></use>
+              </svg>
+              <UseAnimations
+                animation={trash2}
+                size={21}
+                strokeColor="currentColor"
+                onClick={() => {
+                  dispatch(setTargetedColumn(column));
+                  dispatch(setModalOpen("DeleteColumnModal"));
+                }}
+              />
+            </div>
+          </div>
 
-      <Droppable droppableId={column["_id"]}>
-        {(provided) => (
-          <div
-            className="cards-list"
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
+          <div className="cards-list">
             {cardsList.map((card, index) => (
               <ColumnCard key={card["_id"]} card={card} index={index} />
             ))}
             {provided.placeholder}
           </div>
-        )}
-      </Droppable>
 
-      <FormButton
-        type="button"
-        text="Add card"
-        handlerFunction={() => {
-          dispatch(setTargetedColumn(column));
-          dispatch(setModalOpen("AddCardModal"));
-        }}
-        variant={`${theme === "violet" ? "violetBtn" : "greenBtn"}`}
-      />
-    </div>
+          <FormButton
+            type="button"
+            text="Add card"
+            handlerFunction={() => {
+              dispatch(setTargetedColumn(column));
+              dispatch(setModalOpen("AddCardModal"));
+            }}
+            variant={`${theme === "violet" ? "violetBtn" : "greenBtn"}`}
+          />
+        </div>
+      )}
+    </Droppable>
   );
 };
 

@@ -41,6 +41,7 @@ const StyledColumnCard = styled(ColumnCard)`
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      max-width: fit-content;
       color: ${({ theme: { theme } }) =>
         (theme === "dark" && "var(--text-color-white)") ||
         (theme === "light" && "var(--text-color-black)") ||
@@ -158,7 +159,6 @@ const StyledColumnCard = styled(ColumnCard)`
               &.red {
                 color: var(--error-color);
                 font-weight: 600;
-                letter-spacing: 0.02em;
               }
             }
           }

@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import FiltersBtn from "./FiltersBtn";
+import FilterBtn from "./FilterBtn";
 
-const StyledFiltersBtn = styled(FiltersBtn)`
+const StyledFiltersBtn = styled(FilterBtn)`
   position: absolute;
   top: 0;
   right: 20px;
@@ -12,9 +12,10 @@ const StyledFiltersBtn = styled(FiltersBtn)`
   font-weight: 500;
   line-height: 21px;
   letter-spacing: -0.02em;
+  text-transform: capitalize;
   color: var(--text-color-black);
   background-color: #f5f5f5;
-  border: 0.5px solid grey;
+  border: 0.5px dotted grey;
   border-radius: 20px;
   padding: 1px 10px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -25,7 +26,7 @@ const StyledFiltersBtn = styled(FiltersBtn)`
   &.active {
     opacity: 1;
     border-radius: 0px 40px;
-    text-transform: capitalize;
+    border: 0.5px solid grey;
   }
 
   @media (min-width: 768px) {

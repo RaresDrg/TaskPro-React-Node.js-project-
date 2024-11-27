@@ -3,6 +3,7 @@ import BoardColumn from "./BoardColumn";
 
 const StyledBoardColumn = styled(BoardColumn)`
   flex: 0 0 347px;
+  max-height: fit-content;
   display: flex;
   flex-direction: column;
 

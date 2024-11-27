@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { setModalOpen } from "../../redux/modals/slice";
 import { useBoards } from "../../hooks/hooks";
 
-const FiltersBtn = ({ className: styles }) => {
+const FilterBtn = ({ className: styles }) => {
   const dispatch = useDispatch();
   const { filter } = useBoards();
 
@@ -21,4 +21,4 @@ const FiltersBtn = ({ className: styles }) => {
   );
 };
 
-export default FiltersBtn;
+export default FilterBtn;
