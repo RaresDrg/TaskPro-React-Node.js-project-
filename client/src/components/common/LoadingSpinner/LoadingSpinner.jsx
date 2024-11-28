@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import "animate.css";
 
 const LoadingSpinner = ({ className: styles }) => {
   useEffect(() => {

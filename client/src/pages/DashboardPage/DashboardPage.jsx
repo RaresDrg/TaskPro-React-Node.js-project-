@@ -3,14 +3,12 @@ import { useBoards } from "../../hooks/hooks";
 import { useDispatch } from "react-redux";
 import { setModalOpen } from "../../redux/modals/slice";
 
-// todo: tranzitii
-
 const DashboardPage = ({ className: styles }) => {
   const { boardsList } = useBoards();
   const dispatch = useDispatch();
 
   return (
-    <section className={styles}>
+    <section className={`${styles} animate__animated animate__fadeIn`}>
       <Container>
         {boardsList ? (
           <p>

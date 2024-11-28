@@ -54,10 +54,10 @@ const CreateBoardModal = () => {
     dispatch(addBoard(newBoard))
       .unwrap()
       .then((value) => {
-        toast.success(value.message);
-        resetForm();
-        closeModal();
         navigate(`${value.data.board["_id"]}`);
+        resetForm();
+        toast.success(value.message);
+        closeModal();
       })
       .catch((error) => {
         const errorNotification =
@@ -88,6 +88,7 @@ const CreateBoardModal = () => {
               name="title"
               placeholder="Title"
               errors={(errors.title && touched.title) || null}
+              isFocused={true}
             />
             <FormIconsField />
             <FormBackgroundField />

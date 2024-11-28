@@ -8,17 +8,19 @@ const StyledFormButton = styled(FormButton)`
   letter-spacing: -0.02em;
   height: 49px;
   width: ${(props) => (props.variant === "blackBtn" ? "335px" : "100%")};
-  border-radius: 8px;
+  border-radius: ${(props) => (props.variant === "blackBtn" ? "16px" : "8px")};
   overflow: hidden;
   position: relative;
   color: var(--text-color-black);
   background-color: ${(props) =>
-    (props.variant === "blackBtn" && "var(--text-color-white)") ||
+    (props.variant === "blackBtn" && "#ffffff73") ||
     (props.variant === "greenBtn" && "var(--green-color)") ||
     (props.variant === "violetBtn" && "var(--violet-color)") ||
     (props.variant === "redBtn" && "var(--dashboard-page-bg-white)")};
   border: ${(props) =>
     props.variant === "redBtn" ? "1px solid grey" : "1px solid transparent"};
+  box-shadow: ${(props) =>
+    props.variant === "blackBtn" ? "0 4px 30px rgba(0, 0, 0, 0.1)" : "none"};
   transition: var(--transition);
 
   &:before {
@@ -33,7 +35,7 @@ const StyledFormButton = styled(FormButton)`
       (props.variant === "blackBtn" && "var(--text-color-black)") ||
       (props.variant === "greenBtn" && "var(--green-color-active)") ||
       (props.variant === "violetBtn" && "var(--violet-color-active)") ||
-      (props.variant === "redBtn" && "red")};
+      (props.variant === "redBtn" && "var(--error-color)")};
     transition: var(--transition);
   }
 
@@ -46,10 +48,9 @@ const StyledFormButton = styled(FormButton)`
   &:hover:not(:disabled) {
     transform: scale(1.02);
     border: ${(props) =>
-      (props.variant === "blackBtn" && "none") ||
-      (props.variant === "greenBtn" && "1px solid var(--text-color-white)") ||
-      (props.variant === "violetBtn" && "1px solid var(--text-color-white)") ||
-      (props.variant === "redBtn" && "none")};
+      props.variant === "blackBtn"
+        ? "1px solid var(--text-color-black)"
+        : "1px solid var(--text-color-white)"};
     box-shadow: ${(props) =>
       (props.variant === "blackBtn" &&
         "0px 4px 10px 0px var(--text-color-black)") ||
@@ -57,7 +58,7 @@ const StyledFormButton = styled(FormButton)`
         "0px 0px 18px 0px var(--green-color-active)") ||
       (props.variant === "violetBtn" &&
         "0px 0px 18px 0px var(--violet-color-active)") ||
-      (props.variant === "redBtn" && "0px 0px 18px 0px red")};
+      (props.variant === "redBtn" && "0px 0px 18px 0px grey")};
     color: var(--text-color-white);
 
     &:before {

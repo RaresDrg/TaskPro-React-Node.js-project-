@@ -4,6 +4,8 @@ import FiltersModal from "./FiltersModal";
 const StyledFiltersModal = styled(FiltersModal)`
   & {
     .modal-content {
+      width: 300px;
+
       & {
         h2 {
           margin-bottom: 14px;
@@ -114,14 +116,6 @@ const StyledFiltersModal = styled(FiltersModal)`
             }
           }
         }
-      }
-    }
-  }
-
-  @media (min-width: 768px) {
-    & {
-      .modal-content {
-        width: 300px;
       }
     }
   }

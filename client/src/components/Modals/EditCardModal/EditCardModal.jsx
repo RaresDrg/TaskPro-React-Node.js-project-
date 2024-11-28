@@ -104,6 +104,7 @@ const EditCardModal = ({ className: styles }) => {
               name="title"
               placeholder="Title"
               errors={(errors.title && touched.title) || null}
+              isFocused={true}
             />
             <FormTextareaField
               id="descriptionInput"

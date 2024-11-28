@@ -224,6 +224,10 @@ const StyledFormDeadlineField = styled(FormDeadlineField)`
       }
     }
 
+    .react-datepicker__day--selected:not([aria-disabled="true"]):hover {
+      background-color: transparent;
+    }
+
     .react-datepicker__day--selected:hover {
       background-color: transparent;
     }

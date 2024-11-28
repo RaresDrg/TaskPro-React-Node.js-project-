@@ -80,6 +80,7 @@ const EditColumnModal = () => {
               name="title"
               placeholder="Title"
               errors={(errors.title && touched.title) || null}
+              isFocused={true}
             />
             <FormButton
               type={"submit"}

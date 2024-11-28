@@ -8,7 +8,6 @@ const StyledNeedHelpModal = styled(NeedHelpModal)`
 
       & {
         > #emailInput {
-          opacity: 1;
           cursor: not-allowed;
         }
       }

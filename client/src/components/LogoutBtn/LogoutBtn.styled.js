@@ -46,13 +46,13 @@ const StyledLogoutBtn = styled(LogoutBtn)`
     opacity: 1;
 
     svg {
-      stroke: red;
+      stroke: var(--error-color);
       transform: scale(1.15);
     }
 
     span:after {
       width: 100%;
-      background-color: red;
+      background-color: var(--error-color);
     }
   }
 

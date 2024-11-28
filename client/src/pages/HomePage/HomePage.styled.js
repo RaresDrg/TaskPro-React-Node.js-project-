@@ -5,7 +5,7 @@ const StyledHomePage = styled(HomePage)`
   height: 100dvh;
   overflow: auto;
   background: var(--home_register_login-bg);
-  padding: 50px 0;
+  padding: 50px 20px;
 
   & > div {
     min-height: 100%;

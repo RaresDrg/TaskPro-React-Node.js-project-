@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { ThreeDots } from "react-loader-spinner";
-import "animate.css";
 
 const LoadingScreen = ({ className: styles }) => {
   useEffect(() => {
     document.querySelector("video").playbackRate = 2;
+    document.body.style.cursor = "wait";
+
+    return () => (document.body.style.cursor = "auto");
   }, []);
 
   const videoSrc =

@@ -103,6 +103,7 @@ const EditUserModal = ({ className: styles }) => {
                 name="name"
                 placeholder="Name"
                 errors={(errors.name && touched.name) || null}
+                isFocused={true}
               />
               <FormTextField
                 id="emailInput"

@@ -3,7 +3,6 @@ import homePageImg from "../../assets/images/homePageImg.png";
 import { LogoOnHomePage as Logo } from "../../components/common/Logo/Logo.styled";
 import FormButton from "../../components/common/FormButton/FormButton.styled.js";
 import { useNavigate } from "react-router-dom";
-import "animate.css";
 
 const HomePage = ({ className: styles }) => {
   const navigate = useNavigate();

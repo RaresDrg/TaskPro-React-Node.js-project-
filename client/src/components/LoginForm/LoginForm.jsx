@@ -9,7 +9,6 @@ import AuthNavigation from "../common/AuthNavigation/AuthNavigation.styled";
 import FormTextField from "../common/FormTextField/FormTextField.styled";
 import FormPasswordField from "../common/FormPasswordField/FormPasswordField.styled";
 import FormButton from "../common/FormButton/FormButton.styled";
-import "animate.css";
 
 const LoginForm = ({ className: styles }) => {
   const dispatch = useDispatch();
@@ -73,6 +72,7 @@ const LoginForm = ({ className: styles }) => {
               name="email"
               placeholder="Email"
               errors={(errors.email && touched.email) || null}
+              isFocused={true}
             />
             <FormPasswordField
               id="passwordInput"

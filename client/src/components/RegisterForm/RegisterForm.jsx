@@ -9,7 +9,6 @@ import AuthNavigation from "../common/AuthNavigation/AuthNavigation.styled";
 import FormTextField from "../common/FormTextField/FormTextField.styled";
 import FormPasswordField from "../common/FormPasswordField/FormPasswordField.styled";
 import FormButton from "../common/FormButton/FormButton.styled";
-import "animate.css";
 
 const RegisterForm = ({ className: styles }) => {
   const dispatch = useDispatch();
@@ -87,6 +86,7 @@ const RegisterForm = ({ className: styles }) => {
               name="name"
               placeholder="Name"
               errors={(errors.name && touched.name) || null}
+              isFocused={true}
             />
             <FormTextField
               id="emailInput"
@@ -106,9 +106,10 @@ const RegisterForm = ({ className: styles }) => {
               name="confirmPassword"
               placeholder="Please, confirm your password"
               errors={
-                (touched.confirmPassword &&
-                  (errors.confirmPassword || errors.password)) ||
-                null
+                Boolean(
+                  touched.confirmPassword &&
+                    (errors.confirmPassword || errors.password)
+                ) || null
               }
               values={values.confirmPassword || null}
             />

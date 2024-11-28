@@ -90,6 +90,7 @@ const NeedHelpModal = ({ className: styles }) => {
                 placeholder="Comment"
                 errors={(errors.comment && touched.comment) || null}
                 rows={5}
+                isFocused={true}
               />
               <FormButton
                 type={"submit"}

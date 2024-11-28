@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import UseAnimations from "react-useanimations";
 import arrowDown from "react-useanimations/lib/arrowDown";
-import "animate.css";
 
 const NotFoundPage = ({ className: styles }) => {
   const navigate = useNavigate();
