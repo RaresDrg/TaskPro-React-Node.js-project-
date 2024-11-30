@@ -8,4 +8,4 @@
 
 ### Important:
 
-- `fiserul: .env` &mdash; dupa ce a fost generat cu comanda de mai sus, trebuie completat: cu valoarea uri-ului de la baza de date, cu o valoare pentru jwt secret key, cu date de conectare la cloudinary (Cloud name, api key si api secret) si cu date pentru Send grid (api key si un email).
+- `fiserul: .env` &mdash; dupa ce a fost generat cu comanda de mai sus, trebuie completat: cu valoarea uri-ului de la baza de date, cu o valoare pentru jwt secret key, cu date de conectare la cloudinary (Cloud name, api key si api secret) si cu date pentru Nodemailer: gmail si parola (contul trebuie sa aiba acces la parole pentru aplicatii).

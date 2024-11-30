@@ -1,7 +1,7 @@
 import usersService from "../service/usersService.js";
 import utils from "../utils/utils.js";
 import uploadOnCloudinary from "../config/config-cloudinary.js";
-import sendEmail from "../config/config-sendGrid.js";
+import sendEmail from "../config/config-nodemailer.js";
 
 async function register(req, res, next) {
   try {
@@ -224,7 +224,7 @@ async function reachCustomerSupport(req, res, next) {
       status: "succes",
       code: 200,
       message:
-        "We have successfully received your comment, and a confirmation email has been sent to you. Please, check your inbox or spam folder !",
+        "We have successfully received your comment. A confirmation email has been sent to you. Please, check your inbox or spam folder !",
     });
   } catch (error) {
     next(error);

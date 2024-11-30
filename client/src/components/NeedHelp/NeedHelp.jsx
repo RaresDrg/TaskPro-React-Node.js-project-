@@ -1,4 +1,5 @@
 import cactusPot from "../../assets/images/needHelpImg.png";
+import cactusPot_2x from "../../assets/images/needHelpImg_2x.png";
 import icons from "../../assets/icons/icons.svg";
 import { useDispatch } from "react-redux";
 import { setModalOpen } from "../../redux/modals/slice";
@@ -8,7 +9,11 @@ const NeedHelp = ({ className: styles }) => {
 
   return (
     <div className={styles}>
-      <img src={cactusPot} alt="Cactus Pot" />
+      <img
+        srcSet={`${cactusPot} 1x, ${cactusPot_2x} 2x`}
+        src={cactusPot}
+        alt="computer"
+      />
       <p>
         If you need help with <b>TaskPro</b>, check out our support resources or
         reach out to our customer support team.

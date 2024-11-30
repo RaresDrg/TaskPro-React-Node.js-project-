@@ -1,5 +1,6 @@
 import Container from "../../components/common/Container/Container.styled";
 import homePageImg from "../../assets/images/homePageImg.png";
+import homePageImg_2x from "../../assets/images/homePageImg_2x.png";
 import { LogoOnHomePage as Logo } from "../../components/common/Logo/Logo.styled";
 import FormButton from "../../components/common/FormButton/FormButton.styled.js";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +11,11 @@ const HomePage = ({ className: styles }) => {
   return (
     <section className={styles}>
       <Container className={`animate__animated animate__fadeInDown`}>
-        <img src={homePageImg} alt="computer" />
+        <img
+          srcSet={`${homePageImg} 1x, ${homePageImg_2x} 2x`}
+          src={homePageImg}
+          alt="computer"
+        />
         <Logo />
         <p>
           Supercharge your productivity and take control of your tasks with{" "}

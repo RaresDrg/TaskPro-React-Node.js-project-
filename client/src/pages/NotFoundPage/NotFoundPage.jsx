@@ -20,7 +20,7 @@ const NotFoundPage = ({ className: styles }) => {
 
   return (
     <section
-      className={`${styles} animate__animated animate__fadeIn`}
+      className={`${styles} animate__animated animate__fadeIn animate__slow`}
       ref={sectionRef}
     >
       <video autoPlay={true} muted={true} loop={true}>

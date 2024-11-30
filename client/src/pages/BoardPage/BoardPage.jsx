@@ -32,11 +32,23 @@ const BoardPage = ({ className: styles }) => {
   const showFilterBtn = board.columns.some((column) => column.cards.length > 0);
 
   return (
-    <section className={`${styles} animate__animated animate__fadeIn`}>
+    <section
+      className={`${styles} animate__animated animate__fadeIn`}
+      key={`${board["_id"]} ${board.background.value}`}
+    >
       <Container>
-        <BoardTitle text={board.title} />
-        {showFilterBtn && <FilterBtn />}
-        <BoardColumns />
+        <BoardTitle
+          text={board.title}
+          className={`animate__animated animate__slideInDown`}
+        />
+        {showFilterBtn && (
+          <FilterBtn
+            className={`animate__animated animate__flipInX animate__slow`}
+          />
+        )}
+        <BoardColumns
+          className={`animate__animated animate__fadeIn animate__slower`}
+        />
       </Container>
     </section>
   );
