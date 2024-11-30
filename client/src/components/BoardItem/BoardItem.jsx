@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
 import { NavLink, useParams } from "react-router-dom";
-import icons from "../../assets/icons/icons.svg";
-import UseAnimations from "react-useanimations";
-import trash2 from "react-useanimations/lib/trash2";
 import { useDispatch } from "react-redux";
 import { setModalOpen } from "../../redux/modals/slice";
+import icons from "../../assets/icons/icons.svg";
+import { BoardItemTitle } from "../common/EllipsisTooltip/EllipsisTooltip.styled";
+import PencilIcon from "../common/PencilIcon/PencilIcon.styled";
+import TrashIcon from "../common/TrashIcon/TrashIcon.styled";
 
 const BoardItem = ({ className: styles, board }) => {
   const dispatch = useDispatch();
@@ -18,23 +19,18 @@ const BoardItem = ({ className: styles, board }) => {
         <svg>
           <use href={`${icons}#${board.icon}`}></use>
         </svg>
-        <span title={board.title}>{board.title}</span>
+        <BoardItemTitle text={board.title} />
       </NavLink>
 
       {isActive && (
         <div className="action-icons">
-          <svg
-            onClick={() => dispatch(setModalOpen("EditBoardModal"))}
-            data-secondary-action="close burger menu"
-          >
-            <use href={`${icons}#icon-pencil`}></use>
-          </svg>
-          <UseAnimations
-            animation={trash2}
-            size={21}
-            strokeColor="currentColor"
-            onClick={() => dispatch(setModalOpen("DeleteBoardModal"))}
-            data-secondary-action="close burger menu"
+          <PencilIcon
+            handlerFunction={() => dispatch(setModalOpen("EditBoardModal"))}
+            secondAction="close burger menu"
+          />
+          <TrashIcon
+            handlerFunction={() => dispatch(setModalOpen("DeleteBoardModal"))}
+            secondAction="close burger menu"
           />
         </div>
       )}

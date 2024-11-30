@@ -15,7 +15,7 @@ const Logo = ({ className: styles }) => {
           }
         ></use>
       </svg>
-      <span className={theme}>Task Pro</span>
+      <span>Task Pro</span>
     </a>
   );
 };

@@ -1,7 +1,8 @@
-import { useAuth } from "../../hooks/hooks";
 import icons from "../../assets/icons/icons.svg";
+import { useAuth } from "../../hooks/hooks";
 import { useDispatch } from "react-redux";
 import { setModalOpen } from "../../redux/modals/slice";
+import { Username } from "../common/EllipsisTooltip/EllipsisTooltip.styled";
 
 const UserInfo = ({ className: styles }) => {
   const { user, theme } = useAuth();
@@ -9,9 +10,7 @@ const UserInfo = ({ className: styles }) => {
 
   return (
     <div className={styles}>
-      <span title={user.name} className="username">
-        {user.name}
-      </span>
+      <Username text={user.name} />
 
       <div
         className="user-photo"

@@ -239,6 +239,15 @@ const StyledFormDeadlineField = styled(FormDeadlineField)`
         (theme === "violet" && "#16161633")};
       cursor: not-allowed;
     }
+
+    .react-datepicker__day--disabled.react-datepicker__day--selected {
+      background-color: transparent;
+      color: var(--text-color-white);
+
+      &:after {
+        background-color: var(--error-color);
+      }
+    }
   }
 `;
 

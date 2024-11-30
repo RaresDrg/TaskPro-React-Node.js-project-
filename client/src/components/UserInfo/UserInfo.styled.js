@@ -7,28 +7,6 @@ const StyledUserInfo = styled(UserInfo)`
   gap: 15px;
 
   & {
-    .username {
-      cursor: alias;
-      font-size: 14px;
-      font-weight: bold;
-      line-height: 21px;
-      letter-spacing: -0.02em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 140px;
-      color: ${({ theme: { theme } }) =>
-        (theme === "dark" && "var(--text-color-white)") ||
-        (theme === "light" && "var(--text-color-black)") ||
-        (theme === "violet" && "var(--text-color-black)")};
-      transition: var(--transition);
-
-      &:hover {
-        transform: scale(0.9);
-        color: grey;
-      }
-    }
-
     .user-photo {
       cursor: pointer;
       width: 32px;

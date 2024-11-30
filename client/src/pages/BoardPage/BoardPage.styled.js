@@ -25,33 +25,6 @@ const StyledBoardPage = styled(BoardPage)`
       display: flex;
       flex-direction: column;
       position: relative;
-
-      & {
-        h1 {
-          font-size: 14px;
-          font-weight: 900;
-          line-height: 21px;
-          letter-spacing: -0.02em;
-          color: var(--text-color-white);
-          width: fit-content;
-          max-width: calc(100% - 110px);
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          cursor: alias;
-          padding: 3px 23px;
-          border-radius: 40px 0;
-          background-color: ${({ theme: { theme } }) =>
-            (theme === "dark" && "#9dc888b3") ||
-            (theme === "light" && "#9dc888b3") ||
-            (theme === "violet" && "#5255BCb3")};
-          border: 0.5px solid grey;
-          backdrop-filter: blur(5px);
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-          margin-bottom: 39px;
-          transition: var(--transition);
-        }
-      }
     }
   }
 
@@ -62,12 +35,6 @@ const StyledBoardPage = styled(BoardPage)`
         ? "none"
         : `url(${board.background.sources.tablet})`};
     padding: 26px 0 32px 0;
-
-    & > div > h1 {
-      font-size: 18px;
-      line-height: 27px;
-      margin-bottom: 26px;
-    }
   }
 
   @media (min-width: 1440px) {
@@ -77,10 +44,6 @@ const StyledBoardPage = styled(BoardPage)`
         ? "none"
         : `url(${board.background.sources.desktop})`};
     padding: 14px 0 24px 0;
-
-    & > div > h1 {
-      margin-bottom: 14px;
-    }
   }
 
   /* 2X Retina */

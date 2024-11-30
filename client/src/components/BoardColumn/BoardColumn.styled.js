@@ -23,27 +23,6 @@ const StyledBoardColumn = styled(BoardColumn)`
       transition: var(--transition);
 
       & {
-        h3 {
-          font-size: 14px;
-          font-weight: 500;
-          line-height: 21px;
-          letter-spacing: -0.02em;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          max-width: 220px;
-          color: ${({ theme: { theme } }) =>
-            (theme === "dark" && "var(--text-color-white)") ||
-            (theme === "light" && "var(--text-color-black)") ||
-            (theme === "violet" && "var(--text-color-black)")};
-          transition: var(--transition);
-
-          &:hover {
-            color: grey;
-            cursor: alias;
-          }
-        }
-
         div.action-icons {
           display: flex;
           align-items: center;
@@ -53,23 +32,6 @@ const StyledBoardColumn = styled(BoardColumn)`
             (theme === "light" && "var(--text-color-black)") ||
             (theme === "violet" && "var(--text-color-black)")};
           margin-bottom: 5px;
-
-          svg {
-            width: 16px;
-            height: 16px;
-            opacity: 0.5;
-            cursor: pointer;
-            transition: var(--transition);
-
-            &:hover {
-              transform: scale(1.3);
-              opacity: 1;
-            }
-          }
-
-          & > svg:first-of-type {
-            margin-top: 3px;
-          }
         }
       }
     }

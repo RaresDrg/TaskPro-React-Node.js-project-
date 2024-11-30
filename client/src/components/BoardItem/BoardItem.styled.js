@@ -48,7 +48,7 @@ const StyledBoardItem = styled(BoardItem)`
       display: flex;
       align-items: center;
       gap: 4px;
-      width: fit-content;
+      max-width: 100%;
       opacity: 0.5;
       color: ${({ theme: { theme } }) =>
         (theme === "dark" && "var(--text-color-white)") ||
@@ -63,18 +63,12 @@ const StyledBoardItem = styled(BoardItem)`
 
       & {
         svg {
+          flex: 0 0 18px;
           width: 18px;
           height: 18px;
         }
 
-        span {
-          font-size: 14px;
-          font-weight: 500;
-          line-height: 21px;
-          letter-spacing: -0.02em;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+        &:has(+ div.action-icons) > span {
           max-width: 120px;
         }
       }
@@ -89,25 +83,6 @@ const StyledBoardItem = styled(BoardItem)`
         (theme === "light" && "var(--text-color-black)") ||
         (theme === "violet" && "var(--text-color-white)")};
       margin-bottom: 5px;
-
-      & {
-        svg {
-          width: 16px;
-          height: 16px;
-          opacity: 0.5;
-          cursor: pointer;
-          transition: var(--transition);
-
-          &:hover {
-            transform: scale(1.3);
-            opacity: 1;
-          }
-        }
-
-        & > svg:first-of-type {
-          margin-top: 3px;
-        }
-      }
     }
   }
 

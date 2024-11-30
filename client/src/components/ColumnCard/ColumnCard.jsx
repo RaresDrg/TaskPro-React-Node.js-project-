@@ -1,11 +1,13 @@
 import PropTypes from "prop-types";
-import icons from "../../assets/icons/icons.svg";
-import UseAnimations from "react-useanimations";
-import trash2 from "react-useanimations/lib/trash2";
 import { useDispatch } from "react-redux";
 import { setTargetedCard } from "../../redux/boards/slice";
 import { setModalOpen } from "../../redux/modals/slice";
 import { Draggable } from "@hello-pangea/dnd";
+import { CardTitle } from "../common/EllipsisTooltip/EllipsisTooltip.styled";
+import { CardDescription } from "../common/EllipsisTooltip/EllipsisTooltip.styled";
+import DeadlineIcon from "../common/DeadlineIcon/DeadlineIcon.styled";
+import PencilIcon from "../common/PencilIcon/PencilIcon.styled";
+import TrashIcon from "../common/TrashIcon/TrashIcon.styled";
 
 const ColumnCard = ({ className: styles, card, index }) => {
   const dispatch = useDispatch();
@@ -25,8 +27,9 @@ const ColumnCard = ({ className: styles, card, index }) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <h3 title={card.title}>{card.title}</h3>
-          <p title={card.description}>{card.description}</p>
+          <CardTitle text={card.title} />
+          <CardDescription text={card.description} />
+
           <div>
             <div className="priority">
               <span>Priority</span>
@@ -37,28 +40,16 @@ const ColumnCard = ({ className: styles, card, index }) => {
               <span className={overdue ? "red" : ""}>{deadline}</span>
             </div>
             <div className="action-icons">
-              {isDeadlineTime && (
-                <>
-                  <svg className="notification">
-                    <use href={`${icons}#icon-notificationBell`}></use>
-                  </svg>
-                  <span>Deadline&apos;s today. Hurry!</span>
-                </>
-              )}
+              {isDeadlineTime && <DeadlineIcon />}
 
-              <svg
-                onClick={() => {
+              <PencilIcon
+                handlerFunction={() => {
                   dispatch(setTargetedCard(card));
                   dispatch(setModalOpen("EditCardModal"));
                 }}
-              >
-                <use href={`${icons}#icon-pencil`}></use>
-              </svg>
-              <UseAnimations
-                animation={trash2}
-                size={21}
-                strokeColor="currentColor"
-                onClick={() => {
+              />
+              <TrashIcon
+                handlerFunction={() => {
                   dispatch(setTargetedCard(card));
                   dispatch(setModalOpen("DeleteCardModal"));
                 }}

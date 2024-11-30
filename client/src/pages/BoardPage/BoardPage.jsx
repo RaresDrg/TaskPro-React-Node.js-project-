@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { getBoard } from "../../redux/boards/operations";
 import { useBoards } from "../../hooks/hooks";
 import Container from "../../components/common/Container/Container.styled";
+import { BoardTitle } from "../../components/common/EllipsisTooltip/EllipsisTooltip.styled";
 import BoardColumns from "../../components/BoardColumns/BoardColumns.styled";
 import FilterBtn from "../../components/FilterBtn/FilterBtn.styled";
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner.styled";
@@ -33,9 +34,9 @@ const BoardPage = ({ className: styles }) => {
   return (
     <section className={`${styles} animate__animated animate__fadeIn`}>
       <Container>
-        <h1 title={board.title}>{board.title}</h1>
+        <BoardTitle text={board.title} />
         {showFilterBtn && <FilterBtn />}
-        <BoardColumns boardColumns={board.columns} boardId={board["_id"]} />
+        <BoardColumns />
       </Container>
     </section>
   );

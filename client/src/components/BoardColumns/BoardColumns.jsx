@@ -1,17 +1,18 @@
-import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { updateBoardColumns } from "../../redux/boards/operations";
 import { toast } from "react-toastify";
+import { useBoards } from "../../hooks/hooks";
 import { DragDropContext } from "@hello-pangea/dnd";
 import BoardColumn from "../../components/BoardColumn/BoardColumn.styled";
 import AddColumnBtn from "../../components/AddColumnBtn/AddColumnBtn.styled";
 
-const BoardColumns = ({ className: styles, boardColumns, boardId }) => {
-  const [columns, setColumns] = useState(boardColumns);
+const BoardColumns = ({ className: styles }) => {
+  const { board } = useBoards();
+  const [columns, setColumns] = useState(board.columns);
 
   useEffect(() => {
-    setColumns(boardColumns);
-  }, [boardColumns]);
+    setColumns(board.columns);
+  }, [board.columns]);
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
@@ -90,13 +91,8 @@ const BoardColumns = ({ className: styles, boardColumns, boardId }) => {
     });
 
     setColumns(updatedColumns);
-    updateBoardColumns(boardId, updatedColumns);
+    updateBoardColumns(board["_id"], updatedColumns);
   }
-};
-
-BoardColumns.propTypes = {
-  boardColumns: PropTypes.array.isRequired,
-  boardId: PropTypes.string.isRequired,
 };
 
 export default BoardColumns;

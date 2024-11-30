@@ -3,10 +3,10 @@ import { useDispatch } from "react-redux";
 import { setTargetedColumn } from "../../redux/boards/slice";
 import { setModalOpen } from "../../redux/modals/slice";
 import { useAuth, useBoards } from "../../hooks/hooks";
-import icons from "../../assets/icons/icons.svg";
-import UseAnimations from "react-useanimations";
-import trash2 from "react-useanimations/lib/trash2";
 import { Droppable } from "@hello-pangea/dnd";
+import { ColumnTitle } from "../common/EllipsisTooltip/EllipsisTooltip.styled";
+import PencilIcon from "../common/PencilIcon/PencilIcon.styled";
+import TrashIcon from "../common/TrashIcon/TrashIcon.styled";
 import ColumnCard from "../ColumnCard/ColumnCard.styled";
 import FormButton from "../common/FormButton/FormButton.styled";
 
@@ -28,21 +28,16 @@ const BoardColumn = ({ className: styles, column }) => {
           {...provided.droppableProps}
         >
           <div className="column-heading">
-            <h3 title={column.title}>{column.title}</h3>
+            <ColumnTitle text={column.title} />
             <div className="action-icons">
-              <svg
-                onClick={() => {
+              <PencilIcon
+                handlerFunction={() => {
                   dispatch(setTargetedColumn(column));
                   dispatch(setModalOpen("EditColumnModal"));
                 }}
-              >
-                <use href={`${icons}#icon-pencil`}></use>
-              </svg>
-              <UseAnimations
-                animation={trash2}
-                size={21}
-                strokeColor="currentColor"
-                onClick={() => {
+              />
+              <TrashIcon
+                handlerFunction={() => {
                   dispatch(setTargetedColumn(column));
                   dispatch(setModalOpen("DeleteColumnModal"));
                 }}
