@@ -1,5 +1,11 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import utils from "./utils/utils.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const apiDocsPath = path.join(__dirname, "routes", "swaggerDocs");
 
 const iconsOptions = utils.handleBoardsSchema("icon");
 const bgOptions = utils.handleBoardsSchema("background");
@@ -149,7 +155,7 @@ const options = {
       },
     },
   },
-  apis: ["./routes/swaggerDocs/*.js"],
+  apis: [`${apiDocsPath}/*.js`],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
