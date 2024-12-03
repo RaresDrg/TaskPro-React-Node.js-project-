@@ -33,6 +33,8 @@ const options = {
           type: "http",
           scheme: "bearer",
           bearerFormat: "JWT",
+          description:
+            "In order to access certain routes, you need to authorize yourself by using a JWT token, which you receive upon authentication.",
         },
       },
       schemas: {
