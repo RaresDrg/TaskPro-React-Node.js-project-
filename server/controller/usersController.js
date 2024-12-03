@@ -23,12 +23,12 @@ async function register(req, res, next) {
       code: 201,
       message: "User created successfully",
       data: {
-        token,
         user: {
           email: result.email,
           name: result.name,
           theme: result.theme,
         },
+        token,
       },
     });
   } catch (error) {
@@ -73,13 +73,13 @@ async function login(req, res, next) {
       code: 200,
       message: "Logged in successfully",
       data: {
-        token,
         user: {
           email: result.email,
           name: result.name,
           theme: result.theme,
           profilePhotoUrl: result.profilePhotoUrl,
         },
+        token,
       },
     });
   } catch (error) {
@@ -110,10 +110,10 @@ async function getCurrentUserData(req, res, next) {
       code: 200,
       data: {
         user: {
-          name,
           email,
-          profilePhotoUrl,
+          name,
           theme,
+          profilePhotoUrl,
         },
       },
     });

@@ -2,11 +2,12 @@ import express from "express";
 import logger from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
-import { configDotenv } from "dotenv";
-
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./swagger.js";
 import usersRouter from "./routes/api/users.js";
 import boardsRouter from "./routes/api/boards.js";
 import validateAuth from "./config/config-passport.js";
+import { configDotenv } from "dotenv";
 
 configDotenv({ path: "./environment/.env" });
 
@@ -15,6 +16,8 @@ const app = express();
 app.use(logger("dev"));
 app.use(cors());
 app.use(express.json());
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/users", usersRouter);
 app.use("/api/boards", validateAuth, boardsRouter);

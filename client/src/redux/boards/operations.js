@@ -175,7 +175,7 @@ export {
 };
 
 export const updateBoardColumns = (boardId, updatedColumns) => {
-  axios.patch(`/api/boards/${boardId}/columns`, {
+  axios.put(`/api/boards/${boardId}/columns`, {
     columns: updatedColumns,
   });
 };

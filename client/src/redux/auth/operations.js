@@ -1,7 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-// todo: => verccel
 // axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.baseURL = "https://taskproserver.vercel.app";
 
@@ -44,7 +43,7 @@ const login = createAsyncThunk("auth/login", async (userData, thunkAPI) => {
 const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
     await utils.delay(1500);
-    const response = await axios.get("/api/users/logout");
+    const response = await axios.delete("/api/users/logout");
 
     return response.data;
   } catch (error) {

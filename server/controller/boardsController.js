@@ -221,7 +221,17 @@ async function addColumn(req, res, next) {
       return;
     }
 
-    const newColumn = { title: req.body.title };
+    const { title } = req.body;
+    if (!title) {
+      res.status(400).json({
+        status: "failed",
+        code: 400,
+        message: "In order to add a column, you must provide a title",
+      });
+      return;
+    }
+
+    const newColumn = { title };
     const result = await boardsService.addBoardColumnToDB(boardId, newColumn);
 
     if (result === "already exists") {
@@ -307,10 +317,19 @@ async function updateColumn(req, res, next) {
       return;
     }
 
-    const updates = req.body.title;
+    const { title } = req.body;
+    if (!title) {
+      res.status(400).json({
+        status: "failed",
+        code: 400,
+        message: "In order to update a column, you must provide a title",
+      });
+      return;
+    }
+
     const result = await boardsService.updateBoardColumnInDB(
       { boardId, columnId },
-      updates
+      title
     );
 
     if (result === "already exists") {
@@ -373,7 +392,19 @@ async function addCard(req, res, next) {
         status: "failed",
         code: 400,
         message:
-          "In order to add a card, you must enter values for all of these fields: title, description, priority and deadline",
+          "In order to add a card, you must provide values for all of these fields: title, description, priority and deadline",
+      });
+      return;
+    }
+
+    const todayUnix = new Date(new Date().toDateString()).getTime();
+    const deadlineUnix = new Date(new Date(deadline).toDateString()).getTime();
+
+    if (deadlineUnix < todayUnix) {
+      res.status(400).json({
+        status: "failed",
+        code: 400,
+        message: "Deadline should be greater than or equal to today's date",
       });
       return;
     }
@@ -461,6 +492,30 @@ async function updateCard(req, res, next) {
     }
 
     const { title, description, priority, deadline } = req.body;
+    const hasAllrequiredFields = title && description && priority && deadline;
+
+    if (!hasAllrequiredFields) {
+      res.status(400).json({
+        status: "failed",
+        code: 400,
+        message:
+          "In order to update a card, you must provide values for all of these fields: title, description, priority and deadline",
+      });
+      return;
+    }
+
+    const todayUnix = new Date(new Date().toDateString()).getTime();
+    const deadlineUnix = new Date(new Date(deadline).toDateString()).getTime();
+
+    if (deadlineUnix < todayUnix) {
+      res.status(400).json({
+        status: "failed",
+        code: 400,
+        message: "Deadline should be greater than or equal to today's date",
+      });
+      return;
+    }
+
     const updates = { title, description, priority, deadline };
     const result = await boardsService.updateBoardColumnCardInDB(ids, updates);
 
