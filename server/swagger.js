@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const apiDocsPath = path.join(__dirname, "routes", "swaggerDocs");
+const apiDocsDir = path.join(__dirname, "routes", "swaggerDocs");
 
 const iconsOptions = utils.handleBoardsSchema("icon");
 const bgOptions = utils.handleBoardsSchema("background");
@@ -40,7 +40,7 @@ const options = {
           scheme: "bearer",
           bearerFormat: "JWT",
           description:
-            "In order to access certain routes, you need to authorize yourself by using a JWT token, which you receive upon authentication.",
+            "In order to access certain endpoints, you need to authorize yourself by using a JWT token, which you receive upon authentication.",
         },
       },
       schemas: {
@@ -155,7 +155,7 @@ const options = {
       },
     },
   },
-  apis: [`${apiDocsPath}/*.js`],
+  apis: [`${apiDocsDir}/*.js`],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
