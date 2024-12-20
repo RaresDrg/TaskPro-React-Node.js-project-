@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { register } from "../../redux/auth/operations";
-import { notifySuccess, notifyError } from "../../../utils/utils";
+import { notifySuccess, notifyError } from "../../utils/utils";
 import { capitalize, getRegex } from "../../utils/utils";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
