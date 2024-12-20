@@ -13,19 +13,23 @@ import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinne
 
 const BoardPage = ({ className: styles }) => {
   const [shouldWait, setShouldWait] = useState(true);
-
-  const { boardId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    dispatch(getBoard(boardId))
-      .unwrap()
-      .then(() => setShouldWait(false))
-      .catch(() => navigate("/*"));
-  }, [boardId]);
+  const { board, boardsList } = useBoards();
+  const { boardId } = useParams();
+  const isInTheList = boardsList.find((board) => board["_id"] === boardId);
 
-  const { board } = useBoards();
+  useEffect(() => {
+    setShouldWait(true);
+
+    !isInTheList
+      ? navigate("/*")
+      : dispatch(getBoard(boardId))
+          .unwrap()
+          .then(() => setShouldWait(false))
+          .catch(() => navigate("/*"));
+  }, [boardId]);
 
   if (shouldWait) return <LoadingSpinner />;
 

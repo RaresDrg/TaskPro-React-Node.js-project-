@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addBoard } from "../../../redux/boards/operations";
 import { setModalClose } from "../../../redux/modals/slice";
-import { toast } from "react-toastify";
-import { capitalize } from "../../../utils/utils";
+import { capitalize, notifySuccess, notifyError } from "../../../utils/utils";
 import { getIconsOptions, getBgOptions } from "../../../utils/utils";
 import { useAuth } from "../../../hooks/hooks";
 import { Form, Formik } from "formik";
@@ -56,13 +55,11 @@ const CreateBoardModal = () => {
       .then((value) => {
         navigate(`${value.data.board["_id"]}`);
         resetForm();
-        toast.success(value.message);
+        notifySuccess(value.message);
         closeModal();
       })
       .catch((error) => {
-        const errorNotification =
-          error?.response?.data?.message || "Internal server error";
-        toast.error(errorNotification);
+        notifyError(error);
 
         if (error?.response?.status === 409) {
           setFieldError("title", "Invalid title");

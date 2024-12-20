@@ -1,6 +1,7 @@
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger.js";
@@ -14,7 +15,8 @@ configDotenv({ path: "./environment/.env" });
 const app = express();
 
 app.use(logger("dev"));
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
+app.use(cookieParser(process.env.COOKIE_PARSER_SECRET));
 app.use(express.json());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

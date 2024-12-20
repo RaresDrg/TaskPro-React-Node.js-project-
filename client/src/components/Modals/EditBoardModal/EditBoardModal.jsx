@@ -2,8 +2,7 @@ import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { updateBoard } from "../../../redux/boards/operations";
 import { setModalClose } from "../../../redux/modals/slice";
-import { toast } from "react-toastify";
-import { capitalize } from "../../../utils/utils";
+import { capitalize, notifySuccess, notifyError } from "../../../utils/utils";
 import { useAuth, useBoards } from "../../../hooks/hooks";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -51,14 +50,12 @@ const EditBoardModal = () => {
     dispatch(updateBoard({ boardId, updates }))
       .unwrap()
       .then((value) => {
-        toast.success(value.message);
+        notifySuccess(value.message);
         resetForm();
         closeModal();
       })
       .catch((error) => {
-        const errorNotification =
-          error?.response?.data?.message || "Internal server error";
-        toast.error(errorNotification);
+        notifyError(error);
 
         if (error?.response?.status === 409) {
           setFieldError("title", "Invalid title");

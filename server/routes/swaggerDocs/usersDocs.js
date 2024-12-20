@@ -59,10 +59,6 @@
  *                           type: string
  *                           description: The user's theme preference.
  *                           example: violet
- *                     token:
- *                       type: string
- *                       description: Authentication token
- *                       example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
  *       409:
  *         description: Conflict - this email is already used
  *       400:
@@ -127,10 +123,6 @@
  *                           type: string
  *                           description: The link to the user's profile picture.
  *                           example: "https://res.cloudinary.com/userImage"
- *                     token:
- *                       type: string
- *                       description: Authentication token
- *                       example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....
  *       400:
  *         description: Login credentials are missing or invalid
  *       500:
@@ -143,57 +135,11 @@
  *   delete:
  *     summary: Log out user
  *     tags: [Users]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Logged out successfully
  *       401:
  *         description: Unauthorized - missing or invalid token.
- *       500:
- *         description: Internal server error
- */
-
-/**
- * @swagger
- * /api/users/current:
- *   get:
- *     summary: Get current user data
- *     tags: [Users]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: User's data received successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   type: object
- *                   properties:
- *                     user:
- *                       type: object
- *                       properties:
- *                         email:
- *                           type: string
- *                           description: The email of the account
- *                           example: johndoe@example.com
- *                         name:
- *                           type: string
- *                           description: The name of the user.
- *                           example: John Doe
- *                         theme:
- *                           type: string
- *                           description: The user's theme preference.
- *                           example: violet
- *                         profilePhotoUrl:
- *                           type: string
- *                           description: The link to the user's profile picture.
- *                           example: "https://res.cloudinary.com/userImage"
- *       401:
- *         description: Unauthorized - missing or invalid token
  *       500:
  *         description: Internal server error
  */
@@ -206,8 +152,6 @@
  *     description: >
  *       This endpoint allows user to reach customer support. The request must include an object containing the user's comment.
  *     tags: [Users]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -244,8 +188,6 @@
  *     consumes:
  *       - multipart/form-data
  *     tags: [Users]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -322,8 +264,6 @@
  *     description: >
  *       This endpoint allows the user to change the theme to one of the following versions: **light**, **dark**, or **violet**.
  *     tags: [Users]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:

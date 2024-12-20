@@ -1,13 +1,7 @@
-import axios from "axios";
+import apiClient from "../../utils/config-axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-// axios.defaults.baseURL = "http://localhost:3000";
-axios.defaults.baseURL = "https://taskproserver.vercel.app";
-
 const utils = {
-  setAuthHeader: (token) =>
-    (axios.defaults.headers.common.Authorization = `Bearer ${token}`),
-  clearAuthHeader: () => delete axios.defaults.headers.common.Authorization,
   delay: (time) => new Promise((resolve) => setTimeout(resolve, time)),
 };
 
@@ -16,9 +10,7 @@ const register = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       await utils.delay(2500);
-      const response = await axios.post("/api/users/register", userData);
-
-      utils.setAuthHeader(response.data.data.token);
+      const response = await apiClient.post("/api/users/register", userData);
 
       return response.data;
     } catch (error) {
@@ -30,9 +22,7 @@ const register = createAsyncThunk(
 const login = createAsyncThunk("auth/login", async (userData, thunkAPI) => {
   try {
     await utils.delay(2500);
-    const response = await axios.post("/api/users/login", userData);
-
-    utils.setAuthHeader(response.data.data.token);
+    const response = await apiClient.post("/api/users/login", userData);
 
     return response.data;
   } catch (error) {
@@ -43,42 +33,19 @@ const login = createAsyncThunk("auth/login", async (userData, thunkAPI) => {
 const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
     await utils.delay(1500);
-    const response = await axios.delete("/api/users/logout");
+    const response = await apiClient.delete("/api/users/logout");
 
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
-  } finally {
-    utils.clearAuthHeader();
   }
 });
-
-const refreshUser = createAsyncThunk(
-  "auth/refreshUser",
-  async (_, thunkAPI) => {
-    const state = thunkAPI.getState();
-    const persistedToken = state.auth.token;
-
-    if (persistedToken === null) {
-      return thunkAPI.rejectWithValue("Unable to fetch user");
-    }
-
-    try {
-      utils.setAuthHeader(persistedToken);
-      const response = await axios.get("/api/users/current");
-
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
 
 const updateUser = createAsyncThunk(
   "auth/updateUserProfile",
   async (updates, thunkAPI) => {
     try {
-      const response = await axios.put("/api/users/profile", updates, {
+      const response = await apiClient.put("/api/users/profile", updates, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -91,11 +58,11 @@ const updateUser = createAsyncThunk(
   }
 );
 
-export { register, login, logout, refreshUser, updateUser };
+export { register, login, logout, updateUser };
 
-const updateTheme = (theme) => axios.patch("/api/users/theme", { theme });
+const updateTheme = (theme) => apiClient.patch("/api/users/theme", { theme });
 const reachCustomerSupport = async (comment) => {
-  const response = await axios.post("/api/users/support", comment);
+  const response = await apiClient.post("/api/users/support", comment);
   return response.data;
 };
 

@@ -1,16 +1,11 @@
-import { useEffect, useState, lazy } from "react";
+import { lazy } from "react";
 import { ThemeProvider } from "styled-components";
 import { Routes, Route } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { refreshUser } from "./redux/auth/operations";
-import { getBoardsList } from "./redux/boards/operations";
 import { useAuth, useBoards } from "./hooks/hooks";
-
 import ProtectedRoutes from "./pages/ProtectedRoutes/ProtectedRoutes";
 import RestrictedRoutes from "./pages/RestrictedRoutes/RestrictedRoutes";
 import SharedLayout from "./components/common/SharedLayout/SharedLayout";
 import LoadingScreen from "./components/common/LoadingScreen/LoadingScreen.styled";
-import LoadingSpinner from "./components/common/LoadingSpinner/LoadingSpinner.styled";
 import Notification from "./components/common/Notification/Notification";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage.styled"));
@@ -27,27 +22,8 @@ const NotFoundPage = lazy(() =>
 );
 
 const App = () => {
-  const [shouldWait, setShouldWait] = useState(true);
-  const dispatch = useDispatch();
-
-  const { isLoading, isLoggedIn, theme } = useAuth();
+  const { isLoading, theme } = useAuth();
   const { board } = useBoards();
-
-  useEffect(() => {
-    dispatch(refreshUser())
-      .unwrap()
-      .catch(() => setShouldWait(false));
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      dispatch(getBoardsList())
-        .unwrap()
-        .finally(() => setShouldWait(false));
-    }
-  }, [isLoggedIn]);
-
-  if (shouldWait) return <LoadingSpinner />;
 
   return (
     <ThemeProvider theme={{ theme }}>

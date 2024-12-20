@@ -9,8 +9,6 @@
  *         - **icon**: A string with one of the following values: icon-project, icon-star, icon-loading, icon-puzzlePiece, icon-container, icon-lightning, icon-colors or icon-hexagon
  *         - **background**: A string with one of the following velues: bg-default, bg-1, bg-2, bg-3, bg-4, bg-5, bg-6, bg-7, bg-8, bg-9, bg-10, bg-11, bg-12, bg-13, bg-14, bg-15
  *     tags: [Boards]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -68,8 +66,6 @@
  *     summary: Get boards list
  *     description: Get all boards associated with the user
  *     tags: [Boards]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Boards list received successfully
@@ -99,8 +95,6 @@
  *         required: true
  *         description: The board's ID
  *     tags: [Boards]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Board received successfully
@@ -134,8 +128,6 @@
  *         required: true
  *         description: The board's ID
  *     tags: [Boards]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Board deleted successfully
@@ -174,8 +166,6 @@
  *         required: true
  *         description: The board's ID
  *     tags: [Boards]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -247,8 +237,6 @@
  *         required: true
  *         description: The board's ID
  *     tags: [Columns]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -308,8 +296,6 @@
  *         required: true
  *         description: The board's ID
  *     tags: [Columns]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -362,8 +348,6 @@
  *         required: true
  *         description: The column's ID
  *     tags: [Columns]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Column deleted successfully
@@ -407,8 +391,6 @@
  *         required: true
  *         description: The column's ID
  *     tags: [Columns]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -477,8 +459,6 @@
  *         required: true
  *         description: The column's ID
  *     tags: [Cards]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -558,8 +538,6 @@
  *         required: true
  *         description: The card's ID
  *     tags: [Cards]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Card deleted successfully
@@ -610,8 +588,6 @@
  *         required: true
  *         description: The card's ID
  *     tags: [Cards]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:

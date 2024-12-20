@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { Field } from "formik";
 import { useState } from "react";
 import { useAuth } from "../../../hooks/hooks";
-import { toast } from "react-toastify";
+import { notifyWarning } from "../../../utils/utils";
 import icons from "../../../assets/icons/icons.svg";
 
 const FormFileField = ({ className: styles, setFieldValue }) => {
@@ -11,7 +11,7 @@ const FormFileField = ({ className: styles, setFieldValue }) => {
 
   function handleFileUploaded(e) {
     if (e.target.files[0].size > 5000000) {
-      toast.error("Error: The file is larger than the allowed 5 MB limit.");
+      notifyWarning("Error: The file is larger than the allowed 5 MB limit.");
       return;
     }
 

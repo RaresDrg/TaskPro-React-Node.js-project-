@@ -1,4 +1,7 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import usersService from "../service/usersService.js";
 
 function handleInvalidIdError(res) {
   res
@@ -19,7 +22,7 @@ function handleDuplicateEmail(res) {
 }
 
 function encrypt(text) {
-  const salt = bcrypt.genSaltSync(10);
+  const salt = bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS));
   const encryptedText = bcrypt.hashSync(text, salt);
 
   return encryptedText;
@@ -89,6 +92,55 @@ function getBackgroundSrc(background) {
   return backgroundSrc;
 }
 
+function generateTokens(user) {
+  const accessToken = jwt.sign(
+    { email: user.email, id: user.id },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: "15min" }
+  );
+
+  const refreshToken = crypto
+    .randomBytes(Number(process.env.REFRESH_TOKEN_LENGTH))
+    .toString("hex");
+
+  const tokens = { accessToken, refreshToken };
+  return tokens;
+}
+
+function sendTokensAsCookies(res, tokens) {
+  const { accessToken, refreshToken } = tokens;
+
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: true,
+    signed: true,
+    maxAge: 15 * 60 * 1000,
+    sameSite: "None",
+  });
+
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: true,
+    signed: true,
+    maxAge: 24 * 60 * 60 * 1000,
+    sameSite: "None",
+  });
+}
+
+async function getUserByRefreshToken(req) {
+  const refreshToken = req?.signedCookies?.refreshToken ?? null;
+  if (!refreshToken) {
+    throw new Error("Refresh token missing. Please re-login !");
+  }
+
+  const user = await usersService.findUser({ token: refreshToken });
+  if (!user) {
+    throw new Error("Invalid refresh token. Please re-login !");
+  }
+
+  return user;
+}
+
 const utils = {
   handleInvalidIdError,
   handleValidationError,
@@ -96,6 +148,9 @@ const utils = {
   encrypt,
   handleBoardsSchema,
   getBackgroundSrc,
+  generateTokens,
+  sendTokensAsCookies,
+  getUserByRefreshToken,
 };
 
 export default utils;

@@ -27,8 +27,13 @@ const modalsSlice = createSlice({
     setModalClose: (state, action) => {
       state[`is${action.payload}Open`] = false;
     },
+    resetState: (state) => {
+      if (JSON.stringify(initialState) !== JSON.stringify(state)) {
+        return initialState;
+      }
+    },
   },
 });
 
-export const { setModalOpen, setModalClose } = modalsSlice.actions;
+export const { setModalOpen, setModalClose, resetState } = modalsSlice.actions;
 export const modalsReducer = modalsSlice.reducer;

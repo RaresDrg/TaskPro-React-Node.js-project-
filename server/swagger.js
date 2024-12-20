@@ -18,15 +18,12 @@ const options = {
       title: "TaskPro API",
       version: "1.0.0",
       description:
-        "<hr></hr><strong>TaskPro</strong> is an intuitive Kanban board application designed to help users organize and manage their projects and tasks efficiently. Inspired by tools like Trello or Jira, it offers a seamless experience for tracking progress and staying productive. Key features include user authentication, project management, column management, and detailed cards with options for task name, description, priority, and deadline. <br></br> <strong>Base URL</strong> => https://taskproserver.vercel.app",
+        '<hr></hr><strong>Base URL:</strong> => https://taskproserver.vercel.app <br></br> <strong>Important:</strong> In order to access this API, credentials must be included in the requests. Please ensure that <b>"withCredentials"</b> is set to <b>true</b>. Authentication is managed through HttpOnly cookies, which include a JWT access token (valid for 15 minutes) and a refresh token (valid for 1 day).<br></br>',
       contact: {
         name: "Rares Dragan",
         url: "https://github.com/RaresDrg",
       },
     },
-    servers: [
-      { url: "https://taskproserver.vercel.app", description: "Base URL" },
-    ],
     tags: [
       { name: "Users" },
       { name: "Boards" },
@@ -34,15 +31,6 @@ const options = {
       { name: "Cards" },
     ],
     components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "JWT",
-          description:
-            "In order to access certain endpoints, you need to authorize yourself by using a JWT token, which you receive upon authentication.",
-        },
-      },
       schemas: {
         User: {
           type: "object",

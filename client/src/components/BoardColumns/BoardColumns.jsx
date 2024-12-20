@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { updateBoardColumns } from "../../redux/boards/operations";
-import { toast } from "react-toastify";
+import { notifyWarning } from "../../utils/utils";
 import { useBoards } from "../../hooks/hooks";
 import { DragDropContext } from "@hello-pangea/dnd";
 import BoardColumn from "../../components/BoardColumn/BoardColumn.styled";
@@ -51,7 +51,7 @@ const BoardColumns = ({ className: styles }) => {
     });
 
     if (alreadyExistingCard) {
-      toast.error("A card with the same title already exists in the column.");
+      notifyWarning("A card with the same title already exists in the column.");
       return;
     }
 

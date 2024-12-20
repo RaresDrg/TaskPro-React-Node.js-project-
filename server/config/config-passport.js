@@ -1,13 +1,14 @@
 import passport from "passport";
-import { Strategy, ExtractJwt } from "passport-jwt";
+import { Strategy } from "passport-jwt";
 import usersService from "../service/usersService.js";
+import utils from "../utils/utils.js";
 import { configDotenv } from "dotenv";
 
 configDotenv({ path: "./environment/.env" });
 
 const opts = {
-  secretOrKey: process.env.JWT_SECRET,
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: (req) => req?.signedCookies?.accessToken ?? null,
+  secretOrKey: process.env.ACCESS_TOKEN_SECRET,
 };
 
 passport.use(
@@ -16,7 +17,7 @@ passport.use(
       const user = await usersService.findUser({ _id: payload.id });
 
       if (!user) {
-        return done(new Error("User not found"));
+        throw new Error("User not found");
       }
 
       return done(null, user);
@@ -27,16 +28,34 @@ passport.use(
 );
 
 function validateAuth(req, res, next) {
-  passport.authenticate("jwt", { session: false }, (err, user) => {
-    if (!user || err) {
-      return res.status(401).json({
-        status: "error",
-        code: 401,
-        message: "Unauthorized",
-      });
+  passport.authenticate("jwt", { session: false }, async (err, user) => {
+    if (!err && user) {
+      req.user = user;
+      next();
+      return;
     }
-    req.user = user;
-    next();
+
+    if (err || !user) {
+      try {
+        const userByRefreshToken = await utils.getUserByRefreshToken(req);
+        const renewedTokens = utils.generateTokens(userByRefreshToken);
+
+        await usersService.updateUser(userByRefreshToken.id, {
+          token: renewedTokens.refreshToken,
+        });
+
+        utils.sendTokensAsCookies(res, renewedTokens);
+        req.user = userByRefreshToken;
+        next();
+        return;
+      } catch (error) {
+        res.status(401).json({
+          status: "error",
+          code: 401,
+          message: "Unauthorized access",
+        });
+      }
+    }
   })(req, res, next);
 }
 

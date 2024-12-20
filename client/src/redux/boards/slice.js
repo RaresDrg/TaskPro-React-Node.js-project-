@@ -73,7 +73,6 @@ const boardsSlice = createSlice({
         state.boardsList = action.payload.data;
       })
       // *Get board
-      .addCase(getBoard.pending, utils.handlePending)
       .addCase(getBoard.rejected, (state, action) => {
         utils.handleRejected(state, action);
         state.board = null;

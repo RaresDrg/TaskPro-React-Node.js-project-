@@ -8,7 +8,6 @@ const router = express.Router();
 router.post("/register", usersController.register);
 router.post("/login", usersController.login);
 router.delete("/logout", validateAuth, usersController.logout);
-router.get("/current", validateAuth, usersController.getCurrentUserData);
 router.post("/support", validateAuth, usersController.reachCustomerSupport);
 router.patch("/theme", validateAuth, usersController.updateUserTheme);
 router.put(

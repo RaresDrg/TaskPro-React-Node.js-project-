@@ -1,6 +1,5 @@
 import User from "./schemas/usersSchema.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import utils from "../utils/utils.js";
 
 async function addUsertoDB(data) {
@@ -20,17 +19,7 @@ async function addUsertoDB(data) {
   return User.create(newUser);
 }
 
-async function addUserToken(data) {
-  const paylaod = { email: data.email, id: data.id };
-  const secret = process.env.JWT_SECRET;
-  const token = jwt.sign(paylaod, secret, { expiresIn: "1h" });
-
-  await User.findByIdAndUpdate(data.id, { token });
-
-  return token;
-}
-
-async function checkUserLoginData(data) {
+async function checkUserCredentials(data) {
   const user = await User.findOne({ email: data.email });
   if (!user) {
     return "email is wrong";
@@ -63,8 +52,7 @@ const usersService = {
   addUsertoDB,
   findUser,
   updateUser,
-  checkUserLoginData,
-  addUserToken,
+  checkUserCredentials,
   validateData,
 };
 

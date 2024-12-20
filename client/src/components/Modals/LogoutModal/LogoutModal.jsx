@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../../redux/auth/operations";
 import { setModalClose } from "../../../redux/modals/slice";
-import { toast } from "react-toastify";
+import { notifySuccess } from "../../../utils/utils";
 import { useAuth } from "../../../hooks/hooks";
 import Modal from "../../common/Modal/Modal.styled";
 import FormButton from "../../common/FormButton/FormButton.styled";
@@ -21,7 +21,7 @@ const LogoutModal = ({ className: styles }) => {
     closeModal();
     dispatch(logout())
       .unwrap()
-      .finally(() => toast.success("Logged out successfully"));
+      .finally(() => notifySuccess("Logged out successfully"));
   }
 
   return (

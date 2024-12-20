@@ -16,8 +16,12 @@ async function register(req, res, next) {
       return;
     }
 
-    const token = await usersService.addUserToken(result);
+    const user = result;
+    const tokens = utils.generateTokens(user);
 
+    await usersService.updateUser(user.id, { token: tokens.refreshToken });
+
+    utils.sendTokensAsCookies(res, tokens);
     res.status(201).json({
       status: "success",
       code: 201,
@@ -28,7 +32,6 @@ async function register(req, res, next) {
           name: result.name,
           theme: result.theme,
         },
-        token,
       },
     });
   } catch (error) {
@@ -55,7 +58,7 @@ async function login(req, res, next) {
       return;
     }
 
-    const result = await usersService.checkUserLoginData({ email, password });
+    const result = await usersService.checkUserCredentials({ email, password });
 
     if (result === "email is wrong" || result === "password is wrong") {
       res.status(400).json({
@@ -66,8 +69,12 @@ async function login(req, res, next) {
       return;
     }
 
-    const token = await usersService.addUserToken(result);
+    const user = result;
+    const tokens = utils.generateTokens(user);
 
+    await usersService.updateUser(user.id, { token: tokens.refreshToken });
+
+    utils.sendTokensAsCookies(res, tokens);
     res.status(200).json({
       status: "success",
       code: 200,
@@ -79,7 +86,6 @@ async function login(req, res, next) {
           theme: result.theme,
           profilePhotoUrl: result.profilePhotoUrl,
         },
-        token,
       },
     });
   } catch (error) {
@@ -91,31 +97,13 @@ async function logout(req, res, next) {
   try {
     await usersService.updateUser(req.user.id, { token: null });
 
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+
     res.status(200).json({
       status: "success",
       code: 200,
       message: "Logged out successfully",
-    });
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function getCurrentUserData(req, res, next) {
-  try {
-    const { email, name, profilePhotoUrl, theme } = req.user;
-
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      data: {
-        user: {
-          email,
-          name,
-          theme,
-          profilePhotoUrl,
-        },
-      },
     });
   } catch (error) {
     next(error);
@@ -235,7 +223,6 @@ const usersController = {
   register,
   login,
   logout,
-  getCurrentUserData,
   updateUserTheme,
   updateUserProfile,
   reachCustomerSupport,

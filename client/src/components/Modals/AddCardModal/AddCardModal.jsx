@@ -2,9 +2,8 @@ import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addBoardColumnCard } from "../../../redux/boards/operations";
 import { setModalClose } from "../../../redux/modals/slice";
-import { toast } from "react-toastify";
-import { capitalize } from "../../../utils/utils";
-import { getPriorityOptions } from "../../../utils/utils";
+import { capitalize, getPriorityOptions } from "../../../utils/utils";
+import { notifySuccess, notifyError } from "../../../utils/utils";
 import { useAuth, useBoards } from "../../../hooks/hooks";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -69,14 +68,12 @@ const AddCardModal = ({ className: styles }) => {
     dispatch(addBoardColumnCard({ boardId, columnId, newCard }))
       .unwrap()
       .then((value) => {
-        toast.success(value.message);
+        notifySuccess(value.message);
         resetForm();
         closeModal();
       })
       .catch((error) => {
-        const errorNotification =
-          error?.response?.data?.message || "Internal server error";
-        toast.error(errorNotification);
+        notifyError(error);
 
         if (error?.response?.status === 409) {
           setFieldError("title", "Invalid title");

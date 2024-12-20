@@ -1,11 +1,11 @@
-import axios from "axios";
+import apiClient from "../../utils/config-axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const addBoard = createAsyncThunk(
   "boards/addBoard",
   async (newBoard, thunkAPI) => {
     try {
-      const response = await axios.post("/api/boards", newBoard);
+      const response = await apiClient.post("/api/boards", newBoard);
 
       return response.data;
     } catch (error) {
@@ -18,7 +18,7 @@ const getBoardsList = createAsyncThunk(
   "boards/getList",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get("/api/boards");
+      const response = await apiClient.get("/api/boards");
 
       return response.data;
     } catch (error) {
@@ -31,7 +31,7 @@ const getBoard = createAsyncThunk(
   "boards/getBoard",
   async (boardId, thunkAPI) => {
     try {
-      const response = await axios.get(`/api/boards/${boardId}`);
+      const response = await apiClient.get(`/api/boards/${boardId}`);
 
       return response.data;
     } catch (error) {
@@ -44,7 +44,7 @@ const deleteBoard = createAsyncThunk(
   "boards/deleteBoard",
   async (boardId, thunkAPI) => {
     try {
-      const response = await axios.delete(`/api/boards/${boardId}`);
+      const response = await apiClient.delete(`/api/boards/${boardId}`);
 
       return response.data;
     } catch (error) {
@@ -57,7 +57,7 @@ const updateBoard = createAsyncThunk(
   "boards/updateBoard",
   async ({ boardId, updates }, thunkAPI) => {
     try {
-      const response = await axios.put(`/api/boards/${boardId}`, updates);
+      const response = await apiClient.put(`/api/boards/${boardId}`, updates);
 
       return response.data;
     } catch (error) {
@@ -70,7 +70,7 @@ const addBoardColumn = createAsyncThunk(
   "boards/addBoardColumn",
   async ({ boardId, newColumn }, thunkAPI) => {
     try {
-      const response = await axios.post(
+      const response = await apiClient.post(
         `/api/boards/${boardId}/columns`,
         newColumn
       );
@@ -86,7 +86,7 @@ const deleteBoardColumn = createAsyncThunk(
   "boards/deleteBoardColumn",
   async ({ boardId, columnId }, thunkAPI) => {
     try {
-      const response = await axios.delete(
+      const response = await apiClient.delete(
         `/api/boards/${boardId}/columns/${columnId}`
       );
 
@@ -101,7 +101,7 @@ const updateBoardColumn = createAsyncThunk(
   "boards/updateBoardColumn",
   async ({ boardId, columnId, updates }, thunkAPI) => {
     try {
-      const response = await axios.patch(
+      const response = await apiClient.patch(
         `/api/boards/${boardId}/columns/${columnId}`,
         updates
       );
@@ -117,7 +117,7 @@ const addBoardColumnCard = createAsyncThunk(
   "boards/addBoardColumnCard",
   async ({ boardId, columnId, newCard }, thunkAPI) => {
     try {
-      const response = await axios.post(
+      const response = await apiClient.post(
         `/api/boards/${boardId}/columns/${columnId}/cards`,
         newCard
       );
@@ -133,7 +133,7 @@ const deleteBoardColumnCard = createAsyncThunk(
   "boards/deleteBoardColumnCard",
   async ({ boardId, columnId, cardId }, thunkAPI) => {
     try {
-      const response = await axios.delete(
+      const response = await apiClient.delete(
         `/api/boards/${boardId}/columns/${columnId}/cards/${cardId}`
       );
 
@@ -148,7 +148,7 @@ const updateBoardColumnCard = createAsyncThunk(
   "boards/updateBoardColumnCard",
   async ({ boardId, columnId, cardId, updates }, thunkAPI) => {
     try {
-      const response = await axios.patch(
+      const response = await apiClient.patch(
         `/api/boards/${boardId}/columns/${columnId}/cards/${cardId}`,
         updates
       );
@@ -175,7 +175,7 @@ export {
 };
 
 export const updateBoardColumns = (boardId, updatedColumns) => {
-  axios.put(`/api/boards/${boardId}/columns`, {
+  apiClient.put(`/api/boards/${boardId}/columns`, {
     columns: updatedColumns,
   });
 };

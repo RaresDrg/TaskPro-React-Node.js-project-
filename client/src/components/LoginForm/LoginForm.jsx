@@ -1,8 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/auth/operations";
-import { toast } from "react-toastify";
-import { getRegex } from "../../utils/utils";
+import { getRegex, notifySuccess, notifyError } from "../../utils/utils";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import AuthNavigation from "../common/AuthNavigation/AuthNavigation.styled";
@@ -12,7 +10,6 @@ import FormButton from "../common/FormButton/FormButton.styled";
 
 const LoginForm = ({ className: styles }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const initialValues = {
     email: "",
@@ -38,13 +35,10 @@ const LoginForm = ({ className: styles }) => {
       .unwrap()
       .then((value) => {
         resetForm();
-        navigate("/dashboard", { replace: true });
-        toast.success(`Welcome, ${value.data.user.name} !`);
+        notifySuccess(`Welcome, ${value.data.user.name} !`);
       })
       .catch((error) => {
-        const errorNotification =
-          error?.response?.data?.message || "Internal server error";
-        toast.error(errorNotification);
+        notifyError(error);
 
         if (error?.response?.data?.message === "email is wrong") {
           setFieldError("email", "Invalid email address");

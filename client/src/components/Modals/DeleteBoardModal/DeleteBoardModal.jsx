@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteBoard } from "../../../redux/boards/operations";
 import { setModalClose } from "../../../redux/modals/slice";
-import { toast } from "react-toastify";
+import { notifySuccess, notifyError } from "../../../utils/utils";
 import { useAuth, useBoards } from "../../../hooks/hooks";
 import Modal from "../../common/Modal/Modal.styled";
 import FormButton from "../../common/FormButton/FormButton.styled";
@@ -24,14 +24,12 @@ const DeleteBoardModal = ({ className: styles }) => {
     dispatch(deleteBoard(board["_id"]))
       .unwrap()
       .then((value) => {
-        toast.success(value.message);
+        notifySuccess(value.message);
         closeModal();
         navigate("/dashboard");
       })
       .catch((error) => {
-        const errorNotification =
-          error?.response?.data?.message || "Internal server error";
-        toast.error(errorNotification);
+        notifyError(error);
       });
   }
 

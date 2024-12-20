@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { deleteBoardColumn } from "../../../redux/boards/operations";
 import { setModalClose } from "../../../redux/modals/slice";
-import { toast } from "react-toastify";
+import { notifySuccess, notifyError } from "../../../utils/utils";
 import { useAuth, useBoards } from "../../../hooks/hooks";
 import Modal from "../../common/Modal/Modal.styled";
 import FormButton from "../../common/FormButton/FormButton.styled";
@@ -25,13 +25,11 @@ const DeleteColumnModal = ({ className: styles }) => {
     dispatch(deleteBoardColumn({ boardId, columnId }))
       .unwrap()
       .then((value) => {
-        toast.success(value.message);
+        notifySuccess(value.message);
         closeModal();
       })
       .catch((error) => {
-        const errorNotification =
-          error?.response?.data?.message || "Internal server error";
-        toast.error(errorNotification);
+        notifyError(error);
       });
   }
 

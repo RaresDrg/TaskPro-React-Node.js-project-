@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { useDispatch } from "react-redux";
 import { reachCustomerSupport } from "../../../redux/auth/operations";
 import { setModalClose } from "../../../redux/modals/slice";
-import { toast } from "react-toastify";
+import { notifySuccess, notifyError } from "../../../utils/utils";
 import { useAuth } from "../../../hooks/hooks";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -52,14 +52,12 @@ const NeedHelpModal = ({ className: styles }) => {
 
     reachCustomerSupport({ comment: values.comment.trim() })
       .then((value) => {
-        toast.success(value.message);
+        notifySuccess(value.message);
         formikBag.resetForm();
         closeModal();
       })
       .catch((error) => {
-        const errorNotification =
-          error?.response?.data?.message || "Internal server error";
-        toast.error(errorNotification);
+        notifyError(error);
       })
       .finally(() => {
         setIsLoading(false);

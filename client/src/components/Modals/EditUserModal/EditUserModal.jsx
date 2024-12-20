@@ -3,8 +3,8 @@ import { createPortal } from "react-dom";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../../redux/auth/operations";
 import { setModalClose } from "../../../redux/modals/slice";
-import { toast } from "react-toastify";
 import { capitalize, getRegex } from "../../../utils/utils";
+import { notifySuccess, notifyError } from "../../../utils/utils";
 import { useAuth } from "../../../hooks/hooks";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -67,14 +67,12 @@ const EditUserModal = ({ className: styles }) => {
     dispatch(updateUser(updates))
       .unwrap()
       .then((value) => {
-        toast.success(value.message);
+        notifySuccess(value.message);
         resetForm();
         closeModal();
       })
       .catch((error) => {
-        const errorNotification =
-          error?.response?.data?.message || "Internal server error";
-        toast.error(errorNotification);
+        notifyError(error);
 
         if (error?.response?.status === 409) {
           setFieldError("email", "Invalid email address");

@@ -1,18 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import storage from "redux-persist/lib/storage";
 import { persistStore, persistReducer } from "redux-persist";
-
+import storageSession from "redux-persist/lib/storage/session";
 import { authReducer } from "./auth/slice";
 import { modalsReducer } from "./modals/slice";
 import { boardsReducer } from "./boards/slice";
 
 const authPersistConfig = {
   key: "auth",
-  storage,
-  whitelist: ["token"],
+  storage: storageSession,
+  whitelist: ["isLoggedIn", "user"],
 };
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     auth: persistReducer(authPersistConfig, authReducer),
     modals: modalsReducer,
@@ -25,6 +24,4 @@ const store = configureStore({
     }),
 });
 
-const persistor = persistStore(store);
-
-export { store, persistor };
+export const persistor = persistStore(store);
