@@ -8,6 +8,7 @@ import swaggerSpec from "./swagger.js";
 import usersRouter from "./routes/api/users.js";
 import boardsRouter from "./routes/api/boards.js";
 import validateAuth from "./config/config-passport.js";
+import utils from "./utils/utils.js";
 import { configDotenv } from "dotenv";
 
 configDotenv({ path: "./environment/.env" });
@@ -18,6 +19,7 @@ app.use(logger("dev"));
 app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser(process.env.COOKIE_PARSER_SECRET));
 app.use(express.json());
+app.use(utils.disableCacheMiddleware);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
