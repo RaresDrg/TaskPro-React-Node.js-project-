@@ -241,10 +241,9 @@ async function handleGoogleAuth(req, res, next) {
       }),
       { sameSite: "Lax", secure: true }
     );
+    res.redirect("https://taskpro-umber.vercel.app/mafia");
   } catch (error) {
     res.cookie("googleAuthError", `Google authentication failed !`);
-  } finally {
-    res.redirect("https://taskpro-umber.vercel.app/mafia");
   }
 }
 
