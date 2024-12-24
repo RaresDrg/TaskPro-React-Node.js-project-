@@ -7,7 +7,7 @@ const StyledAuthNavigation = styled(AuthNavigation)`
   margin-bottom: 40px;
 
   & {
-    a {
+    a:not(.google-btn) {
       font-size: 18px;
       font-weight: 500;
       line-height: 27px;
@@ -26,6 +26,41 @@ const StyledAuthNavigation = styled(AuthNavigation)`
     a:hover:not(.active) {
       opacity: 1;
       color: var(--green-color);
+    }
+
+    a.google-btn {
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      display: flex;
+      justify-content: center;
+      align-items: end;
+      transform: rotate(45deg);
+      background-color: #cececee6;
+      opacity: 0.5;
+      transition: var(--transition);
+
+      &:hover {
+        opacity: 0.95;
+
+        > svg {
+          opacity: 1;
+        }
+      }
+
+      & {
+        > svg {
+          width: 33px;
+          height: 33px;
+          transform: rotate(-45deg);
+          margin-left: 6px;
+          margin-bottom: 2px;
+          opacity: 0.7;
+          transition: var(--transition);
+        }
+      }
     }
   }
 `;

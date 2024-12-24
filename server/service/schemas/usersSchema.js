@@ -4,24 +4,73 @@ const schema = new Schema(
   {
     name: {
       type: String,
-      trim: true,
-      minlength: [3, "Name must be at least 3 characters long"],
-      maxlength: [50, "Name must be less than 50 characters long"],
-      required: [true, "=> this field is required"],
+      validate: [
+        {
+          validator: function (v) {
+            return v?.trim().length > 0;
+          },
+          message: "=> this field is required",
+        },
+        {
+          validator: function (v) {
+            if (this.isGoogleUser) {
+              return true;
+            }
+
+            return v?.trim().length >= 3 && v?.trim().length <= 50;
+          },
+          message: "=> it must be between 3 and 50 characters long",
+        },
+      ],
     },
     email: {
       type: String,
-      match: [/^([\w-.]+@([\w-]+\.)+[\w-]{2,4})?$/, "Invalid email address"],
-      required: [true, "=> this field is required"],
+      validate: [
+        {
+          validator: function (v) {
+            return v?.trim().length > 0;
+          },
+          message: "=> this field is required",
+        },
+        {
+          validator: function (v) {
+            return v && /^([\w-.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v.trim());
+          },
+          message: "=> Invalid email address",
+        },
+      ],
       unique: true,
     },
     password: {
       type: String,
-      match: [
-        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
-        "=> Password must be at least 8 characters long and must include an uppercase, a lowercase and a digit",
+      validate: [
+        {
+          validator: function (v) {
+            if (this.isGoogleUser) {
+              return true;
+            }
+
+            return v?.length > 0;
+          },
+          message: "=> this field is required",
+        },
+        {
+          validator: function (v) {
+            if (this.isGoogleUser) {
+              return true;
+            }
+
+            return v && /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(v);
+          },
+          message:
+            "=> it must be at least 8 characters long and must include an uppercase, a lowercase and a digit",
+        },
       ],
-      required: [true, "=> this field is required"],
+      default: null,
+    },
+    isGoogleUser: {
+      type: Boolean,
+      default: false,
     },
     token: {
       type: String,

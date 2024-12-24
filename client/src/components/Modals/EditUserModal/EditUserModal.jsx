@@ -45,6 +45,7 @@ const EditUserModal = ({ className: styles }) => {
       .max(50, "Name must be less than 50 characters long")
       .required("Required *"),
     email: Yup.string()
+      .trim()
       .matches(emailRegex, { message: "Invalid email address" })
       .required("Required *"),
     password: Yup.string()

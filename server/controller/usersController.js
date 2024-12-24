@@ -3,6 +3,10 @@ import utils from "../utils/utils.js";
 import uploadOnCloudinary from "../config/config-cloudinary.js";
 import sendEmail from "../config/config-nodemailer.js";
 
+// todo: vercel
+// "http://localhost:5173"
+// "https://taskpro-umber.vercel.app";
+
 async function register(req, res, next) {
   try {
     const result = await usersService.addUsertoDB({ ...req.body });
@@ -28,9 +32,9 @@ async function register(req, res, next) {
       message: "User created successfully",
       data: {
         user: {
-          email: result.email,
-          name: result.name,
-          theme: result.theme,
+          email: user.email,
+          name: user.name,
+          theme: user.theme,
         },
       },
     });
@@ -81,10 +85,10 @@ async function login(req, res, next) {
       message: "Logged in successfully",
       data: {
         user: {
-          email: result.email,
-          name: result.name,
-          theme: result.theme,
-          profilePhotoUrl: result.profilePhotoUrl,
+          email: user.email,
+          name: user.name,
+          theme: user.theme,
+          profilePhotoUrl: user.profilePhotoUrl,
         },
       },
     });
@@ -124,7 +128,7 @@ async function updateUserTheme(req, res, next) {
     }
 
     const userId = req.user.id;
-    const result = await usersService.updateUser(userId, { theme });
+    const updatedUser = await usersService.updateUser(userId, { theme });
 
     res.status(200).json({
       status: "succes",
@@ -132,10 +136,10 @@ async function updateUserTheme(req, res, next) {
       message: "Your profile's theme has been successfully updated",
       data: {
         user: {
-          theme: result.theme,
-          name: result.name,
-          email: result.email,
-          profilePhotoUrl: result.profilePhotoUrl,
+          theme: updatedUser.theme,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          profilePhotoUrl: updatedUser.profilePhotoUrl,
         },
       },
     });
@@ -162,7 +166,7 @@ async function updateUserProfile(req, res, next) {
       updates.profilePhotoUrl = profilePhotoUrl;
     }
 
-    const result = await usersService.updateUser(userId, updates);
+    const updatedUser = await usersService.updateUser(userId, updates);
 
     res.status(200).json({
       status: "succes",
@@ -170,10 +174,10 @@ async function updateUserProfile(req, res, next) {
       message: "Your profile has been successfully updated",
       data: {
         user: {
-          name: result.name,
-          email: result.email,
-          profilePhotoUrl: result.profilePhotoUrl,
-          theme: result.theme,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          profilePhotoUrl: updatedUser.profilePhotoUrl,
+          theme: updatedUser.theme,
         },
       },
     });
@@ -219,6 +223,30 @@ async function reachCustomerSupport(req, res, next) {
   }
 }
 
+async function handleGoogleAuth(req, res, next) {
+  try {
+    const { user } = req;
+    const tokens = utils.generateTokens(user);
+    await usersService.updateUser(user.id, { token: tokens.refreshToken });
+
+    utils.sendTokensAsCookies(res, tokens);
+
+    res.cookie(
+      "googleAuthSuccess",
+      JSON.stringify({
+        email: user.email,
+        name: user.name,
+        theme: user.theme,
+        profilePhotoUrl: user.profilePhotoUrl,
+      })
+    );
+  } catch (error) {
+    res.cookie("googleAuthError", `Google authentication failed !`);
+  } finally {
+    res.redirect("https://taskpro-umber.vercel.app");
+  }
+}
+
 const usersController = {
   register,
   login,
@@ -226,6 +254,7 @@ const usersController = {
   updateUserTheme,
   updateUserProfile,
   reachCustomerSupport,
+  handleGoogleAuth,
 };
 
 export default usersController;

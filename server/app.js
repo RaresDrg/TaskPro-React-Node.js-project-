@@ -7,8 +7,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger.js";
 import usersRouter from "./routes/api/users.js";
 import boardsRouter from "./routes/api/boards.js";
-import validateAuth from "./config/config-passport.js";
-import utils from "./utils/utils.js";
+import { validateJWTAuth, disableCache } from "./middlewares/middlewares.js";
 import { configDotenv } from "dotenv";
 
 configDotenv({ path: "./environment/.env" });
@@ -19,12 +18,12 @@ app.use(logger("dev"));
 app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser(process.env.COOKIE_PARSER_SECRET));
 app.use(express.json());
-app.use(utils.disableCacheMiddleware);
+app.use(disableCache);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/users", usersRouter);
-app.use("/api/boards", validateAuth, boardsRouter);
+app.use("/api/boards", validateJWTAuth, boardsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

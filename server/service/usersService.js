@@ -19,8 +19,12 @@ async function addUsertoDB(data) {
   return User.create(newUser);
 }
 
+function addGoogleUserToDB(user) {
+  return User.create(user);
+}
+
 async function checkUserCredentials(data) {
-  const user = await User.findOne({ email: data.email });
+  const user = await User.findOne({ email: data.email, isGoogleUser: false });
   if (!user) {
     return "email is wrong";
   }
@@ -50,6 +54,7 @@ async function validateData(data) {
 
 const usersService = {
   addUsertoDB,
+  addGoogleUserToDB,
   findUser,
   updateUser,
   checkUserCredentials,

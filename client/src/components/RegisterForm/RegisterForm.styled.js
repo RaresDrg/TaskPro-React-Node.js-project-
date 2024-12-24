@@ -5,6 +5,7 @@ const StyledRegisterForm = styled(RegisterForm)`
   background-color: var(--form-bg-black);
   border-radius: 8px;
   padding: 24px;
+  overflow: hidden;
 
   & {
     div:has(> input):not(:nth-last-of-type(1)) {

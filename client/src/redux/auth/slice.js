@@ -47,6 +47,15 @@ const authSlice = createSlice({
     forceLogout: (state) => {
       utils.handleLogout(state);
     },
+    handleGoogleAuth: (state, action) => {
+      state.isLoggedIn = true;
+      state.user = {
+        name: action.payload.user.name,
+        email: action.payload.user.email,
+        theme: action.payload.user.theme,
+        profilePhotoUrl: action.payload.user.profilePhotoUrl,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -99,5 +108,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setTheme, forceLogout } = authSlice.actions;
+export const { setTheme, forceLogout, handleGoogleAuth } = authSlice.actions;
 export const authReducer = authSlice.reducer;

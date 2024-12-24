@@ -27,7 +27,7 @@ passport.use(
   })
 );
 
-function validateAuth(req, res, next) {
+function validateJWTAuth(req, res, next) {
   passport.authenticate("jwt", { session: false }, async (err, user) => {
     if (!err && user) {
       req.user = user;
@@ -59,4 +59,4 @@ function validateAuth(req, res, next) {
   })(req, res, next);
 }
 
-export default validateAuth;
+export default validateJWTAuth;

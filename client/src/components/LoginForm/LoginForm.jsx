@@ -20,6 +20,7 @@ const LoginForm = ({ className: styles }) => {
 
   const validationSchema = Yup.object({
     email: Yup.string()
+      .trim()
       .matches(emailRegex, { message: "Invalid email address" })
       .required("Required *"),
     password: Yup.string().required("Required *"),
