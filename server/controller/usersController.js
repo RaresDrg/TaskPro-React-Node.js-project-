@@ -229,6 +229,13 @@ async function handleGoogleAuth(req, res, next) {
     const tokens = utils.generateTokens(user);
     await usersService.updateUser(user.id, { token: tokens.refreshToken });
 
+    res.set(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, proxy-revalidate"
+    );
+    res.set("Pragma", "no-cache");
+    res.set("Expires", "0");
+
     utils.sendTokensAsCookies(res, tokens);
 
     res.cookie(

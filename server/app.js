@@ -25,14 +25,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/users", usersRouter);
 app.use("/api/boards", validateJWTAuth, boardsRouter);
 
-app.use((req, res, next) => {
-  res.setHeader(
-    "Content-Security-Policy",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com"
-  );
-  next();
-});
-
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
