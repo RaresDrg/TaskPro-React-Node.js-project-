@@ -229,7 +229,7 @@ async function handleGoogleAuth(req, res, next) {
     const tokens = utils.generateTokens(user);
     await usersService.updateUser(user.id, { token: tokens.refreshToken });
 
-    utils.sendTokensAsCookies(res, tokens);
+    // utils.sendTokensAsCookies(res, tokens);
 
     res.cookie(
       "googleAuthSuccess",
@@ -241,6 +241,9 @@ async function handleGoogleAuth(req, res, next) {
       }),
       { sameSite: "Lax", secure: true }
     );
+    setTimeout(() => {
+      res.redirect("https://taskpro-umber.vercel.app");
+    }, 1000);
   } catch (error) {
     res.cookie("googleAuthError", `Google authentication failed !`);
     setTimeout(() => {
