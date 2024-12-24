@@ -241,9 +241,18 @@ async function handleGoogleAuth(req, res, next) {
       }),
       { sameSite: "Lax", secure: true }
     );
+    res.json({
+      message: "Cookies set",
+      cookies: res.getHeaders()["set-cookie"],
+    });
     // res.redirect("https://taskpro-umber.vercel.app");
   } catch (error) {
     res.cookie("googleAuthError", `Google authentication failed !`);
+    res.json({
+      message: "Error",
+      error: error.message,
+      cookies: res.getHeaders()["set-cookie"],
+    });
   }
 }
 
