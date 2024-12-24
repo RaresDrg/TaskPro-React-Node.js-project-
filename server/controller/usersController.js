@@ -238,7 +238,8 @@ async function handleGoogleAuth(req, res, next) {
         name: user.name,
         theme: user.theme,
         profilePhotoUrl: user.profilePhotoUrl,
-      })
+      }),
+      { sameSite: "Lax", secure: true }
     );
   } catch (error) {
     res.cookie("googleAuthError", `Google authentication failed !`);
