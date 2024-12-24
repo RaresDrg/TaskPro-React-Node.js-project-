@@ -229,18 +229,18 @@ async function handleGoogleAuth(req, res, next) {
     const tokens = utils.generateTokens(user);
     await usersService.updateUser(user.id, { token: tokens.refreshToken });
 
-    utils.sendTokensAsCookies(res, tokens);
+    // utils.sendTokensAsCookies(res, tokens);
 
-    // res.cookie(
-    //   "googleAuthSuccess",
-    //   JSON.stringify({
-    //     email: user.email,
-    //     name: user.name,
-    //     theme: user.theme,
-    //     profilePhotoUrl: user.profilePhotoUrl,
-    //   }),
-    //   { sameSite: "Lax", secure: true }
-    // );
+    res.cookie(
+      "googleAuthSuccess",
+      JSON.stringify({
+        email: user.email,
+        name: user.name,
+        theme: user.theme,
+        profilePhotoUrl: user.profilePhotoUrl,
+      }),
+      { sameSite: "Lax", secure: true }
+    );
     res.redirect("https://taskpro-umber.vercel.app");
   } catch (error) {
     res.cookie("googleAuthError", `Google authentication failed !`);
