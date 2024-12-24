@@ -56,7 +56,7 @@ const validateGoogleAuth = {
     passport.authenticate("google", { session: false }, (err, user) => {
       if (err || !user) {
         res.cookie("googleAuthError", `Google authentication failed !`);
-        res.redirect("https://taskpro-umber.vercel.app");
+        res.redirect("https://taskpro-umber.vercel.app/test");
         return;
       }
 
