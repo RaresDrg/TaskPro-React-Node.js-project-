@@ -243,7 +243,7 @@ async function handleGoogleAuth(req, res, next) {
   } catch (error) {
     res.cookie("googleAuthError", `Google authentication failed !`);
   } finally {
-    res.redirect("https://taskpro-umber.vercel.app");
+    res.redirect("https://taskpro-umber.vercel.app/mafia");
   }
 }
 
