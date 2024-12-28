@@ -25,5 +25,6 @@ router.get(
   validateGoogleAuth.handleCallback,
   usersController.handleGoogleAuth
 );
+router.get("/google-auth/:validationToken", usersController.getUserData);
 
 export default router;

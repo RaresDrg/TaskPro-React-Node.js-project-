@@ -92,16 +92,21 @@ function getBackgroundSrc(background) {
   return backgroundSrc;
 }
 
+function generateRandomBytes() {
+  const token = crypto
+    .randomBytes(Number(process.env.RANDOM_BYTES_LENGTH))
+    .toString("hex");
+
+  return token;
+}
+
 function generateTokens(user) {
   const accessToken = jwt.sign(
     { email: user.email, id: user.id },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: "15min" }
   );
-
-  const refreshToken = crypto
-    .randomBytes(Number(process.env.REFRESH_TOKEN_LENGTH))
-    .toString("hex");
+  const refreshToken = generateRandomBytes();
 
   const tokens = { accessToken, refreshToken };
   return tokens;
@@ -141,6 +146,22 @@ async function getUserByRefreshToken(req) {
   return user;
 }
 
+function handleRedirect(res, variant, validationToken = null) {
+  let searchParams;
+
+  if (variant === "failed") {
+    searchParams = `googleAuthFailed=Google authentication failed !`;
+  }
+
+  if (variant === "success") {
+    searchParams = `googleAuthSuccess=${validationToken}`;
+  }
+
+  // todo: vercel
+  res.redirect(`https://taskpro-umber.vercel.app/?${searchParams}`);
+  // res.redirect(`http://localhost:5173/?${searchParams}`);
+}
+
 const utils = {
   handleInvalidIdError,
   handleValidationError,
@@ -148,9 +169,11 @@ const utils = {
   encrypt,
   handleBoardsSchema,
   getBackgroundSrc,
+  generateRandomBytes,
   generateTokens,
   sendTokensAsCookies,
   getUserByRefreshToken,
+  handleRedirect,
 };
 
 export default utils;

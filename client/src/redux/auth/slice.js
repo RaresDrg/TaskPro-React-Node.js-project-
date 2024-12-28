@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { register, login, logout, updateUser } from "./operations";
+import {
+  register,
+  login,
+  logout,
+  updateUser,
+  handleGoogleAuth,
+} from "./operations";
 
 const initialState = {
   isLoading: false,
@@ -22,7 +28,7 @@ const utils = {
     state.error =
       action.payload?.response?.data?.message || "Internal server error";
   },
-  handlefulfilled: (state) => {
+  handleFulfilled: (state) => {
     state.isLoading = false;
     state.error = null;
   },
@@ -33,6 +39,15 @@ const utils = {
       email: null,
       theme: null,
       profilePhotoUrl: null,
+    };
+  },
+  handleAuth: (state, action) => {
+    state.isLoggedIn = true;
+    state.user = {
+      name: action.payload.data.user.name,
+      email: action.payload.data.user.email,
+      theme: action.payload.data.user.theme,
+      profilePhotoUrl: action.payload.data.user?.profilePhotoUrl ?? null,
     };
   },
 };
@@ -47,15 +62,6 @@ const authSlice = createSlice({
     forceLogout: (state) => {
       utils.handleLogout(state);
     },
-    handleGoogleAuth: (state, action) => {
-      state.isLoggedIn = true;
-      state.user = {
-        name: action.payload.user.name,
-        email: action.payload.user.email,
-        theme: action.payload.user.theme,
-        profilePhotoUrl: action.payload.user.profilePhotoUrl,
-      };
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -63,26 +69,15 @@ const authSlice = createSlice({
       .addCase(register.pending, utils.handlePending)
       .addCase(register.rejected, utils.handleRejected)
       .addCase(register.fulfilled, (state, action) => {
-        utils.handlefulfilled(state);
-        state.isLoggedIn = true;
-        state.user = {
-          name: action.payload.data.user.name,
-          email: action.payload.data.user.email,
-          theme: action.payload.data.user.theme,
-        };
+        utils.handleFulfilled(state);
+        utils.handleAuth(state, action);
       })
       // *Login
       .addCase(login.pending, utils.handlePending)
       .addCase(login.rejected, utils.handleRejected)
       .addCase(login.fulfilled, (state, action) => {
-        utils.handlefulfilled(state);
-        state.isLoggedIn = true;
-        state.user = {
-          name: action.payload.data.user.name,
-          email: action.payload.data.user.email,
-          theme: action.payload.data.user.theme,
-          profilePhotoUrl: action.payload.data.user.profilePhotoUrl,
-        };
+        utils.handleFulfilled(state);
+        utils.handleAuth(state, action);
       })
       // *Logout
       .addCase(logout.pending, utils.handlePending)
@@ -91,7 +86,7 @@ const authSlice = createSlice({
         utils.handleLogout(state);
       })
       .addCase(logout.fulfilled, (state) => {
-        utils.handlefulfilled(state);
+        utils.handleFulfilled(state);
         utils.handleLogout(state);
       })
       // *Update User
@@ -104,9 +99,15 @@ const authSlice = createSlice({
           profilePhotoUrl: action.payload.data.user.profilePhotoUrl,
           theme: action.payload.data.user.theme,
         };
+      })
+      // *Handle Google Auth
+      .addCase(handleGoogleAuth.rejected, utils.handleRejected)
+      .addCase(handleGoogleAuth.fulfilled, (state, action) => {
+        state.error = null;
+        utils.handleAuth(state, action);
       });
   },
 });
 
-export const { setTheme, forceLogout, handleGoogleAuth } = authSlice.actions;
+export const { setTheme, forceLogout } = authSlice.actions;
 export const authReducer = authSlice.reducer;

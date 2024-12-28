@@ -3,12 +3,11 @@ import homePageImg from "../../assets/images/homePageImg.png";
 import homePageImg_2x from "../../assets/images/homePageImg_2x.png";
 import { LogoOnHomePage as Logo } from "../../components/common/Logo/Logo.styled";
 import FormButton from "../../components/common/FormButton/FormButton.styled.js";
-import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import Cookies from "js-cookie";
+import { useNavigate, useLocation } from "react-router-dom";
 import { notifyWarning, notifySuccess } from "../../utils/notify.js";
 import { useDispatch } from "react-redux";
-import { handleGoogleAuth } from "../../redux/auth/slice.js";
+import { handleGoogleAuth } from "../../redux/auth/operations.js";
 
 // todo: vercel
 // "http://localhost:3000/api/users/google-auth"
@@ -18,20 +17,27 @@ const HomePage = ({ className: styles }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const location = useLocation();
+  const pathname = location.pathname;
+  const queryParams = new URLSearchParams(location.search);
+
   useEffect(() => {
-    const googleAuthError = Cookies.get("googleAuthError");
-    if (googleAuthError) {
-      notifyWarning(googleAuthError);
-      Cookies.remove("googleAuthError");
+    const googleAuthFailed = queryParams.get("googleAuthFailed");
+    if (googleAuthFailed) {
+      notifyWarning(googleAuthFailed);
+      window.history.replaceState({}, document.title, pathname);
       return;
     }
 
-    const googleAuthSuccess = Cookies.get("googleAuthSuccess");
-    if (googleAuthSuccess) {
-      const user = JSON.parse(googleAuthSuccess);
-      dispatch(handleGoogleAuth({ user: { ...user } }));
-      notifySuccess(`Welcome, ${user.name} !`);
-      Cookies.remove("googleAuthSuccess");
+    const validationToken = queryParams.get("googleAuthSuccess");
+    if (validationToken) {
+      dispatch(handleGoogleAuth(validationToken))
+        .unwrap()
+        .then((value) => notifySuccess(`Welcome, ${value.data.user.name} !`))
+        .catch(() => notifyWarning("Google authentication failed !"))
+        .finally(() => {
+          window.history.replaceState({}, document.title, pathname);
+        });
       return;
     }
   }, []);

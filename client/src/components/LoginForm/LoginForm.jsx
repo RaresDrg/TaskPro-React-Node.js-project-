@@ -41,7 +41,10 @@ const LoginForm = ({ className: styles }) => {
       .catch((error) => {
         notifyError(error);
 
-        if (error?.response?.data?.message === "email is wrong") {
+        if (
+          error?.response?.data?.message ===
+          "there is no account associated with this email address"
+        ) {
           setFieldError("email", "Invalid email address");
         }
 

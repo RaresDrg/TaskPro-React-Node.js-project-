@@ -1,14 +1,12 @@
 import passport from "passport";
 import { Strategy } from "passport-google-oauth20";
 import usersService from "../service/usersService.js";
+import utils from "../utils/utils.js";
 import { configDotenv } from "dotenv";
 
 configDotenv({ path: "./environment/.env" });
 
 // todo: vercel
-// "http://localhost:5173"
-// "https://taskpro-umber.vercel.app";
-
 // "http://localhost:3000/api/users/google-auth/callback"
 // "https://taskproserver.vercel.app/api/users/google-auth/callback";
 
@@ -55,8 +53,7 @@ const validateGoogleAuth = {
   handleCallback: (req, res, next) => {
     passport.authenticate("google", { session: false }, (err, user) => {
       if (err || !user) {
-        res.cookie("googleAuthError", `Google authentication failed !`);
-        res.redirect("https://taskpro-umber.vercel.app");
+        utils.handleRedirect(res, "failed");
         return;
       }
 

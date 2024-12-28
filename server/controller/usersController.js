@@ -3,10 +3,6 @@ import utils from "../utils/utils.js";
 import uploadOnCloudinary from "../config/config-cloudinary.js";
 import sendEmail from "../config/config-nodemailer.js";
 
-// todo: vercel
-// "http://localhost:5173"
-// "https://taskpro-umber.vercel.app";
-
 async function register(req, res, next) {
   try {
     const result = await usersService.addUsertoDB({ ...req.body });
@@ -63,8 +59,10 @@ async function login(req, res, next) {
     }
 
     const result = await usersService.checkUserCredentials({ email, password });
-
-    if (result === "email is wrong" || result === "password is wrong") {
+    if (
+      result === "there is no account associated with this email address" ||
+      result === "password is wrong"
+    ) {
       res.status(400).json({
         status: "failed",
         code: 400,
@@ -225,25 +223,45 @@ async function reachCustomerSupport(req, res, next) {
 
 async function handleGoogleAuth(req, res, next) {
   try {
-    const { user } = req;
+    const validationToken = utils.generateRandomBytes();
+    await usersService.updateUser(req.user.id, { validationToken });
+    utils.handleRedirect(res, "success", validationToken);
+  } catch (error) {
+    utils.handleRedirect(res, "failed");
+  }
+}
+
+async function getUserData(req, res, next) {
+  try {
+    const { validationToken } = req.params;
+    const user = await usersService.findUser({ validationToken });
+    if (!user) {
+      res.status(404).json({ code: 404, message: "Not found" });
+      return;
+    }
+
     const tokens = utils.generateTokens(user);
-    await usersService.updateUser(user.id, { token: tokens.refreshToken });
+
+    await usersService.updateUser(user.id, {
+      validationToken: null,
+      token: tokens.refreshToken,
+    });
 
     utils.sendTokensAsCookies(res, tokens);
-
-    res.cookie(
-      "googleAuthSuccess",
-      JSON.stringify({
-        email: user.email,
-        name: user.name,
-        theme: user.theme,
-        profilePhotoUrl: user.profilePhotoUrl,
-      })
-    );
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: {
+        user: {
+          email: user.email,
+          name: user.name,
+          theme: user.theme,
+          profilePhotoUrl: user.profilePhotoUrl,
+        },
+      },
+    });
   } catch (error) {
-    res.cookie("googleAuthError", `Google authentication failed !`);
-  } finally {
-    res.redirect("https://taskpro-umber.vercel.app");
+    next(error);
   }
 }
 
@@ -255,6 +273,7 @@ const usersController = {
   updateUserProfile,
   reachCustomerSupport,
   handleGoogleAuth,
+  getUserData,
 };
 
 export default usersController;

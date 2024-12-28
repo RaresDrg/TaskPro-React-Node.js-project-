@@ -26,7 +26,7 @@ function addGoogleUserToDB(user) {
 async function checkUserCredentials(data) {
   const user = await User.findOne({ email: data.email, isGoogleUser: false });
   if (!user) {
-    return "email is wrong";
+    return "there is no account associated with this email address";
   }
 
   const decryptedPassword = bcrypt.compareSync(data.password, user.password);

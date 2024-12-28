@@ -58,7 +58,22 @@ const updateUser = createAsyncThunk(
   }
 );
 
-export { register, login, logout, updateUser };
+const handleGoogleAuth = createAsyncThunk(
+  "auth/handleGoogleAuth",
+  async (validationToken, thunkAPI) => {
+    try {
+      const response = await apiClient.get(
+        `/api/users/google-auth/${validationToken}`
+      );
+
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export { register, login, logout, updateUser, handleGoogleAuth };
 
 const updateTheme = (theme) => apiClient.patch("/api/users/theme", { theme });
 const reachCustomerSupport = async (comment) => {

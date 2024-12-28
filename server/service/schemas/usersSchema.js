@@ -68,10 +68,6 @@ const schema = new Schema(
       ],
       default: null,
     },
-    isGoogleUser: {
-      type: Boolean,
-      default: false,
-    },
     token: {
       type: String,
       default: null,
@@ -87,6 +83,14 @@ const schema = new Schema(
         values: ["light", "dark", "violet"],
         message: "=> is either: light, dark or violet",
       },
+    },
+    isGoogleUser: {
+      type: Boolean,
+      default: false,
+    },
+    validationToken: {
+      type: String,
+      default: null,
     },
   },
   { versionKey: false }
