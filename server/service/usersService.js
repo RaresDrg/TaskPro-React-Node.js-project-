@@ -24,14 +24,29 @@ function addGoogleUserToDB(user) {
 }
 
 async function checkUserCredentials(data) {
-  const user = await User.findOne({ email: data.email, isGoogleUser: false });
+  const user = await User.findOne({ email: data.email });
+
   if (!user) {
-    return "there is no account associated with this email address";
+    return {
+      isInvalid: true,
+      message: "There is no account associated with this email address",
+    };
+  }
+
+  if (user.isGoogleUser) {
+    return {
+      isInvalid: true,
+      message:
+        "The account associated with this email is linked with Google, so please use Google in order to authenticate",
+    };
   }
 
   const decryptedPassword = bcrypt.compareSync(data.password, user.password);
   if (!decryptedPassword) {
-    return "password is wrong";
+    return {
+      isInvalid: true,
+      message: "Password is wrong",
+    };
   }
 
   return user;

@@ -22,6 +22,7 @@ const schema = new Schema(
           message: "=> it must be between 3 and 50 characters long",
         },
       ],
+      trim: true,
     },
     email: {
       type: String,
@@ -40,6 +41,7 @@ const schema = new Schema(
         },
       ],
       unique: true,
+      trim: true,
     },
     password: {
       type: String,
@@ -89,8 +91,14 @@ const schema = new Schema(
       default: false,
     },
     validationToken: {
-      type: String,
-      default: null,
+      value: {
+        type: String,
+        default: null,
+      },
+      expiresAt: {
+        type: Date,
+        default: null,
+      },
     },
   },
   { versionKey: false }

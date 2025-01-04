@@ -17,7 +17,7 @@ async function register(req, res, next) {
     }
 
     const user = result;
-    const tokens = utils.generateTokens(user);
+    const tokens = utils.generateAuthTokens(user);
 
     await usersService.updateUser(user.id, { token: tokens.refreshToken });
 
@@ -59,20 +59,17 @@ async function login(req, res, next) {
     }
 
     const result = await usersService.checkUserCredentials({ email, password });
-    if (
-      result === "there is no account associated with this email address" ||
-      result === "password is wrong"
-    ) {
+    if (result?.isInvalid) {
       res.status(400).json({
         status: "failed",
         code: 400,
-        message: result,
+        message: result.message,
       });
       return;
     }
 
     const user = result;
-    const tokens = utils.generateTokens(user);
+    const tokens = utils.generateAuthTokens(user);
 
     await usersService.updateUser(user.id, { token: tokens.refreshToken });
 
@@ -115,7 +112,6 @@ async function logout(req, res, next) {
 async function updateUserTheme(req, res, next) {
   try {
     const { theme } = req.body;
-
     if (!theme) {
       res.status(400).json({
         status: "failed",
@@ -129,7 +125,7 @@ async function updateUserTheme(req, res, next) {
     const updatedUser = await usersService.updateUser(userId, { theme });
 
     res.status(200).json({
-      status: "succes",
+      status: "success",
       code: 200,
       message: "Your profile's theme has been successfully updated",
       data: {
@@ -167,7 +163,7 @@ async function updateUserProfile(req, res, next) {
     const updatedUser = await usersService.updateUser(userId, updates);
 
     res.status(200).json({
-      status: "succes",
+      status: "success",
       code: 200,
       message: "Your profile has been successfully updated",
       data: {
@@ -197,7 +193,6 @@ async function updateUserProfile(req, res, next) {
 async function reachCustomerSupport(req, res, next) {
   try {
     const { comment } = req.body;
-
     if (!comment) {
       res.status(400).json({
         status: "failed",
@@ -207,11 +202,10 @@ async function reachCustomerSupport(req, res, next) {
       return;
     }
 
-    const { name, email } = req.user;
-    await sendEmail(email, name, comment);
+    await sendEmail("customerSupport", req.user, comment);
 
     res.status(200).json({
-      status: "succes",
+      status: "success",
       code: 200,
       message:
         "We have successfully received your comment. A confirmation email has been sent to you. Please, check your inbox or spam folder !",
@@ -221,11 +215,107 @@ async function reachCustomerSupport(req, res, next) {
   }
 }
 
+async function handleForgotPassword(req, res, next) {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      res.status(400).json({
+        status: "failed",
+        code: 400,
+        message: "Email field is required. Please provide your account email.",
+      });
+      return;
+    }
+
+    const user = await usersService.findUser({ email });
+    if (!user) {
+      res.status(404).json({ code: 404, message: "Not found" });
+      return;
+    }
+
+    if (user.isGoogleUser) {
+      res.status(403).json({
+        status: "failed",
+        code: 403,
+        message:
+          "Password change not supported. The account associated with this email is linked with Google, so please use Google in order to authenticate.",
+      });
+      return;
+    }
+
+    const validationToken = utils.generateValidationToken();
+    await usersService.updateUser(user.id, { validationToken });
+
+    await sendEmail("passwordRecovery", user, validationToken.value);
+
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      message:
+        "Password change request received. Please check your email (including spam folder) for a confirmation message.",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function updatePassword(req, res, next) {
+  try {
+    const { newPassword } = req.body;
+    if (!newPassword) {
+      res.status(400).json({
+        status: "failed",
+        code: 400,
+        message: "Missing password field",
+      });
+      return;
+    }
+
+    const isValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(newPassword);
+    if (!isValid) {
+      res.status(400).json({
+        status: "failed",
+        code: 400,
+        message:
+          "Password must be at least 8 characters long and must include an uppercase, a lowercase and a digit",
+      });
+      return;
+    }
+
+    const { user } = req;
+    const tokens = utils.generateAuthTokens(user);
+
+    const updates = {
+      password: utils.encrypt(newPassword),
+      token: tokens.refreshToken,
+      validationToken: null,
+    };
+    await usersService.updateUser(user.id, updates);
+
+    utils.sendTokensAsCookies(res, tokens);
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      message: "Password changed successfully",
+      data: {
+        user: {
+          email: user.email,
+          name: user.name,
+          theme: user.theme,
+          profilePhotoUrl: user.profilePhotoUrl,
+        },
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function handleGoogleAuth(req, res, next) {
   try {
-    const validationToken = utils.generateRandomBytes();
+    const validationToken = utils.generateValidationToken();
     await usersService.updateUser(req.user.id, { validationToken });
-    utils.handleRedirect(res, "success", validationToken);
+    utils.handleRedirect(res, "success", validationToken.value);
   } catch (error) {
     utils.handleRedirect(res, "failed");
   }
@@ -233,14 +323,8 @@ async function handleGoogleAuth(req, res, next) {
 
 async function getUserData(req, res, next) {
   try {
-    const { validationToken } = req.params;
-    const user = await usersService.findUser({ validationToken });
-    if (!user) {
-      res.status(404).json({ code: 404, message: "Not found" });
-      return;
-    }
-
-    const tokens = utils.generateTokens(user);
+    const { user } = req;
+    const tokens = utils.generateAuthTokens(user);
 
     await usersService.updateUser(user.id, {
       validationToken: null,
@@ -272,6 +356,8 @@ const usersController = {
   updateUserTheme,
   updateUserProfile,
   reachCustomerSupport,
+  handleForgotPassword,
+  updatePassword,
   handleGoogleAuth,
   getUserData,
 };

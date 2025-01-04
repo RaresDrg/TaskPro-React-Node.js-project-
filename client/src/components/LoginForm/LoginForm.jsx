@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/auth/operations";
+import { setModalOpen } from "../../redux/modals/slice";
 import { getRegex, notifySuccess, notifyError } from "../../utils/utils";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -43,12 +44,12 @@ const LoginForm = ({ className: styles }) => {
 
         if (
           error?.response?.data?.message ===
-          "there is no account associated with this email address"
+          "There is no account associated with this email address"
         ) {
           setFieldError("email", "Invalid email address");
         }
 
-        if (error?.response?.data?.message === "password is wrong") {
+        if (error?.response?.data?.message === "Password is wrong") {
           setFieldError("password", "Invalid password");
         }
       })
@@ -89,6 +90,13 @@ const LoginForm = ({ className: styles }) => {
               }
               variant={"greenBtn"}
             />
+            <button
+              type="button"
+              className="forgotBtn"
+              onClick={() => dispatch(setModalOpen("ForgotPasswordModal"))}
+            >
+              Forgot password ?
+            </button>
           </Form>
         )}
       </Formik>

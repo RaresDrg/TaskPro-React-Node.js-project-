@@ -8,8 +8,39 @@ const StyledLoginForm = styled(LoginForm)`
   overflow: hidden;
 
   & {
-    div:has(> input):not(:nth-last-of-type(1)) {
-      margin-bottom: 14px;
+    form {
+      position: relative;
+
+      & {
+        div:nth-of-type(1) {
+          margin-bottom: 14px;
+        }
+
+        div:nth-of-type(2) {
+          margin-bottom: 40px;
+        }
+
+        div:nth-of-type(2):has(> input + span) {
+          margin-bottom: 22.5px;
+        }
+
+        .forgotBtn {
+          position: absolute;
+          bottom: 66px;
+          right: 0;
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 18px;
+          letter-spacing: -0.02em;
+          opacity: 0.4;
+          color: var(--text-color-white);
+          transition: var(--transition);
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
     }
   }
 

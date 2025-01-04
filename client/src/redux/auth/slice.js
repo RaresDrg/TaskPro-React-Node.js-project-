@@ -5,6 +5,7 @@ import {
   logout,
   updateUser,
   handleGoogleAuth,
+  changePassword,
 } from "./operations";
 
 const initialState = {
@@ -103,6 +104,12 @@ const authSlice = createSlice({
       // *Handle Google Auth
       .addCase(handleGoogleAuth.rejected, utils.handleRejected)
       .addCase(handleGoogleAuth.fulfilled, (state, action) => {
+        state.error = null;
+        utils.handleAuth(state, action);
+      })
+      // *Change Password
+      .addCase(changePassword.rejected, utils.handleRejected)
+      .addCase(changePassword.fulfilled, (state, action) => {
         state.error = null;
         utils.handleAuth(state, action);
       });

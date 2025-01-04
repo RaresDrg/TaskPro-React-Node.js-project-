@@ -100,7 +100,16 @@ function generateRandomBytes() {
   return token;
 }
 
-function generateTokens(user) {
+function generateValidationToken() {
+  const validationToken = {
+    value: generateRandomBytes(),
+    expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+  };
+
+  return validationToken;
+}
+
+function generateAuthTokens(user) {
   const accessToken = jwt.sign(
     { email: user.email, id: user.id },
     process.env.ACCESS_TOKEN_SECRET,
@@ -170,7 +179,8 @@ const utils = {
   handleBoardsSchema,
   getBackgroundSrc,
   generateRandomBytes,
-  generateTokens,
+  generateValidationToken,
+  generateAuthTokens,
   sendTokensAsCookies,
   getUserByRefreshToken,
   handleRedirect,

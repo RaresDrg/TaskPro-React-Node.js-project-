@@ -38,7 +38,7 @@ function validateJWTAuth(req, res, next) {
     if (err || !user) {
       try {
         const userByRefreshToken = await utils.getUserByRefreshToken(req);
-        const renewedTokens = utils.generateTokens(userByRefreshToken);
+        const renewedTokens = utils.generateAuthTokens(userByRefreshToken);
 
         await usersService.updateUser(userByRefreshToken.id, {
           token: renewedTokens.refreshToken,

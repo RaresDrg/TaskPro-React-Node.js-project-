@@ -18,14 +18,13 @@ const HomePage = ({ className: styles }) => {
   const dispatch = useDispatch();
 
   const location = useLocation();
-  const pathname = location.pathname;
   const queryParams = new URLSearchParams(location.search);
 
   useEffect(() => {
     const googleAuthFailed = queryParams.get("googleAuthFailed");
     if (googleAuthFailed) {
       notifyWarning(googleAuthFailed);
-      window.history.replaceState({}, document.title, pathname);
+      window.history.replaceState({}, document.title, location.pathname);
       return;
     }
 
@@ -36,7 +35,7 @@ const HomePage = ({ className: styles }) => {
         .then((value) => notifySuccess(`Welcome, ${value.data.user.name} !`))
         .catch(() => notifyWarning("Google authentication failed !"))
         .finally(() => {
-          window.history.replaceState({}, document.title, pathname);
+          window.history.replaceState({}, document.title, location.pathname);
         });
       return;
     }

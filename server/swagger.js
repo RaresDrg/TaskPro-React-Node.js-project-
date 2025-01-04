@@ -3,13 +3,11 @@ import utils from "./utils/utils.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
+// todo: la sfarsit mai verific ce inseamna filename,etc si mai verific in ui toate datele, daca mai trb sa agaug ceva
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const apiDocsDir = path.join(__dirname, "routes", "swaggerDocs");
-
-const iconsOptions = utils.handleBoardsSchema("icon");
-const bgOptions = utils.handleBoardsSchema("background");
-const priorityOptions = utils.handleBoardsSchema("priority");
 
 const options = {
   definition: {
@@ -83,13 +81,13 @@ const options = {
             icon: {
               type: "string",
               description: "The icon of the board",
-              enum: iconsOptions,
+              enum: utils.handleBoardsSchema("icon"),
               example: "icon-project",
             },
             background: {
               type: "string",
               description: "The background of the board",
-              enum: bgOptions,
+              enum: utils.handleBoardsSchema("background"),
               example: "bg-1",
             },
           },
@@ -128,7 +126,7 @@ const options = {
             priority: {
               type: "string",
               description: "The priority of the card",
-              enum: priorityOptions,
+              enum: utils.handleBoardsSchema("priority"),
               example: "medium",
             },
             deadline: {

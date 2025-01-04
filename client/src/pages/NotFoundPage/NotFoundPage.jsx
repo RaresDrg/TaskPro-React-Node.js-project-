@@ -12,7 +12,7 @@ const NotFoundPage = ({ className: styles }) => {
       "animate__fadeIn",
       "animate__fadeOutLeft"
     );
-    setTimeout(() => navigate("/"), 700);
+    setTimeout(() => navigate(-1), 1630);
   }
 
   const videoSrc =

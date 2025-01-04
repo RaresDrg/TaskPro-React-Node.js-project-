@@ -33,15 +33,18 @@ const StyledModal = styled(Modal)`
       border-radius: 8px;
       position: relative;
       background-color: ${({ theme: { theme } }) =>
+        (theme === null && "var(--form-bg-white)") ||
         (theme === "dark" && "var(--form-bg-black)") ||
         (theme === "light" && "var(--form-bg-white)") ||
         (theme === "violet" && "var(--form-bg-white)")};
       border: ${({ theme: { theme } }) =>
+        (theme === null && "1px solid #161616e6") ||
         (theme === "dark" && "1px solid #ffffff99") ||
         (theme === "light" && "1px solid #161616e6") ||
         (theme === "violet" && "1px solid #161616e6")};
       box-shadow: ${({ theme: { theme } }) =>
-        (theme === "dark" && " 0px 4px 16px 0px #ffffff33") ||
+        (theme === null && "0px 4px 16px 0px #16161699") ||
+        (theme === "dark" && "0px 4px 16px 0px #ffffff33") ||
         (theme === "light" && "0px 4px 16px 0px #16161699") ||
         (theme === "violet" && "0px 4px 16px 0px #16161699")};
       animation: translateIn 0.35s ease-in-out;
@@ -57,6 +60,7 @@ const StyledModal = styled(Modal)`
           right: 14px;
           cursor: pointer;
           color: ${({ theme: { theme } }) =>
+            (theme === null && "var(--text-color-black)") ||
             (theme === "dark" && "var(--text-color-white)") ||
             (theme === "light" && "var(--text-color-black)") ||
             (theme === "violet" && "var(--text-color-black)")};
@@ -65,10 +69,12 @@ const StyledModal = styled(Modal)`
           &:hover {
             padding: 2px;
             color: ${({ theme: { theme } }) =>
+              (theme === null && "var(--text-color-white)") ||
               (theme === "dark" && "var(--text-color-black)") ||
               (theme === "light" && "var(--text-color-white)") ||
               (theme === "violet" && "var(--text-color-white)")};
             background-color: ${({ theme: { theme } }) =>
+              (theme === null && "var(--green-color-active)") ||
               (theme === "dark" && "var(--green-color)") ||
               (theme === "light" && "var(--green-color-active)") ||
               (theme === "violet" && "var(--violet-color-active)")};

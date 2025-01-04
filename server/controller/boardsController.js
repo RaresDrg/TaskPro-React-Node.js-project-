@@ -69,7 +69,7 @@ async function getBoard(req, res, next) {
       return;
     }
 
-    res.status(200).json({ status: "succes", code: 200, data: result });
+    res.status(200).json({ status: "success", code: 200, data: result });
   } catch (error) {
     if (error.name === "CastError") {
       utils.handleInvalidIdError(res);
@@ -94,7 +94,7 @@ async function deleteBoard(req, res, next) {
     const currentBoardsList = await boardsService.getBoardsListFromDB(owner);
 
     res.status(200).json({
-      status: "succes",
+      status: "success",
       code: 200,
       message: "The board has been successfully deleted",
       data: currentBoardsList.length > 0 ? currentBoardsList : null,
@@ -142,7 +142,7 @@ async function updateBoard(req, res, next) {
     const currentBoardsList = await boardsService.getBoardsListFromDB(owner);
 
     res.status(200).json({
-      status: "succes",
+      status: "success",
       code: 200,
       message: "The board has been successfully updated",
       data: {
@@ -191,7 +191,7 @@ async function updateBoardColumns(req, res, next) {
     const result = await boardsService.updateBoardColumnsInDB(boardId, columns);
 
     res.status(200).json({
-      status: "succes",
+      status: "success",
       code: 200,
       message: "The board's columns have been successfully updated",
       data: result.columns,
