@@ -4,7 +4,7 @@ import FormFileField from "./FormFileField";
 const StyledFormFileField = styled(FormFileField)`
   width: 68px;
   height: 68px;
-  margin: 0 auto 25px auto;
+  margin: 0 auto 26px auto;
   position: relative;
 
   & {

@@ -171,6 +171,16 @@ function handleRedirect(res, variant, validationToken = null) {
   // res.redirect(`http://localhost:5173/?${searchParams}`);
 }
 
+function selectUserProperties(user) {
+  return {
+    email: user.email,
+    name: user.name,
+    theme: user.theme,
+    profilePhotoUrl: user.profilePhotoUrl,
+    isGoogleUser: user.isGoogleUser,
+  };
+}
+
 const utils = {
   handleInvalidIdError,
   handleValidationError,
@@ -184,6 +194,7 @@ const utils = {
   sendTokensAsCookies,
   getUserByRefreshToken,
   handleRedirect,
+  selectUserProperties,
 };
 
 export default utils;

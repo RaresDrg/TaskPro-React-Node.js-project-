@@ -5,7 +5,7 @@ const useAuth = () => {
   const isLoading = useSelector(authSelectors.selectIsLoading);
   const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
   const user = useSelector(authSelectors.selectUser);
-  const theme = useSelector(authSelectors.selectTheme);
+  const theme = useSelector(authSelectors.selectTheme) ?? null;
 
   return {
     isLoading,

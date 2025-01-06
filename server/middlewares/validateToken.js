@@ -3,7 +3,7 @@ import usersService from "../service/usersService.js";
 async function validateToken(req, res, next) {
   try {
     const { validationToken } = req.query;
-    if (!validationToken || validationToken === "null") {
+    if (!validationToken || validationToken === "undefined") {
       res.status(400).json({
         status: "failed",
         code: 400,

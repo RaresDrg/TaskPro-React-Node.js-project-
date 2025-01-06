@@ -31,9 +31,11 @@ const uploadOnCloudinary = async (file, userId, name) => {
       uploadStream.end(file.buffer);
     });
 
+    console.log("File successfully uploaded to Cloudinary");
     return uploadResult.secure_url;
   } catch (error) {
-    return error;
+    console.error(error);
+    throw new Error(`Error uploading to Cloudinary: ${error.message}`);
   }
 };
 

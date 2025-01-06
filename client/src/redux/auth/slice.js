@@ -12,12 +12,7 @@ const initialState = {
   isLoading: false,
   error: null,
   isLoggedIn: false,
-  user: {
-    name: null,
-    email: null,
-    profilePhotoUrl: null,
-    theme: null,
-  },
+  user: null,
 };
 
 const utils = {
@@ -35,16 +30,12 @@ const utils = {
   },
   handleLogout: (state) => {
     state.isLoggedIn = false;
-    state.user = {
-      name: null,
-      email: null,
-      theme: null,
-      profilePhotoUrl: null,
-    };
+    state.user = null;
   },
   handleAuth: (state, action) => {
     state.isLoggedIn = true;
     state.user = {
+      isGoogleUser: action.payload.data.user.isGoogleUser,
       name: action.payload.data.user.name,
       email: action.payload.data.user.email,
       theme: action.payload.data.user.theme,
@@ -95,10 +86,10 @@ const authSlice = createSlice({
       .addCase(updateUser.fulfilled, (state, action) => {
         state.error = null;
         state.user = {
+          ...state.user,
           name: action.payload.data.user.name,
           email: action.payload.data.user.email,
           profilePhotoUrl: action.payload.data.user.profilePhotoUrl,
-          theme: action.payload.data.user.theme,
         };
       })
       // *Handle Google Auth

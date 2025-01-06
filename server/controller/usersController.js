@@ -26,13 +26,7 @@ async function register(req, res, next) {
       status: "success",
       code: 201,
       message: "User created successfully",
-      data: {
-        user: {
-          email: user.email,
-          name: user.name,
-          theme: user.theme,
-        },
-      },
+      data: { user: utils.selectUserProperties(user) },
     });
   } catch (error) {
     if (error.name === "ValidationError") {
@@ -78,14 +72,7 @@ async function login(req, res, next) {
       status: "success",
       code: 200,
       message: "Logged in successfully",
-      data: {
-        user: {
-          email: user.email,
-          name: user.name,
-          theme: user.theme,
-          profilePhotoUrl: user.profilePhotoUrl,
-        },
-      },
+      data: { user: utils.selectUserProperties(user) },
     });
   } catch (error) {
     next(error);
@@ -128,14 +115,7 @@ async function updateUserTheme(req, res, next) {
       status: "success",
       code: 200,
       message: "Your profile's theme has been successfully updated",
-      data: {
-        user: {
-          theme: updatedUser.theme,
-          name: updatedUser.name,
-          email: updatedUser.email,
-          profilePhotoUrl: updatedUser.profilePhotoUrl,
-        },
-      },
+      data: { user: utils.selectUserProperties(updatedUser) },
     });
   } catch (error) {
     if (error.name === "ValidationError") {
@@ -149,31 +129,23 @@ async function updateUserTheme(req, res, next) {
 
 async function updateUserProfile(req, res, next) {
   try {
-    const { name, email, password } = req.body;
-    await usersService.validateData({ name, email, password });
+    const { user } = req;
+    const { name, email } = req.body;
 
-    const userId = req.user.id;
-    const updates = { name, email, password: utils.encrypt(password) };
+    let updatedUser = user.isGoogleUser
+      ? await usersService.updateUser(user.id, { name })
+      : await usersService.updateUser(user.id, { name, email });
 
     if (req.file) {
-      const profilePhotoUrl = await uploadOnCloudinary(req.file, userId, name);
-      updates.profilePhotoUrl = profilePhotoUrl;
+      const profilePhotoUrl = await uploadOnCloudinary(req.file, user.id, name);
+      updatedUser = await usersService.updateUser(user.id, { profilePhotoUrl });
     }
-
-    const updatedUser = await usersService.updateUser(userId, updates);
 
     res.status(200).json({
       status: "success",
       code: 200,
       message: "Your profile has been successfully updated",
-      data: {
-        user: {
-          name: updatedUser.name,
-          email: updatedUser.email,
-          profilePhotoUrl: updatedUser.profilePhotoUrl,
-          theme: updatedUser.theme,
-        },
-      },
+      data: { user: utils.selectUserProperties(updatedUser) },
     });
   } catch (error) {
     if (error.name === "ValidationError") {
@@ -297,14 +269,7 @@ async function updatePassword(req, res, next) {
       status: "success",
       code: 200,
       message: "Password changed successfully",
-      data: {
-        user: {
-          email: user.email,
-          name: user.name,
-          theme: user.theme,
-          profilePhotoUrl: user.profilePhotoUrl,
-        },
-      },
+      data: { user: utils.selectUserProperties(user) },
     });
   } catch (error) {
     next(error);
@@ -335,14 +300,7 @@ async function getUserData(req, res, next) {
     res.status(200).json({
       status: "success",
       code: 200,
-      data: {
-        user: {
-          email: user.email,
-          name: user.name,
-          theme: user.theme,
-          profilePhotoUrl: user.profilePhotoUrl,
-        },
-      },
+      data: { user: utils.selectUserProperties(user) },
     });
   } catch (error) {
     next(error);
