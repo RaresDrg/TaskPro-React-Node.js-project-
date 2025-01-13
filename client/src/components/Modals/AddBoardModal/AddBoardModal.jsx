@@ -1,13 +1,10 @@
-import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addBoard } from "../../../redux/boards/operations";
-import { setModalClose } from "../../../redux/modals/slice";
-import { capitalize, notifySuccess, notifyError } from "../../../utils/utils";
-import { getIconsOptions, getBgOptions } from "../../../utils/utils";
-import { useAuth } from "../../../hooks/hooks";
+import * as utils from "../../../utils/utils";
+import { useAuth, useBoards } from "../../../hooks/hooks";
 import { Form, Formik } from "formik";
-import * as Yup from "yup";
+import { closeModal } from "../../common/Modal/Modal";
 import Modal from "../../common/Modal/Modal.styled";
 import FormTitle from "../../common/FormTitle/FormTitle.styled";
 import FormTextField from "../../common/FormTextField/FormTextField.styled";
@@ -15,63 +12,46 @@ import FormIconsField from "../../common/FormIconsField/FormIconsField.styled";
 import FormBackgroundField from "../../common/FormBackgroundField/FormBackgroundField.styled";
 import FormButton from "../../common/FormButton/FormButton.styled";
 
-const CreateBoardModal = () => {
-  const modalRef = useRef();
+const AddBoardModal = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { theme } = useAuth();
-
-  function closeModal() {
-    modalRef.current.classList.add("hidden");
-    setTimeout(() => dispatch(setModalClose("CreateBoardModal")), 500);
-  }
-
-  const iconsOptions = getIconsOptions();
-  const bgOptions = getBgOptions();
+  const { boardsList } = useBoards();
 
   const initialValues = {
     title: "",
-    icon: iconsOptions[0],
-    background: bgOptions[0],
+    icon: utils.getIconsOptions()[0],
+    background: utils.getBgOptions()[0],
   };
-
-  const validationSchema = Yup.object({
-    title: Yup.string()
-      .trim()
-      .min(3, "Title must be at least 3 characters long")
-      .max(50, "Title must be less than 50 characters long")
-      .required("Required *"),
-  });
+  const validationSchema = utils.getValidationSchema(["title"]);
 
   const handleSubmit = (values, formikBag) => {
     const { title, icon, background } = values;
-    const { setSubmitting, setFieldError, resetForm } = formikBag;
+    const newBoard = { title: utils.capitalize(title), icon, background };
 
-    setSubmitting(true);
-    const newBoard = { title: capitalize(title), icon, background };
+    const alreadyExist = utils.checkExistence("addCase", boardsList, newBoard);
+    if (alreadyExist) {
+      formikBag.setFieldError("title", "Invalid title");
+      utils.notify.warning(
+        "The title you want to assign is already in use by another board"
+      );
+      formikBag.setSubmitting(false);
+      return;
+    }
 
     dispatch(addBoard(newBoard))
       .unwrap()
       .then((value) => {
         navigate(`${value.data.board["_id"]}`);
-        resetForm();
-        notifySuccess(value.message);
+        utils.notify.success(value.message);
         closeModal();
       })
-      .catch((error) => {
-        notifyError(error);
-
-        if (error?.response?.status === 409) {
-          setFieldError("title", "Invalid title");
-        }
-      })
-      .finally(() => {
-        setSubmitting(false);
-      });
+      .catch((error) => utils.notify.error(error))
+      .finally(() => formikBag.setSubmitting(false));
   };
 
   return (
-    <Modal closeModal={closeModal} modalRef={modalRef}>
+    <Modal>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -85,13 +65,13 @@ const CreateBoardModal = () => {
               name="title"
               placeholder="Title"
               errors={(errors.title && touched.title) || null}
-              isFocused={true}
+              isFocused
             />
             <FormIconsField />
             <FormBackgroundField />
             <FormButton
               type={"submit"}
-              text={isSubmitting ? "Loading..." : "Create"}
+              text={isSubmitting ? "Loading..." : "Add"}
               isDisabled={isSubmitting || (errors.title && touched.title)}
               variant={`${theme === "violet" ? "violetBtn" : "greenBtn"}`}
             />
@@ -102,4 +82,4 @@ const CreateBoardModal = () => {
   );
 };
 
-export default CreateBoardModal;
+export default AddBoardModal;

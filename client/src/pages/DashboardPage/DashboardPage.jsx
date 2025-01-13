@@ -18,7 +18,7 @@ const DashboardPage = ({ className: styles }) => {
         ) : (
           <p>
             Before starting your project, it is essential{" "}
-            <b onClick={() => dispatch(setModalOpen("CreateBoardModal"))}>
+            <b onClick={() => dispatch(setModalOpen("AddBoardModal"))}>
               to create a board
             </b>{" "}
             to visualize and track all the necessary tasks and milestones. This

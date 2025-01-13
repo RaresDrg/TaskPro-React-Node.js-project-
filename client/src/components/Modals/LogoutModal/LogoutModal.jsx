@@ -1,31 +1,24 @@
-import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../../redux/auth/operations";
-import { setModalClose } from "../../../redux/modals/slice";
-import { notifySuccess } from "../../../utils/utils";
+import { notify } from "../../../utils/utils";
 import { useAuth } from "../../../hooks/hooks";
+import { closeModal } from "../../common/Modal/Modal";
 import Modal from "../../common/Modal/Modal.styled";
 import FormButton from "../../common/FormButton/FormButton.styled";
 
 const LogoutModal = ({ className: styles }) => {
-  const modalRef = useRef();
   const { theme } = useAuth();
   const dispatch = useDispatch();
-
-  function closeModal() {
-    modalRef.current.classList.add("hidden");
-    setTimeout(() => dispatch(setModalClose("LogoutModal")), 500);
-  }
 
   function handleExit() {
     closeModal();
     dispatch(logout())
       .unwrap()
-      .finally(() => notifySuccess("Logged out successfully"));
+      .finally(() => notify.success("Logged out successfully"));
   }
 
   return (
-    <Modal className={styles} closeModal={closeModal} modalRef={modalRef}>
+    <Modal className={styles}>
       <p>Are you sure you want to exit ?</p>
       <div className="buttons-wrapper">
         <FormButton

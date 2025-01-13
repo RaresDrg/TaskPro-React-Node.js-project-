@@ -15,7 +15,7 @@ const MyBoards = ({ className: styles }) => {
         <span>Create a new board</span>
         <svg
           className="create-btn"
-          onClick={() => dispatch(setModalOpen("CreateBoardModal"))}
+          onClick={() => dispatch(setModalOpen("AddBoardModal"))}
           data-secondary-action="close burger menu"
         >
           <use href={`${icons}#icon-plus`}></use>

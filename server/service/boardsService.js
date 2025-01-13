@@ -3,75 +3,71 @@ import Board from "./schemas/boardsSchema.js";
 async function addBoardToDB(newBoard) {
   await Board.validate(newBoard);
 
-  const alreadyExistingDoc = await Board.findOne({
-    title: newBoard.title,
-    owner: newBoard.owner,
-  });
+  const query = { title: newBoard.title, owner: newBoard.owner };
+  const alreadyExistingDoc = await Board.findOne(query);
 
-  if (alreadyExistingDoc) {
-    return "already exists";
-  }
-
-  return Board.create(newBoard);
+  return alreadyExistingDoc
+    ? {
+        isInvalid: true,
+        message:
+          "The title you want to assign is already in use by another board",
+      }
+    : Board.create(newBoard);
 }
 
-async function getBoardsListFromDB(owner) {
+function getBoardsListFromDB(owner) {
   return Board.find({ owner }, { _id: 1, title: 1, icon: 1 });
 }
 
-async function getBoardFromDB(boardId) {
-  return Board.findOne({ _id: boardId }, { owner: 0 });
+function getBoardFromDB(boardId) {
+  return Board.findById(boardId, { owner: 0 });
 }
 
 function deleteBoardFromDB(boardId) {
-  return Board.findOneAndDelete({ _id: boardId });
+  return Board.findByIdAndDelete(boardId);
 }
 
 async function updateBoardInDB(boardId, owner, updates) {
   await Board.validate(updates);
 
-  const alreadyExistingDoc = await Board.findOne({
-    title: updates.title,
-    owner: owner,
-  });
+  const query = { title: updates.title, owner };
+  const alreadyExistingDoc = await Board.findOne(query);
 
-  if (alreadyExistingDoc && alreadyExistingDoc.id !== boardId) {
-    return "already exists";
-  }
-
-  return Board.findOneAndUpdate({ _id: boardId }, updates, {
-    new: true,
-    runValidators: true,
-  });
+  return alreadyExistingDoc && alreadyExistingDoc.id !== boardId
+    ? {
+        isInvalid: true,
+        message:
+          "The title you want to assign is already in use by another board",
+      }
+    : Board.findByIdAndUpdate(boardId, updates, {
+        new: true,
+        runValidators: true,
+      });
 }
 
 async function updateBoardColumnsInDB(boardId, updates) {
-  return Board.findOneAndUpdate(
-    { _id: boardId },
+  return Board.findByIdAndUpdate(
+    boardId,
     { columns: updates },
     { new: true, runValidators: true }
   );
 }
 
 async function addBoardColumnToDB(boardId, newColumn) {
-  const alreadyExistingColumn = await Board.findOne({
-    _id: boardId,
-    "columns.title": newColumn.title,
-  });
+  const query = { _id: boardId, "columns.title": newColumn.title };
+  const alreadyExistingColumn = await Board.findOne(query);
 
-  if (alreadyExistingColumn) {
-    return "already exists";
-  }
-
-  return Board.findOneAndUpdate(
-    { _id: boardId },
-    { $push: { columns: newColumn } },
-    { new: true, runValidators: true }
-  );
-}
-
-function getBoardColumnFromDB({ boardId, columnId }) {
-  return Board.findOne({ _id: boardId, "columns._id": columnId });
+  return alreadyExistingColumn
+    ? {
+        isInvalid: true,
+        message:
+          "The title you want to assign is already in use by another column",
+      }
+    : Board.findByIdAndUpdate(
+        boardId,
+        { $push: { columns: newColumn } },
+        { new: true, runValidators: true }
+      );
 }
 
 function deleteBoardColumnFromDB({ boardId, columnId }) {
@@ -82,50 +78,62 @@ function deleteBoardColumnFromDB({ boardId, columnId }) {
   );
 }
 
+function getBoardColumnFromDB({ boardId, columnId }) {
+  return Board.findOne({ _id: boardId, "columns._id": columnId });
+}
+
 async function updateBoardColumnInDB({ boardId, columnId }, updates) {
-  const alreadyExistingDoc = await Board.findOne(
-    { _id: boardId, "columns.title": updates },
-    { "columns.$": 1 }
-  );
+  const query = { _id: boardId, "columns.title": updates };
+  const alreadyExistingDoc = await Board.findOne(query, { "columns.$": 1 });
 
-  if (alreadyExistingDoc && alreadyExistingDoc.columns[0].id !== columnId) {
-    return "already exists";
-  }
-
-  return Board.findOneAndUpdate(
-    { _id: boardId, "columns._id": columnId },
-    { $set: { "columns.$[column].title": updates } },
-    {
-      arrayFilters: [{ "column._id": columnId }],
-      new: true,
-      runValidators: true,
-    }
-  );
+  return alreadyExistingDoc && alreadyExistingDoc.columns[0].id !== columnId
+    ? {
+        isInvalid: true,
+        message:
+          "The title you want to assign is already in use by another column",
+      }
+    : Board.findOneAndUpdate(
+        { _id: boardId, "columns._id": columnId },
+        { $set: { "columns.$[column].title": updates } },
+        {
+          arrayFilters: [{ "column._id": columnId }],
+          new: true,
+          runValidators: true,
+        }
+      );
 }
 
 async function addBoardColumnCardToDB({ boardId, columnId }, newCard) {
-  const targetedColumn = await Board.findOne(
-    { _id: boardId, "columns._id": columnId },
-    { "columns.$": 1 }
-  );
+  const query = { _id: boardId, "columns._id": columnId };
+  const targetedColumn = await Board.findOne(query, { "columns.$": 1 });
 
-  const columnCards = targetedColumn.columns[0]?.cards;
+  const columnCards = targetedColumn?.columns[0]?.cards;
   const alreadyExistingCard = columnCards?.find(
     (card) => card.title === newCard.title
   );
 
-  if (alreadyExistingCard) {
-    return "already exists";
-  }
+  return alreadyExistingCard
+    ? {
+        isInvalid: true,
+        message:
+          "The title you want to assign is already in use by another card",
+      }
+    : Board.findOneAndUpdate(
+        { _id: boardId, "columns._id": columnId },
+        { $push: { "columns.$[column].cards": newCard } },
+        {
+          arrayFilters: [{ "column._id": columnId }],
+          new: true,
+          runValidators: true,
+        }
+      );
+}
 
+function deleteBoardColumnCardFromDB({ boardId, columnId, cardId }) {
   return Board.findOneAndUpdate(
-    { _id: boardId, "columns._id": columnId },
-    { $push: { "columns.$[column].cards": newCard } },
-    {
-      arrayFilters: [{ "column._id": columnId }],
-      new: true,
-      runValidators: true,
-    }
+    { _id: boardId, "columns._id": columnId, "columns.cards._id": cardId },
+    { $pull: { "columns.$[column].cards": { _id: cardId } } },
+    { arrayFilters: [{ "column._id": columnId }], new: true }
   );
 }
 
@@ -137,40 +145,32 @@ function getBoardColumnCardFromDB({ boardId, columnId, cardId }) {
   });
 }
 
-function deleteBoardColumnCardFromDB({ boardId, columnId, cardId }) {
-  return Board.findOneAndUpdate(
-    { _id: boardId, "columns._id": columnId, "columns.cards._id": cardId },
-    { $pull: { "columns.$[column].cards": { _id: cardId } } },
-    { arrayFilters: [{ "column._id": columnId }], new: true }
-  );
-}
-
 async function updateBoardColumnCardInDB(ids, updates) {
   const { boardId, columnId, cardId } = ids;
 
-  const targetedColumn = await Board.findOne(
-    { _id: boardId, "columns._id": columnId },
-    { "columns.$": 1 }
-  );
+  const query = { _id: boardId, "columns._id": columnId };
+  const targetedColumn = await Board.findOne(query, { "columns.$": 1 });
 
   const columnCards = targetedColumn.columns[0]?.cards;
   const alreadyExistingCard = columnCards?.find(
     (item) => item.title === updates.title
   );
 
-  if (alreadyExistingCard && alreadyExistingCard.id !== cardId) {
-    return "already exists";
-  }
-
-  return Board.findOneAndUpdate(
-    { _id: boardId, "columns._id": columnId, "columns.cards._id": cardId },
-    { $set: { "columns.$[column].cards.$[card]": updates } },
-    {
-      arrayFilters: [{ "column._id": columnId }, { "card._id": cardId }],
-      new: true,
-      runValidators: true,
-    }
-  );
+  return alreadyExistingCard && alreadyExistingCard.id !== cardId
+    ? {
+        isInvalid: true,
+        message:
+          "The title you want to assign is already in use by another card",
+      }
+    : Board.findOneAndUpdate(
+        { _id: boardId, "columns._id": columnId, "columns.cards._id": cardId },
+        { $set: { "columns.$[column].cards.$[card]": updates } },
+        {
+          arrayFilters: [{ "column._id": columnId }, { "card._id": cardId }],
+          new: true,
+          runValidators: true,
+        }
+      );
 }
 
 const boardsService = {

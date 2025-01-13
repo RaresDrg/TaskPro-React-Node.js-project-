@@ -1,11 +1,9 @@
-import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { updateBoard } from "../../../redux/boards/operations";
-import { setModalClose } from "../../../redux/modals/slice";
-import { capitalize, notifySuccess, notifyError } from "../../../utils/utils";
+import * as utils from "../../../utils/utils";
 import { useAuth, useBoards } from "../../../hooks/hooks";
 import { Form, Formik } from "formik";
-import * as Yup from "yup";
+import { closeModal } from "../../common/Modal/Modal";
 import Modal from "../../common/Modal/Modal.styled";
 import FormTitle from "../../common/FormTitle/FormTitle.styled";
 import FormTextField from "../../common/FormTextField/FormTextField.styled";
@@ -14,60 +12,52 @@ import FormBackgroundField from "../../common/FormBackgroundField/FormBackground
 import FormButton from "../../common/FormButton/FormButton.styled";
 
 const EditBoardModal = () => {
-  const modalRef = useRef();
   const dispatch = useDispatch();
   const { theme } = useAuth();
-  const { board } = useBoards();
-
-  function closeModal() {
-    modalRef.current.classList.add("hidden");
-    setTimeout(() => dispatch(setModalClose("EditBoardModal")), 500);
-  }
+  const { board, boardsList } = useBoards();
 
   const initialValues = {
     title: board.title,
     icon: board.icon,
     background: board.background.value,
   };
-
-  const validationSchema = Yup.object({
-    title: Yup.string()
-      .trim()
-      .min(3, "Title must be at least 3 characters long")
-      .max(50, "Title must be less than 50 characters long")
-      .required("Required *"),
-  });
+  const validationSchema = utils.getValidationSchema(["title"]);
 
   const handleSubmit = (values, formikBag) => {
     const { title, icon, background } = values;
-    const { setSubmitting, setFieldError, resetForm } = formikBag;
+    const updates = { title: utils.capitalize(title), icon, background };
 
-    setSubmitting(true);
+    const hasUpdates = utils.checkUpdates(initialValues, updates);
+    if (!hasUpdates) {
+      closeModal();
+      return;
+    }
 
-    const boardId = board["_id"];
-    const updates = { title: capitalize(title), icon, background };
+    const alreadyExist = utils.checkExistence("updateCase", boardsList, {
+      title: updates.title,
+      id: board["_id"],
+    });
+    if (alreadyExist) {
+      formikBag.setFieldError("title", "Invalid title");
+      utils.notify.warning(
+        "The title you want to assign is already in use by another board"
+      );
+      formikBag.setSubmitting(false);
+      return;
+    }
 
-    dispatch(updateBoard({ boardId, updates }))
+    dispatch(updateBoard({ boardId: board["_id"], updates }))
       .unwrap()
       .then((value) => {
-        notifySuccess(value.message);
-        resetForm();
+        utils.notify.success(value.message);
         closeModal();
       })
-      .catch((error) => {
-        notifyError(error);
-
-        if (error?.response?.status === 409) {
-          setFieldError("title", "Invalid title");
-        }
-      })
-      .finally(() => {
-        setSubmitting(false);
-      });
+      .catch((error) => utils.notify.error(error))
+      .finally(() => formikBag.setSubmitting(false));
   };
 
   return (
-    <Modal closeModal={closeModal} modalRef={modalRef}>
+    <Modal>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -81,7 +71,7 @@ const EditBoardModal = () => {
               name="title"
               placeholder="Title"
               errors={(errors.title && touched.title) || null}
-              isFocused={true}
+              isFocused
             />
             <FormIconsField />
             <FormBackgroundField />

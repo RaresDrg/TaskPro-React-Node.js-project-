@@ -1,12 +1,9 @@
-import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addBoardColumnCard } from "../../../redux/boards/operations";
-import { setModalClose } from "../../../redux/modals/slice";
-import { capitalize, getPriorityOptions } from "../../../utils/utils";
-import { notifySuccess, notifyError } from "../../../utils/utils";
+import * as utils from "../../../utils/utils";
 import { useAuth, useBoards } from "../../../hooks/hooks";
 import { Form, Formik } from "formik";
-import * as Yup from "yup";
+import { closeModal } from "../../common/Modal/Modal";
 import Modal from "../../common/Modal/Modal.styled";
 import FormTitle from "../../common/FormTitle/FormTitle.styled";
 import FormTextField from "../../common/FormTextField/FormTextField.styled";
@@ -16,76 +13,51 @@ import FormDeadlineField from "../../common/FormDeadlineField/FormDeadlineField.
 import FormButton from "../../common/FormButton/FormButton.styled";
 
 const AddCardModal = ({ className: styles }) => {
-  const modalRef = useRef();
   const dispatch = useDispatch();
   const { theme } = useAuth();
   const { board, column } = useBoards();
 
-  function closeModal() {
-    modalRef.current.classList.add("hidden");
-    setTimeout(() => dispatch(setModalClose("AddCardModal")), 500);
-  }
-
-  const priorityOptions = getPriorityOptions();
-  const [startDate, setStartDate] = useState(new Date());
-
   const initialValues = {
     title: "",
     description: "",
-    priority: priorityOptions[3],
-    deadline: startDate,
+    priority: utils.getPriorityOptions()[3],
+    deadline: new Date(),
   };
-
-  const validationSchema = Yup.object({
-    title: Yup.string()
-      .trim()
-      .min(3, "It must be at least 3 characters long")
-      .max(50, "It must be less than 50 characters long")
-      .required("Required *"),
-    description: Yup.string()
-      .trim()
-      .min(5, "It must be at least 5 characters long")
-      .max(400, "It must be less than 400 characters long")
-      .required("Required *"),
-  });
+  const validationSchema = utils.getValidationSchema(["title", "description"]);
 
   const handleSubmit = (values, formikBag) => {
-    const { setSubmitting, setFieldError, resetForm } = formikBag;
-    const { title, description, priority, deadline } = values;
+    const newCard = {
+      title: utils.capitalize(values.title),
+      description: values.description.trim().toLowerCase(),
+      priority: values.priority,
+      deadline: values.deadline.toDateString(),
+    };
 
-    setSubmitting(true);
+    const alreadyExist = utils.checkExistence("addCase", column.cards, newCard);
+    if (alreadyExist) {
+      formikBag.setFieldError("title", "Invalid title");
+      utils.notify.warning(
+        "The title you want to assign is already in use by another card"
+      );
+      formikBag.setSubmitting(false);
+      return;
+    }
 
     const boardId = board["_id"];
     const columnId = column["_id"];
 
-    const newCard = {
-      title: capitalize(title),
-      description: description.trim().toLowerCase(),
-      priority,
-      deadline: deadline.toDateString(),
-    };
-
     dispatch(addBoardColumnCard({ boardId, columnId, newCard }))
       .unwrap()
       .then((value) => {
-        notifySuccess(value.message);
-        resetForm();
+        utils.notify.success(value.message);
         closeModal();
       })
-      .catch((error) => {
-        notifyError(error);
-
-        if (error?.response?.status === 409) {
-          setFieldError("title", "Invalid title");
-        }
-      })
-      .finally(() => {
-        setSubmitting(false);
-      });
+      .catch((error) => utils.notify.error(error))
+      .finally(() => formikBag.setSubmitting(false));
   };
 
   return (
-    <Modal className={styles} closeModal={closeModal} modalRef={modalRef}>
+    <Modal className={styles}>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -99,7 +71,7 @@ const AddCardModal = ({ className: styles }) => {
               name="title"
               placeholder="Title"
               errors={(errors.title && touched.title) || null}
-              isFocused={true}
+              isFocused
             />
             <FormTextareaField
               id="descriptionInput"
@@ -109,13 +81,7 @@ const AddCardModal = ({ className: styles }) => {
               rows={6}
             />
             <FormPriorityField />
-            <FormDeadlineField
-              date={startDate}
-              handlerFunctions={{
-                setFieldValue,
-                setStartDate,
-              }}
-            />
+            <FormDeadlineField setFieldValue={setFieldValue} />
             <FormButton
               type={"submit"}
               text={isSubmitting ? "Loading..." : "Add"}

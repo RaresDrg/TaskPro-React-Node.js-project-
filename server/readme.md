@@ -1,11 +1,22 @@
-### Comenzi:
+### Commands:
 
-- `npm start` &mdash; pornește serverul în modul production.
-- `npm run start:dev` &mdash; pornește serverul în modul dezvoltare (development).
-- `npm run lint` &mdash; rulează verificarea codului cu ESLint, este necesar să se ruleze înaintea fiecărui PR și să se corecteze toate erorile linterului.
-- `npm lint:fix` &mdash; aceeași verificare a linterului, dar cu corecții automate pentru erorile simple.
-- `npm create-env` &mdash; creaza fiserul: .env, in folderul: environment
+- `npm start` &mdash; starts the server in production mode.
+- `npm run start:dev` &mdash; starts the server in development mode.
+- `npm run lint` &mdash; runs code verification with ESLint.
+- `npm run create-env` &mdash; creates the .env file.
 
 ### Important:
 
-- `fiserul: .env` &mdash; dupa ce a fost generat cu comanda de mai sus, trebuie completat: cu valoarea uri-ului de la baza de date, cu o valoare pentru jwt secret key, cu date de conectare la cloudinary (Cloud name, api key si api secret) si cu date pentru Nodemailer: gmail si parola (contul trebuie sa aiba acces la parole pentru aplicatii).
+- `.env file` &mdash; after it has been generated with the command above (npm run create-env), it must be filled out with the following:
+  -DB_HOST = the URI value of the database (MongoDD)
+  -SALT_ROUNDS = number of salt rounds for bcrypt
+  -ACCESS_TOKEN_SECRET = random secret string
+  -RANDOM_BYTES_LENGTH = number of crypto bytes length
+  -COOKIE_PARSER_SECRET = random secret string
+  -CLOUD_NAME = Cloudinary config
+  -API_KEY = Cloudinary config
+  -API_SECRET = Cloudinary config
+  -EMAIL = email for sending messages (Nodemailer)
+  -PASSWORD = password of the email's account (Nodemailer)
+  -GOOGLE_CLIENT_ID = OAuth config
+  -GOOGLE_CLIENT_SECRET = OAuth config

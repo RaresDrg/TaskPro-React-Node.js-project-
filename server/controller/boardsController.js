@@ -13,33 +13,16 @@ async function addBoard(req, res, next) {
     const newBoard = { title, icon, background, owner };
     const result = await boardsService.addBoardToDB(newBoard);
 
-    if (result === "already exists") {
-      res.status(409).json({
-        status: "failed",
-        code: 409,
-        message:
-          "The title you want to assign is already in use by another board",
-      });
-      return;
-    }
-
-    const currentBoardsList = await boardsService.getBoardsListFromDB(owner);
-
-    res.status(201).json({
-      status: "success",
-      code: 201,
-      message: "The board has been successfully added",
-      data: {
-        board: result,
-        boardsList: currentBoardsList,
-      },
-    });
+    result?.isInvalid
+      ? utils.sendFailureResponse(res, 409, result.message)
+      : utils.sendSuccessResponse(res, 201, {
+          message: "The board has been successfully added",
+          data: {
+            board: result,
+            boardsList: await boardsService.getBoardsListFromDB(owner),
+          },
+        });
   } catch (error) {
-    if (error.name === "ValidationError") {
-      utils.handleValidationError(res, error.message);
-      return;
-    }
-
     next(error);
   }
 }
@@ -49,11 +32,12 @@ async function getBoardsList(req, res, next) {
     const owner = req.user.id;
     const boardsList = await boardsService.getBoardsListFromDB(owner);
 
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      data: boardsList.length > 0 ? boardsList : null,
-    });
+    boardsList.length > 0
+      ? utils.sendSuccessResponse(res, 200, { data: boardsList })
+      : utils.sendSuccessResponse(res, 200, {
+          data: null,
+          message: "There are no boards saved in the database.",
+        });
   } catch (error) {
     next(error);
   }
@@ -62,20 +46,12 @@ async function getBoardsList(req, res, next) {
 async function getBoard(req, res, next) {
   try {
     const { boardId } = req.params;
-    const result = await boardsService.getBoardFromDB(boardId);
+    const board = await boardsService.getBoardFromDB(boardId);
 
-    if (!result) {
-      res.status(404).json({ code: 404, message: "Not found" });
-      return;
-    }
-
-    res.status(200).json({ status: "success", code: 200, data: result });
+    board
+      ? utils.sendSuccessResponse(res, 200, { data: board })
+      : utils.sendFailureResponse(res, 404, "Not found");
   } catch (error) {
-    if (error.name === "CastError") {
-      utils.handleInvalidIdError(res);
-      return;
-    }
-
     next(error);
   }
 }
@@ -86,25 +62,18 @@ async function deleteBoard(req, res, next) {
     const result = await boardsService.deleteBoardFromDB(boardId);
 
     if (!result) {
-      res.status(404).json({ code: 404, message: "Not found" });
+      utils.sendFailureResponse(res, 404, "Not found");
       return;
     }
 
     const owner = req.user.id;
     const currentBoardsList = await boardsService.getBoardsListFromDB(owner);
 
-    res.status(200).json({
-      status: "success",
-      code: 200,
+    utils.sendSuccessResponse(res, 200, {
       message: "The board has been successfully deleted",
       data: currentBoardsList.length > 0 ? currentBoardsList : null,
     });
   } catch (error) {
-    if (error.name === "CastError") {
-      utils.handleInvalidIdError(res);
-      return;
-    }
-
     next(error);
   }
 }
@@ -115,7 +84,7 @@ async function updateBoard(req, res, next) {
     const targetedBoard = await boardsService.getBoardFromDB(boardId);
 
     if (!targetedBoard) {
-      res.status(404).json({ code: 404, message: "Not found" });
+      utils.sendFailureResponse(res, 404, "Not found");
       return;
     }
 
@@ -129,38 +98,16 @@ async function updateBoard(req, res, next) {
     const updates = { title, icon, background };
     const result = await boardsService.updateBoardInDB(boardId, owner, updates);
 
-    if (result === "already exists") {
-      res.status(409).json({
-        status: "failed",
-        code: 409,
-        message:
-          "The title you want to assign is already in use by another board",
-      });
-      return;
-    }
-
-    const currentBoardsList = await boardsService.getBoardsListFromDB(owner);
-
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      message: "The board has been successfully updated",
-      data: {
-        board: result,
-        boardsList: currentBoardsList,
-      },
-    });
+    result?.isInvalid
+      ? utils.sendFailureResponse(res, 409, result.message)
+      : utils.sendSuccessResponse(res, 200, {
+          message: "The board has been successfully updated",
+          data: {
+            board: result,
+            boardsList: await boardsService.getBoardsListFromDB(owner),
+          },
+        });
   } catch (error) {
-    if (error.name === "CastError") {
-      utils.handleInvalidIdError(res);
-      return;
-    }
-
-    if (error.name === "ValidationError") {
-      utils.handleValidationError(res, error.message);
-      return;
-    }
-
     next(error);
   }
 }
@@ -171,7 +118,7 @@ async function updateBoardColumns(req, res, next) {
     const targetedBoard = await boardsService.getBoardFromDB(boardId);
 
     if (!targetedBoard) {
-      res.status(404).json({ code: 404, message: "Not found" });
+      utils.sendFailureResponse(res, 404, "Not found");
       return;
     }
 
@@ -179,34 +126,19 @@ async function updateBoardColumns(req, res, next) {
     const isReqValid = Array.isArray(columns) && columns.length > 0;
 
     if (!isReqValid) {
-      res.status(400).json({
-        status: "failed",
-        code: 400,
-        message:
-          "In order to update your board's columns, you have to provide an array of objects, containing the new columns.",
-      });
+      const message =
+        "In order to update your board's columns, you have to provide an array of objects, containing the new columns.";
+      utils.sendFailureResponse(res, 400, message);
       return;
     }
 
     const result = await boardsService.updateBoardColumnsInDB(boardId, columns);
 
-    res.status(200).json({
-      status: "success",
-      code: 200,
+    utils.sendSuccessResponse(res, 200, {
       message: "The board's columns have been successfully updated",
       data: result.columns,
     });
   } catch (error) {
-    if (error.name === "CastError") {
-      utils.handleInvalidIdError(res);
-      return;
-    }
-
-    if (error.name === "ValidationError") {
-      utils.handleValidationError(res, error.message);
-      return;
-    }
-
     next(error);
   }
 }
@@ -217,58 +149,24 @@ async function addColumn(req, res, next) {
     const targetedBoard = await boardsService.getBoardFromDB(boardId);
 
     if (!targetedBoard) {
-      res.status(404).json({ code: 404, message: "Not found" });
+      utils.sendFailureResponse(res, 404, "Not found");
       return;
     }
 
     const { title } = req.body;
     if (!title) {
-      res.status(400).json({
-        status: "failed",
-        code: 400,
-        message: "In order to add a column, you must provide a title",
-      });
+      utils.sendFailureResponse(res, 400, "title: => this field is required");
       return;
     }
 
-    const newColumn = { title };
-    const result = await boardsService.addBoardColumnToDB(boardId, newColumn);
-
-    if (result === "already exists") {
-      res.status(409).json({
-        status: "failed",
-        code: 409,
-        message:
-          "The title you want to assign is already in use by another column",
-      });
-      return;
-    }
-
-    const currentColumns = result.columns;
-    const columnJustAdded = currentColumns.find(
-      (item) => item.title === req.body.title
-    );
-
-    res.status(201).json({
-      status: "success",
-      code: 201,
-      message: "The column has been successfully added",
-      data: {
-        column: columnJustAdded,
-        columns: currentColumns,
-      },
-    });
+    const result = await boardsService.addBoardColumnToDB(boardId, { title });
+    result?.isInvalid
+      ? utils.sendFailureResponse(res, 409, result.message)
+      : utils.sendSuccessResponse(res, 201, {
+          message: "The column has been successfully added",
+          data: { columns: result.columns },
+        });
   } catch (error) {
-    if (error.name === "CastError") {
-      utils.handleInvalidIdError(res);
-      return;
-    }
-
-    if (error.name === "ValidationError") {
-      utils.handleValidationError(res, error.message);
-      return;
-    }
-
     next(error);
   }
 }
@@ -276,30 +174,16 @@ async function addColumn(req, res, next) {
 async function deleteColumn(req, res, next) {
   try {
     const { boardId, columnId } = req.params;
-    const result = await boardsService.deleteBoardColumnFromDB({
-      boardId,
-      columnId,
-    });
+    const ids = { boardId, columnId };
+    const result = await boardsService.deleteBoardColumnFromDB(ids);
 
-    if (!result) {
-      res.status(404).json({ code: 404, message: "Not found" });
-      return;
-    }
-
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      message: "The column has been successfully deleted",
-      data: {
-        columns: result.columns,
-      },
-    });
+    !result
+      ? utils.sendFailureResponse(res, 404, "Not found")
+      : utils.sendSuccessResponse(res, 200, {
+          message: "The column has been successfully deleted",
+          data: { columns: result.columns },
+        });
   } catch (error) {
-    if (error.name === "CastError") {
-      utils.handleInvalidIdError(res);
-      return;
-    }
-
     next(error);
   }
 }
@@ -307,66 +191,28 @@ async function deleteColumn(req, res, next) {
 async function updateColumn(req, res, next) {
   try {
     const { boardId, columnId } = req.params;
-    const targetedColumn = await boardsService.getBoardColumnFromDB({
-      boardId,
-      columnId,
-    });
+    const ids = { boardId, columnId };
 
+    const targetedColumn = await boardsService.getBoardColumnFromDB(ids);
     if (!targetedColumn) {
-      res.status(404).json({ code: 404, message: "Not found" });
+      utils.sendFailureResponse(res, 404, "Not found");
       return;
     }
 
     const { title } = req.body;
     if (!title) {
-      res.status(400).json({
-        status: "failed",
-        code: 400,
-        message: "In order to update a column, you must provide a title",
-      });
+      utils.sendFailureResponse(res, 400, "title: => this field is required");
       return;
     }
 
-    const result = await boardsService.updateBoardColumnInDB(
-      { boardId, columnId },
-      title
-    );
-
-    if (result === "already exists") {
-      res.status(409).json({
-        status: "failed",
-        code: 409,
-        message:
-          "The title you want to assign is already in use by another column",
-      });
-      return;
-    }
-
-    const currentColumns = result.columns;
-    const columnJustUpdated = currentColumns.find(
-      (item) => item.title === req.body.title
-    );
-
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      message: "The column has been successfully updated",
-      data: {
-        column: columnJustUpdated,
-        columns: currentColumns,
-      },
-    });
+    const result = await boardsService.updateBoardColumnInDB(ids, title);
+    result?.isInvalid
+      ? utils.sendFailureResponse(res, 409, result.message)
+      : utils.sendSuccessResponse(res, 200, {
+          message: "The column has been successfully updated",
+          data: { columns: result.columns },
+        });
   } catch (error) {
-    if (error.name === "CastError") {
-      utils.handleInvalidIdError(res);
-      return;
-    }
-
-    if (error.name === "ValidationError") {
-      utils.handleValidationError(res, error.message);
-      return;
-    }
-
     next(error);
   }
 }
@@ -374,76 +220,40 @@ async function updateColumn(req, res, next) {
 async function addCard(req, res, next) {
   try {
     const { boardId, columnId } = req.params;
-    const targetedColumn = await boardsService.getBoardColumnFromDB({
-      boardId,
-      columnId,
-    });
+    const ids = { boardId, columnId };
 
+    const targetedColumn = await boardsService.getBoardColumnFromDB(ids);
     if (!targetedColumn) {
-      res.status(404).json({ code: 404, message: "Not found" });
+      utils.sendFailureResponse(res, 404, "Not found");
       return;
     }
 
     const { title, description, priority, deadline } = req.body;
-    const hasAllrequiredFields = title && description && priority && deadline;
-
-    if (!hasAllrequiredFields) {
-      res.status(400).json({
-        status: "failed",
-        code: 400,
-        message:
-          "In order to add a card, you must provide values for all of these fields: title, description, priority and deadline",
-      });
+    if (!title || !description || !priority || !deadline) {
+      const message =
+        "You must provide values for all of these fields: title, description, priority and deadline";
+      utils.sendFailureResponse(res, 400, message);
       return;
     }
 
-    const todayUnix = new Date(new Date().toDateString()).getTime();
-    const deadlineUnix = new Date(new Date(deadline).toDateString()).getTime();
-
-    if (deadlineUnix < todayUnix) {
-      res.status(400).json({
-        status: "failed",
-        code: 400,
-        message: "Deadline should be greater than or equal to today's date",
-      });
+    const isDeadlineValid = utils.checkDeadline(deadline);
+    if (!isDeadlineValid) {
+      const message =
+        "The deadline should be a date that is greater than or equal to today's date";
+      utils.sendFailureResponse(res, 400, message);
       return;
     }
 
     const newCard = { title, description, priority, deadline };
-    const result = await boardsService.addBoardColumnCardToDB(
-      { boardId, columnId },
-      newCard
-    );
+    const result = await boardsService.addBoardColumnCardToDB(ids, newCard);
 
-    if (result === "already exists") {
-      res.status(409).json({
-        status: "failed",
-        code: 409,
-        message:
-          "The title you want to assign is already in use by another card",
-      });
-      return;
-    }
-
-    res.status(201).json({
-      status: "success",
-      code: 201,
-      message: "The card has been successfully added",
-      data: {
-        columns: result.columns,
-      },
-    });
+    result?.isInvalid
+      ? utils.sendFailureResponse(res, 409, result.message)
+      : utils.sendSuccessResponse(res, 201, {
+          message: "The card has been successfully added",
+          data: { columns: result.columns },
+        });
   } catch (error) {
-    if (error.name === "CastError") {
-      utils.handleInvalidIdError(res);
-      return;
-    }
-
-    if (error.name === "ValidationError") {
-      utils.handleValidationError(res, error.message);
-      return;
-    }
-
     next(error);
   }
 }
@@ -451,31 +261,16 @@ async function addCard(req, res, next) {
 async function deleteCard(req, res, next) {
   try {
     const { boardId, columnId, cardId } = req.params;
-    const result = await boardsService.deleteBoardColumnCardFromDB({
-      boardId,
-      columnId,
-      cardId,
-    });
+    const ids = { boardId, columnId, cardId };
+    const result = await boardsService.deleteBoardColumnCardFromDB(ids);
 
-    if (!result) {
-      res.status(404).json({ code: 404, message: "Not found" });
-      return;
-    }
-
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      message: "The card has been successfully deleted",
-      data: {
-        columns: result.columns,
-      },
-    });
+    !result
+      ? utils.sendFailureResponse(res, 404, "Not found")
+      : utils.sendSuccessResponse(res, 200, {
+          message: "The card has been successfully deleted",
+          data: { columns: result.columns },
+        });
   } catch (error) {
-    if (error.name === "CastError") {
-      utils.handleInvalidIdError(res);
-      return;
-    }
-
     next(error);
   }
 }
@@ -484,70 +279,39 @@ async function updateCard(req, res, next) {
   try {
     const { boardId, columnId, cardId } = req.params;
     const ids = { boardId, columnId, cardId };
-    const targetedCard = await boardsService.getBoardColumnCardFromDB(ids);
 
+    const targetedCard = await boardsService.getBoardColumnCardFromDB(ids);
     if (!targetedCard) {
-      res.status(404).json({ code: 404, message: "Not found" });
+      utils.sendFailureResponse(res, 404, "Not found");
       return;
     }
 
     const { title, description, priority, deadline } = req.body;
-    const hasAllrequiredFields = title && description && priority && deadline;
-
-    if (!hasAllrequiredFields) {
-      res.status(400).json({
-        status: "failed",
-        code: 400,
-        message:
-          "In order to update a card, you must provide values for all of these fields: title, description, priority and deadline",
-      });
+    if (!title || !description || !priority || !deadline) {
+      const message =
+        "You must provide values for all of these fields: title, description, priority and deadline";
+      utils.sendFailureResponse(res, 400, message);
       return;
     }
 
-    const todayUnix = new Date(new Date().toDateString()).getTime();
-    const deadlineUnix = new Date(new Date(deadline).toDateString()).getTime();
-
-    if (deadlineUnix < todayUnix) {
-      res.status(400).json({
-        status: "failed",
-        code: 400,
-        message: "Deadline should be greater than or equal to today's date",
-      });
+    const isDeadlineValid = utils.checkDeadline(deadline);
+    if (!isDeadlineValid) {
+      const message =
+        "The deadline should be a date that is greater than or equal to today's date";
+      utils.sendFailureResponse(res, 400, message);
       return;
     }
 
     const updates = { title, description, priority, deadline };
     const result = await boardsService.updateBoardColumnCardInDB(ids, updates);
 
-    if (result === "already exists") {
-      res.status(409).json({
-        status: "failed",
-        code: 409,
-        message:
-          "The title you want to assign is already in use by another card",
-      });
-      return;
-    }
-
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      message: "The card has been successfully updated",
-      data: {
-        columns: result.columns,
-      },
-    });
+    result?.isInvalid
+      ? utils.sendFailureResponse(res, 409, result.message)
+      : utils.sendSuccessResponse(res, 200, {
+          message: "The card has been successfully updated",
+          data: { columns: result.columns },
+        });
   } catch (error) {
-    if (error.name === "CastError") {
-      utils.handleInvalidIdError(res);
-      return;
-    }
-
-    if (error.name === "ValidationError") {
-      utils.handleValidationError(res, error.message);
-      return;
-    }
-
     next(error);
   }
 }

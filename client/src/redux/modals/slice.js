@@ -7,7 +7,7 @@ const initialState = {
   isNeedHelpModalOpen: false,
   isLogoutModalOpen: false,
   isFiltersModalOpen: false,
-  isCreateBoardModalOpen: false,
+  isAddBoardModalOpen: false,
   isEditBoardModalOpen: false,
   isDeleteBoardModalOpen: false,
   isAddColumnModalOpen: false,
@@ -25,16 +25,14 @@ const modalsSlice = createSlice({
     setModalOpen: (state, action) => {
       state[`is${action.payload}Open`] = true;
     },
-    setModalClose: (state, action) => {
-      state[`is${action.payload}Open`] = false;
-    },
-    resetState: (state) => {
-      if (JSON.stringify(initialState) !== JSON.stringify(state)) {
-        return initialState;
-      }
+    setModalsClose: () => initialState,
+    setBurgerMenuClose: (state) => {
+      state.isBurgerMenuOpen = false;
     },
   },
 });
 
-export const { setModalOpen, setModalClose, resetState } = modalsSlice.actions;
+export const { setModalOpen, setModalsClose, setBurgerMenuClose } =
+  modalsSlice.actions;
+
 export const modalsReducer = modalsSlice.reducer;

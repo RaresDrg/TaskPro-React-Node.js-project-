@@ -2,9 +2,7 @@ import passport from "passport";
 import { Strategy } from "passport-google-oauth20";
 import usersService from "../service/usersService.js";
 import utils from "../utils/utils.js";
-import { configDotenv } from "dotenv";
-
-configDotenv({ path: "./environment/.env" });
+import "dotenv/config";
 
 // todo: vercel
 // "http://localhost:3000/api/users/google-auth/callback"

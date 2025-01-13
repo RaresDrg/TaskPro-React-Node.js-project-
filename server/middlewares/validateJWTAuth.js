@@ -2,9 +2,7 @@ import passport from "passport";
 import { Strategy } from "passport-jwt";
 import usersService from "../service/usersService.js";
 import utils from "../utils/utils.js";
-import { configDotenv } from "dotenv";
-
-configDotenv({ path: "./environment/.env" });
+import "dotenv/config";
 
 const opts = {
   jwtFromRequest: (req) => req?.signedCookies?.accessToken ?? null,
@@ -49,11 +47,7 @@ function validateJWTAuth(req, res, next) {
         next();
         return;
       } catch (error) {
-        res.status(401).json({
-          status: "error",
-          code: 401,
-          message: "Unauthorized access",
-        });
+        utils.sendFailureResponse(res, 401, "Unauthorized access");
       }
     }
   })(req, res, next);

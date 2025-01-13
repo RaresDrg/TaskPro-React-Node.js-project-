@@ -1,18 +1,16 @@
 import { toast } from "react-toastify";
 
-function notifySuccess(message) {
-  toast.success(message);
-}
+export const notify = {
+  success(message) {
+    toast.success(message);
+  },
+  error(error) {
+    if (error.status === 401) return;
 
-function notifyError(error) {
-  if (error.status === 401) return;
-
-  const message = error?.response?.data?.message ?? "Internal server error";
-  toast.error(message);
-}
-
-function notifyWarning(message) {
-  toast.warning(message);
-}
-
-export { notifySuccess, notifyError, notifyWarning };
+    const message = error?.response?.data?.message ?? "Internal server error";
+    toast.error(message);
+  },
+  warning(message) {
+    toast.warning(message);
+  },
+};

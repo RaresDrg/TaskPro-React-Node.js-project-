@@ -6,17 +6,14 @@ async function addUsertoDB(data) {
   await User.validate(data);
 
   const alreadyExistingDoc = await User.findOne({ email: data.email });
-  if (alreadyExistingDoc) {
-    return "user already exists";
-  }
 
-  const newUser = {
-    name: data.name,
-    email: data.email,
-    password: utils.encrypt(data.password),
-  };
-
-  return User.create(newUser);
+  return alreadyExistingDoc
+    ? { isInvalid: true, message: "This email is already used" }
+    : User.create({
+        name: data.name,
+        email: data.email,
+        password: utils.encrypt(data.password),
+      });
 }
 
 function addGoogleUserToDB(user) {
@@ -63,17 +60,12 @@ function updateUser(userId, updates) {
   });
 }
 
-async function validateData(data) {
-  await User.validate(data);
-}
-
 const usersService = {
   addUsertoDB,
   addGoogleUserToDB,
   findUser,
   updateUser,
   checkUserCredentials,
-  validateData,
 };
 
 export default usersService;

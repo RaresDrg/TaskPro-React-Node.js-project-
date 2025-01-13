@@ -1,13 +1,11 @@
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { changePassword } from "../../redux/auth/operations";
 import { setModalOpen } from "../../redux/modals/slice";
-import { getRegex, notifyWarning } from "../../utils/utils";
-import { notifySuccess, notifyError } from "../../utils/utils";
+import { getValidationSchema, notify } from "../../utils/utils";
 import { Form, Formik } from "formik";
-import * as Yup from "yup";
 import FormTitle from "../common/FormTitle/FormTitle.styled";
 import FormPasswordField from "../common/FormPasswordField/FormPasswordField.styled";
 import FormButton from "../common/FormButton/FormButton.styled";
@@ -18,39 +16,18 @@ const ResetPasswordForm = ({ className: styles, validationToken }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    document.querySelector("#passwordInput").focus();
-  }, []);
-
   const initialValues = { password: "", confirmPassword: "" };
-  const passwordRegex = getRegex("password");
-  const validationSchema = Yup.object({
-    password: Yup.string()
-      .min(8, "Password must be at least 8 characters")
-      .matches(passwordRegex, {
-        message: "Must include an uppercase, a lowercase, a digit",
-      })
-      .required("Required *"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Password doesn't match")
-      .required("Required *"),
-  });
+  const validationSchema = getValidationSchema(Object.keys(initialValues));
 
   const handleSubmit = (values, formikBag) => {
-    const { setSubmitting, resetForm } = formikBag;
-
     setIsLoading(true);
-    setSubmitting(true);
 
     dispatch(changePassword({ validationToken, newPassword: values.password }))
       .unwrap()
-      .then((value) => {
-        resetForm();
-        notifySuccess(value.message);
-      })
+      .then((value) => notify.success(value.message))
       .catch((error) => {
         if (error?.status === 403 || error?.status === 404) {
-          notifyWarning(
+          notify.warning(
             "The link to reset your password has expired. Please initiate a new password reset request."
           );
           navigate("/login", { replace: true });
@@ -58,11 +35,11 @@ const ResetPasswordForm = ({ className: styles, validationToken }) => {
           return;
         }
 
-        notifyError(error);
+        notify.error(error);
       })
       .finally(() => {
         setIsLoading(false);
-        setSubmitting(false);
+        formikBag.setSubmitting(false);
       });
   };
 
@@ -83,6 +60,7 @@ const ResetPasswordForm = ({ className: styles, validationToken }) => {
                 placeholder="New Password"
                 errors={(errors.password && touched.password) || null}
                 values={values.password || null}
+                isFocused
               />
               <FormPasswordField
                 id="confirmPasswordInput"

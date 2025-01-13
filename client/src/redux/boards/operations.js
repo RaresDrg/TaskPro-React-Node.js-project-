@@ -66,13 +66,28 @@ const updateBoard = createAsyncThunk(
   }
 );
 
+const updateBoardColumns = createAsyncThunk(
+  "boards/updateBoardColumns",
+  async ({ boardId, updatedColumns }, thunkAPI) => {
+    try {
+      const response = await apiClient.put(`/api/boards/${boardId}/columns`, {
+        columns: updatedColumns,
+      });
+
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 const addBoardColumn = createAsyncThunk(
   "boards/addBoardColumn",
-  async ({ boardId, newColumn }, thunkAPI) => {
+  async ({ boardId, column }, thunkAPI) => {
     try {
       const response = await apiClient.post(
         `/api/boards/${boardId}/columns`,
-        newColumn
+        column
       );
 
       return response.data;
@@ -166,16 +181,11 @@ export {
   getBoard,
   deleteBoard,
   updateBoard,
+  updateBoardColumns,
   addBoardColumn,
   deleteBoardColumn,
   updateBoardColumn,
   addBoardColumnCard,
   deleteBoardColumnCard,
   updateBoardColumnCard,
-};
-
-export const updateBoardColumns = (boardId, updatedColumns) => {
-  apiClient.put(`/api/boards/${boardId}/columns`, {
-    columns: updatedColumns,
-  });
 };

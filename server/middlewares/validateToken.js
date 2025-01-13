@@ -1,14 +1,11 @@
 import usersService from "../service/usersService.js";
+import utils from "../utils/utils.js";
 
 async function validateToken(req, res, next) {
   try {
     const { validationToken } = req.query;
     if (!validationToken || validationToken === "undefined") {
-      res.status(400).json({
-        status: "failed",
-        code: 400,
-        message: "Validation token missing.",
-      });
+      utils.sendFailureResponse(res, 400, "Validation token missing.");
       return;
     }
 
@@ -17,23 +14,19 @@ async function validateToken(req, res, next) {
     });
 
     if (!user) {
-      res.status(404).json({ code: 404, message: "Not found" });
+      utils.sendFailureResponse(res, 404, "Not found");
       return;
     }
 
     if (user.validationToken.expiresAt < new Date()) {
-      res.status(403).json({
-        status: "failed",
-        code: 403,
-        message: "Validation token is expired",
-      });
+      utils.sendFailureResponse(res, 403, "Validation token is expired");
       return;
     }
 
     req.user = user;
     next();
   } catch (error) {
-    res.status(500).json({ message: `Internal server error. ${error}` });
+    utils.sendFailureResponse(res, 500, "Internal server error");
   }
 }
 

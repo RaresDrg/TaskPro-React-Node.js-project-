@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { updateBoardColumns } from "../../redux/boards/operations";
-import { notifyWarning } from "../../utils/utils";
+import { notify } from "../../utils/utils";
 import { useBoards } from "../../hooks/hooks";
 import { DragDropContext } from "@hello-pangea/dnd";
 import BoardColumn from "../../components/BoardColumn/BoardColumn.styled";
@@ -9,6 +10,7 @@ import AddColumnBtn from "../../components/AddColumnBtn/AddColumnBtn.styled";
 const BoardColumns = ({ className: styles }) => {
   const { board } = useBoards();
   const [columns, setColumns] = useState(board.columns);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setColumns(board.columns);
@@ -51,7 +53,9 @@ const BoardColumns = ({ className: styles }) => {
     });
 
     if (alreadyExistingCard) {
-      notifyWarning("A card with the same title already exists in the column.");
+      notify.warning(
+        "A card with the same title already exists in the column."
+      );
       return;
     }
 
@@ -91,7 +95,7 @@ const BoardColumns = ({ className: styles }) => {
     });
 
     setColumns(updatedColumns);
-    updateBoardColumns(board["_id"], updatedColumns);
+    dispatch(updateBoardColumns({ boardId: board["_id"], updatedColumns }));
   }
 };
 

@@ -1,7 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
-import { configDotenv } from "dotenv";
-
-configDotenv({ path: "../environment/.env" });
+import "dotenv/config";
 
 const uploadOnCloudinary = async (file, userId, name) => {
   try {

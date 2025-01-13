@@ -1,18 +1,21 @@
-import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useBoards } from "../../../hooks/hooks";
+import { store } from "../../../redux/store.js";
+import { setModalsClose } from "../../../redux/modals/slice";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner.styled";
 import icons from "../../../assets/icons/icons.svg";
 
-const Modal = ({ children, className: styles, closeModal, modalRef }) => {
+export function closeModal() {
+  document.querySelector(".modal").classList.add("hidden");
+  setTimeout(() => store.dispatch(setModalsClose()), 500);
+}
+
+const Modal = ({ children, className: styles }) => {
   const { isLoading } = useBoards();
 
   useEffect(() => {
     document.addEventListener("keydown", handleClose);
-
-    return () => {
-      document.removeEventListener("keydown", handleClose);
-    };
+    return () => document.removeEventListener("keydown", handleClose);
   }, []);
 
   function handleClose(e) {
@@ -21,14 +24,12 @@ const Modal = ({ children, className: styles, closeModal, modalRef }) => {
       e.target === e.currentTarget ||
       e.target.classList.contains("close-btn");
 
-    if (allowClossing) {
-      closeModal();
-    }
+    allowClossing && closeModal();
   }
 
   return (
     <>
-      <div className={styles} ref={modalRef} onMouseDown={handleClose}>
+      <div className={`${styles} modal`} onMouseDown={handleClose}>
         <div className="modal-content">
           <svg className="close-btn">
             <use href={`${icons}#icon-closeBtn`}></use>
@@ -41,10 +42,6 @@ const Modal = ({ children, className: styles, closeModal, modalRef }) => {
       {isLoading && <LoadingSpinner />}
     </>
   );
-};
-
-Modal.propTypes = {
-  closeModal: PropTypes.func.isRequired,
 };
 
 export default Modal;

@@ -5,24 +5,24 @@ import UseAnimations from "react-useanimations";
 import visibility from "react-useanimations/lib/visibility";
 
 const FormPasswordField = (props) => {
-  const { className: styles, id, name, placeholder, errors, values } = props;
   const [isVisible, setIsVisible] = useState(false);
 
   function handleClick() {
-    !isVisible && document.querySelector(`#${id}`).focus();
+    !isVisible && document.querySelector(`#${props.id}`).focus();
     setIsVisible((prev) => !prev);
   }
 
   return (
-    <div className={`${styles} ${errors ? "onError" : ""}`}>
+    <div className={`${props.className} ${props.errors ? "onError" : ""}`}>
       <Field
         type={isVisible ? "text" : "password"}
-        id={id}
-        name={name}
-        placeholder={placeholder}
+        id={props.id}
+        name={props.name}
+        placeholder={props.placeholder}
+        autoFocus={props.isFocused}
       />
-      <ErrorMessage className="error" name={name} component="span" />
-      {values && (
+      <ErrorMessage className="error" name={props.name} component="span" />
+      {props.values && (
         <UseAnimations
           animation={visibility}
           onClick={handleClick}
@@ -42,6 +42,7 @@ FormPasswordField.propTypes = {
   placeholder: PropTypes.string.isRequired,
   errors: PropTypes.bool,
   values: PropTypes.string,
+  isFocused: PropTypes.bool,
 };
 
 export default FormPasswordField;

@@ -1,6 +1,6 @@
 import { lazy } from "react";
 import { useModals } from "../../hooks/hooks";
-import CreateBoardModal from "./CreateBoardModal/CreateBoardModal";
+import AddBoardModal from "./AddBoardModal/AddBoardModal";
 import EditBoardModal from "./EditBoardModal/EditBoardModal";
 import DeleteBoardModal from "./DeleteBoardModal/DeleteBoardModal.styled";
 import LogoutModal from "./LogoutModal/LogoutModal.styled";
@@ -34,7 +34,7 @@ const Modals = () => {
       {modals.isNeedHelpModalOpen && <NeedHelpModal />}
       {modals.isLogoutModalOpen && <LogoutModal />}
       {modals.isFiltersModalOpen && <FiltersModal />}
-      {modals.isCreateBoardModalOpen && <CreateBoardModal />}
+      {modals.isAddBoardModalOpen && <AddBoardModal />}
       {modals.isEditBoardModalOpen && <EditBoardModal />}
       {modals.isDeleteBoardModalOpen && <DeleteBoardModal />}
       {modals.isAddColumnModalOpen && <AddColumnModal />}

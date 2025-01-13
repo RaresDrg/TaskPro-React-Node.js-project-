@@ -1,9 +1,7 @@
 import { useDispatch } from "react-redux";
 import { register } from "../../redux/auth/operations";
-import { notifySuccess, notifyError } from "../../utils/utils";
-import { capitalize, getRegex } from "../../utils/utils";
+import { capitalize, getValidationSchema, notify } from "../../utils/utils";
 import { Form, Formik } from "formik";
-import * as Yup from "yup";
 import AuthNavigation from "../common/AuthNavigation/AuthNavigation.styled";
 import FormTextField from "../common/FormTextField/FormTextField.styled";
 import FormPasswordField from "../common/FormPasswordField/FormPasswordField.styled";
@@ -18,53 +16,23 @@ const RegisterForm = ({ className: styles }) => {
     password: "",
     confirmPassword: "",
   };
-
-  const emailRegex = getRegex("email");
-  const passwordRegex = getRegex("password");
-
-  const validationSchema = Yup.object({
-    name: Yup.string()
-      .trim()
-      .min(3, "Name must be at least 3 characters")
-      .max(50, "Name must be less than 50 characters long")
-      .required("Required *"),
-    email: Yup.string()
-      .trim()
-      .matches(emailRegex, { message: "Invalid email address" })
-      .required("Required *"),
-    password: Yup.string()
-      .min(8, "Password must be at least 8 characters")
-      .matches(passwordRegex, {
-        message: "Must include an uppercase, a lowercase, a digit",
-      })
-      .required("Required *"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Password doesn't match")
-      .required("Required *"),
-  });
+  const validationSchema = getValidationSchema(Object.keys(initialValues));
 
   const handleSubmit = (values, formikBag) => {
-    const { setSubmitting, setFieldError, resetForm } = formikBag;
     const { email, password } = values;
-
-    setSubmitting(true);
-
     const name = capitalize(values.name);
 
     dispatch(register({ name, email, password }))
       .unwrap()
-      .then(() => {
-        resetForm();
-        notifySuccess(`Welcome, ${name} !`);
-      })
+      .then(() => notify.success(`Welcome, ${name} !`))
       .catch((error) => {
-        notifyError(error);
+        notify.error(error);
 
         if (error?.response?.status === 409) {
-          setFieldError("email", "Invalid email address");
+          formikBag.setFieldError("email", "Invalid email address");
         }
       })
-      .finally(() => setSubmitting(false));
+      .finally(() => formikBag.setSubmitting(false));
   };
 
   return (
@@ -82,7 +50,7 @@ const RegisterForm = ({ className: styles }) => {
               name="name"
               placeholder="Name"
               errors={(errors.name && touched.name) || null}
-              isFocused={true}
+              isFocused
             />
             <FormTextField
               id="emailInput"

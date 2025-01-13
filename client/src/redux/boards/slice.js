@@ -5,6 +5,7 @@ import {
   getBoard,
   deleteBoard,
   updateBoard,
+  updateBoardColumns,
   addBoardColumn,
   updateBoardColumn,
   deleteBoardColumn,
@@ -34,7 +35,16 @@ const utils = {
   },
   handleFulfilled: (state) => {
     state.isLoading = false;
-    state.error = false;
+    state.error = null;
+  },
+  handleError: (state, action) => {
+    state.error =
+      action.payload?.response?.data?.message || "Internal server error";
+  },
+  handleColumns: (state, action) => {
+    state.isLoading = false;
+    state.error = null;
+    state.board.columns = action.payload.data.columns;
   },
 };
 
@@ -61,11 +71,12 @@ const boardsSlice = createSlice({
       .addCase(addBoard.fulfilled, (state, action) => {
         utils.handleFulfilled(state);
         state.boardsList = action.payload.data.boardsList;
+        state.board = action.payload.data.board;
+        state.filter = null;
       })
       // *Get list
       .addCase(getBoardsList.rejected, (state, action) => {
-        state.error =
-          action.payload?.response?.data?.message || "Internal server error";
+        utils.handleError(state, action);
         state.boardsList = null;
       })
       .addCase(getBoardsList.fulfilled, (state, action) => {
@@ -74,11 +85,11 @@ const boardsSlice = createSlice({
       })
       // *Get board
       .addCase(getBoard.rejected, (state, action) => {
-        utils.handleRejected(state, action);
+        utils.handleError(state, action);
         state.board = null;
       })
       .addCase(getBoard.fulfilled, (state, action) => {
-        utils.handleFulfilled(state);
+        state.error = null;
         state.board = action.payload.data;
         state.filter = null;
       })
@@ -98,49 +109,38 @@ const boardsSlice = createSlice({
         state.boardsList = action.payload.data.boardsList;
       })
 
+      // *Update board columns
+      .addCase(updateBoardColumns.rejected, utils.handleError)
+      .addCase(updateBoardColumns.fulfilled, (state, action) => {
+        state.error = null;
+        state.board.columns = action.payload.data;
+      })
+
       // *Add board column
       .addCase(addBoardColumn.pending, utils.handlePending)
       .addCase(addBoardColumn.rejected, utils.handleRejected)
-      .addCase(addBoardColumn.fulfilled, (state, action) => {
-        utils.handleFulfilled(state);
-        state.board.columns = action.payload.data.columns;
-      })
+      .addCase(addBoardColumn.fulfilled, utils.handleColumns)
       // *Delete board column
       .addCase(deleteBoardColumn.pending, utils.handlePending)
       .addCase(deleteBoardColumn.rejected, utils.handleRejected)
-      .addCase(deleteBoardColumn.fulfilled, (state, action) => {
-        utils.handleFulfilled(state);
-        state.board.columns = action.payload.data.columns;
-      })
+      .addCase(deleteBoardColumn.fulfilled, utils.handleColumns)
       // *Update board column
       .addCase(updateBoardColumn.pending, utils.handlePending)
       .addCase(updateBoardColumn.rejected, utils.handleRejected)
-      .addCase(updateBoardColumn.fulfilled, (state, action) => {
-        utils.handleFulfilled(state);
-        state.board.columns = action.payload.data.columns;
-      })
+      .addCase(updateBoardColumn.fulfilled, utils.handleColumns)
 
       // *Add board column card
       .addCase(addBoardColumnCard.pending, utils.handlePending)
       .addCase(addBoardColumnCard.rejected, utils.handleRejected)
-      .addCase(addBoardColumnCard.fulfilled, (state, action) => {
-        utils.handleFulfilled(state);
-        state.board.columns = action.payload.data.columns;
-      })
+      .addCase(addBoardColumnCard.fulfilled, utils.handleColumns)
       // *Delete board column card
       .addCase(deleteBoardColumnCard.pending, utils.handlePending)
       .addCase(deleteBoardColumnCard.rejected, utils.handleRejected)
-      .addCase(deleteBoardColumnCard.fulfilled, (state, action) => {
-        utils.handleFulfilled(state);
-        state.board.columns = action.payload.data.columns;
-      })
+      .addCase(deleteBoardColumnCard.fulfilled, utils.handleColumns)
       // *Update board column card
       .addCase(updateBoardColumnCard.pending, utils.handlePending)
       .addCase(updateBoardColumnCard.rejected, utils.handleRejected)
-      .addCase(updateBoardColumnCard.fulfilled, (state, action) => {
-        utils.handleFulfilled(state);
-        state.board.columns = action.payload.data.columns;
-      });
+      .addCase(updateBoardColumnCard.fulfilled, utils.handleColumns);
   },
 });
 

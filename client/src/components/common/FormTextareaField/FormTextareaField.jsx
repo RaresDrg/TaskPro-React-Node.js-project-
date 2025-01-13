@@ -2,27 +2,17 @@ import PropTypes from "prop-types";
 import { Field, ErrorMessage } from "formik";
 
 const FormTextareaField = (props) => {
-  const {
-    className: styles,
-    id,
-    name,
-    placeholder,
-    errors,
-    rows,
-    isFocused,
-  } = props;
-
   return (
-    <div className={`${styles} ${errors ? "onError" : ""}`}>
+    <div className={`${props.className} ${props.errors ? "onError" : ""}`}>
       <Field
         as="textarea"
-        id={id}
-        name={name}
-        placeholder={placeholder}
-        rows={rows}
-        autoFocus={isFocused}
+        id={props.id}
+        name={props.name}
+        placeholder={props.placeholder}
+        rows={props.rows}
+        autoFocus={props.isFocused}
       />
-      <ErrorMessage className="error" name={name} component="span" />
+      <ErrorMessage className="error" name={props.name} component="span" />
     </div>
   );
 };

@@ -16,24 +16,31 @@ const BoardPage = ({ className: styles }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { board, boardsList } = useBoards();
   const { boardId } = useParams();
-  const isInTheList = boardsList.find((board) => board["_id"] === boardId);
+  const { board, boardsList } = useBoards();
 
   useEffect(() => {
     setShouldWait(true);
 
-    !isInTheList
-      ? navigate("/*")
-      : dispatch(getBoard(boardId))
-          .unwrap()
-          .then(() => setShouldWait(false))
-          .catch(() => navigate("/*"));
+    if (board && board["_id"] === boardId) {
+      setShouldWait(false);
+    } else {
+      const isInTheList = boardsList?.find((board) => board["_id"] === boardId);
+
+      !isInTheList
+        ? navigate("/*", { replace: true })
+        : dispatch(getBoard(boardId))
+            .unwrap()
+            .then(() => setShouldWait(false))
+            .catch(() => navigate("/*", { replace: true }));
+    }
   }, [boardId]);
 
   if (shouldWait) return <LoadingSpinner />;
 
-  const showFilterBtn = board.columns.some((column) => column.cards.length > 0);
+  const showFilterBtn = board?.columns.some(
+    (column) => column.cards.length > 0
+  );
 
   return (
     <section

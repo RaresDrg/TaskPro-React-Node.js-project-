@@ -1,7 +1,5 @@
 import nodemailer from "nodemailer";
-import { configDotenv } from "dotenv";
-
-configDotenv({ path: "../environment/.env" });
+import "dotenv/config";
 
 // todo: vercel
 // https://taskpro-umber.vercel.app/reset-password?validationToken=${data}

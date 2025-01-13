@@ -1,22 +1,15 @@
-import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { deleteBoardColumnCard } from "../../../redux/boards/operations";
-import { setModalClose } from "../../../redux/modals/slice";
-import { notifySuccess, notifyError } from "../../../utils/utils";
+import { notify } from "../../../utils/utils";
 import { useAuth, useBoards } from "../../../hooks/hooks";
+import { closeModal } from "../../common/Modal/Modal";
 import Modal from "../../common/Modal/Modal.styled";
 import FormButton from "../../common/FormButton/FormButton.styled";
 
 const DeleteCardModal = ({ className: styles }) => {
-  const modalRef = useRef();
   const dispatch = useDispatch();
   const { theme } = useAuth();
   const { board, card } = useBoards();
-
-  function closeModal() {
-    modalRef.current.classList.add("hidden");
-    setTimeout(() => dispatch(setModalClose("DeleteCardModal")), 500);
-  }
 
   function handleDelete() {
     const boardId = board["_id"];
@@ -29,16 +22,14 @@ const DeleteCardModal = ({ className: styles }) => {
     dispatch(deleteBoardColumnCard({ boardId, columnId, cardId }))
       .unwrap()
       .then((value) => {
-        notifySuccess(value.message);
+        notify.success(value.message);
         closeModal();
       })
-      .catch((error) => {
-        notifyError(error);
-      });
+      .catch((error) => notify.error(error));
   }
 
   return (
-    <Modal className={styles} closeModal={closeModal} modalRef={modalRef}>
+    <Modal className={styles}>
       <p>Are you sure you want to delete the card?</p>
       <div className="buttons-wrapper">
         <FormButton

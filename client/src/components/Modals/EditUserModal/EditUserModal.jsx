@@ -1,13 +1,10 @@
-import { useRef, useState, useEffect } from "react";
-import { createPortal } from "react-dom";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../../redux/auth/operations";
-import { setModalClose } from "../../../redux/modals/slice";
-import { capitalize, getRegex } from "../../../utils/utils";
-import { notifySuccess, notifyError } from "../../../utils/utils";
+import * as utils from "../../../utils/utils";
 import { useAuth } from "../../../hooks/hooks";
 import { Form, Formik } from "formik";
-import * as Yup from "yup";
+import { closeModal } from "../../common/Modal/Modal";
 import Modal from "../../common/Modal/Modal.styled";
 import FormTitle from "../../common/FormTitle/FormTitle.styled";
 import FormFileField from "../../common/FormFileField/FormFileField.styled";
@@ -17,72 +14,54 @@ import LoadingSpinner from "../../common/LoadingSpinner/LoadingSpinner.styled";
 
 const EditUserModal = ({ className: styles }) => {
   const [isLoading, setIsLoading] = useState(false);
-
-  const modalRef = useRef();
   const dispatch = useDispatch();
   const { theme, user } = useAuth();
-
-  function closeModal() {
-    modalRef.current.classList.add("hidden");
-    setTimeout(() => dispatch(setModalClose("EditUserModal")), 500);
-  }
-
-  useEffect(() => {
-    if (user.isGoogleUser) {
-      document.querySelector("#emailInput").disabled = true;
-    }
-  }, []);
 
   const initialValues = {
     name: user.name,
     email: user.email,
     profilePhoto: "",
   };
-
-  const emailRegex = getRegex("email");
-
-  const validationSchema = Yup.object({
-    name: Yup.string()
-      .trim()
-      .min(3, "Name must be at least 3 characters long")
-      .max(50, "Name must be less than 50 characters long")
-      .required("Required *"),
-    email: Yup.string()
-      .trim()
-      .matches(emailRegex, { message: "Invalid email address" })
-      .required("Required *"),
-  });
+  const validationSchema = utils.getValidationSchema(["name", "email"]);
 
   const handleSubmit = (values, formikBag) => {
-    const { setSubmitting, setFieldError, resetForm } = formikBag;
-    const { name, email, profilePhoto } = values;
-
     setIsLoading(true);
 
-    const updates = { name: capitalize(name), email, profilePhoto };
+    const updates = {
+      name: utils.capitalize(values.name),
+      email: values.email.trim(),
+      profilePhoto: values.profilePhoto,
+    };
+
+    const hasUpdates = utils.checkUpdates(initialValues, updates);
+    if (!hasUpdates) {
+      closeModal();
+      setIsLoading(false);
+      return;
+    }
+
     dispatch(updateUser(updates))
       .unwrap()
       .then((value) => {
-        notifySuccess(value.message);
-        resetForm();
+        utils.notify.success(value.message);
         closeModal();
       })
       .catch((error) => {
-        notifyError(error);
+        utils.notify.error(error);
 
         if (error?.response?.status === 409) {
-          setFieldError("email", "Invalid email address");
+          formikBag.setFieldError("email", "Invalid email address");
         }
       })
       .finally(() => {
         setIsLoading(false);
-        setSubmitting(false);
+        formikBag.setSubmitting(false);
       });
   };
 
   return (
     <>
-      <Modal className={styles} closeModal={closeModal} modalRef={modalRef}>
+      <Modal className={styles}>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -97,13 +76,14 @@ const EditUserModal = ({ className: styles }) => {
                 name="name"
                 placeholder="Name"
                 errors={(errors.name && touched.name) || null}
-                isFocused={true}
+                isFocused
               />
               <FormTextField
                 id="emailInput"
                 name="email"
                 placeholder="Email"
                 errors={(errors.email && touched.email) || null}
+                isDisabled={user.isGoogleUser}
               />
               <FormButton
                 type={"submit"}
@@ -120,7 +100,7 @@ const EditUserModal = ({ className: styles }) => {
         </Formik>
       </Modal>
 
-      {isLoading && createPortal(<LoadingSpinner />, document.body)}
+      {isLoading && <LoadingSpinner />}
     </>
   );
 };

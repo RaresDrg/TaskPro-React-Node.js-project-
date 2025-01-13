@@ -91,14 +91,8 @@ const schema = new Schema(
       default: false,
     },
     validationToken: {
-      value: {
-        type: String,
-        default: null,
-      },
-      expiresAt: {
-        type: Date,
-        default: null,
-      },
+      type: Object,
+      default: null,
     },
   },
   { versionKey: false }

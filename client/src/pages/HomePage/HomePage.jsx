@@ -5,7 +5,7 @@ import { LogoOnHomePage as Logo } from "../../components/common/Logo/Logo.styled
 import FormButton from "../../components/common/FormButton/FormButton.styled.js";
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { notifyWarning, notifySuccess } from "../../utils/notify.js";
+import { notify } from "../../utils/notify.js";
 import { useDispatch } from "react-redux";
 import { handleGoogleAuth } from "../../redux/auth/operations.js";
 
@@ -23,7 +23,7 @@ const HomePage = ({ className: styles }) => {
   useEffect(() => {
     const googleAuthFailed = queryParams.get("googleAuthFailed");
     if (googleAuthFailed) {
-      notifyWarning(googleAuthFailed);
+      notify.warning(googleAuthFailed);
       window.history.replaceState({}, document.title, location.pathname);
       return;
     }
@@ -32,8 +32,8 @@ const HomePage = ({ className: styles }) => {
     if (validationToken) {
       dispatch(handleGoogleAuth(validationToken))
         .unwrap()
-        .then((value) => notifySuccess(`Welcome, ${value.data.user.name} !`))
-        .catch(() => notifyWarning("Google authentication failed !"))
+        .then((value) => notify.success(`Welcome, ${value.data.user.name} !`))
+        .catch(() => notify.warning("Google authentication failed !"))
         .finally(() => {
           window.history.replaceState({}, document.title, location.pathname);
         });

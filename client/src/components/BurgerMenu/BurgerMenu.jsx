@@ -1,7 +1,7 @@
 import LeftSidebar from "../LeftSidebar/LeftSidebar.styled";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
-import { setModalClose } from "../../redux/modals/slice";
+import { setBurgerMenuClose } from "../../redux/modals/slice";
 
 const BurgerMenu = ({ className: styles }) => {
   const burgerMenuRef = useRef();
@@ -18,7 +18,7 @@ const BurgerMenu = ({ className: styles }) => {
 
     if (targetedElement || e.currentTarget === e.target) {
       burgerMenuRef.current.classList.add("hidden");
-      setTimeout(() => dispatch(setModalClose("BurgerMenu")), 500);
+      setTimeout(() => dispatch(setBurgerMenuClose()), 500);
     }
   }
 

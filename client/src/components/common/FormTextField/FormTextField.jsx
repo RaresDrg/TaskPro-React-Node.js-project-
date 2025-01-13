@@ -2,18 +2,17 @@ import PropTypes from "prop-types";
 import { Field, ErrorMessage } from "formik";
 
 const FormTextField = (props) => {
-  const { className: styles, id, name, placeholder, errors, isFocused } = props;
-
   return (
-    <div className={`${styles} ${errors ? "onError" : ""}`}>
+    <div className={`${props.className} ${props.errors ? "onError" : ""}`}>
       <Field
         type="text"
-        id={id}
-        name={name}
-        placeholder={placeholder}
-        autoFocus={isFocused}
+        id={props.id}
+        name={props.name}
+        placeholder={props.placeholder}
+        autoFocus={props.isFocused}
+        disabled={props.isDisabled}
       />
-      <ErrorMessage className="error" name={name} component="span" />
+      <ErrorMessage className="error" name={props.name} component="span" />
     </div>
   );
 };
@@ -24,6 +23,7 @@ FormTextField.propTypes = {
   placeholder: PropTypes.string.isRequired,
   errors: PropTypes.bool,
   isFocused: PropTypes.bool,
+  isDisabled: PropTypes.bool,
 };
 
 export default FormTextField;

@@ -1,11 +1,12 @@
 import PropTypes from "prop-types";
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import icons from "../../../assets/icons/icons.svg";
 
-const FormDeadlineField = ({ className: styles, date, handlerFunctions }) => {
-  const { setStartDate, setFieldValue } = handlerFunctions;
+const FormDeadlineField = (props) => {
+  const { className: styles, setFieldValue, deadline = null } = props;
+  const [startDate, setStartDate] = useState(deadline ?? new Date());
 
   //*intrabare: aici daca pun button imi da trigger si la form button
   const DateInput = forwardRef(({ value, onClick }, ref) => (
@@ -15,25 +16,23 @@ const FormDeadlineField = ({ className: styles, date, handlerFunctions }) => {
   ));
   DateInput.displayName = "DateInput";
 
-  const calendarIcon = (
-    <svg>
-      <use href={`${icons}#icon-dropdown`}></use>
-    </svg>
-  );
-
   return (
     <div className={styles}>
       <h3>Deadline</h3>
       <DatePicker
         customInput={<DateInput />}
-        selected={date}
+        selected={startDate}
         dateFormat="MMMM d, yyyy"
         minDate={new Date()}
         calendarStartDay={1}
         showPopperArrow={false}
         popperPlacement="top-start"
         showIcon
-        icon={calendarIcon}
+        icon={
+          <svg>
+            <use href={`${icons}#icon-dropdown`}></use>
+          </svg>
+        }
         toggleCalendarOnIconClick
         onChange={(date) => {
           setStartDate(date);
@@ -45,11 +44,8 @@ const FormDeadlineField = ({ className: styles, date, handlerFunctions }) => {
 };
 
 FormDeadlineField.propTypes = {
-  date: PropTypes.object.isRequired,
-  handlerFunctions: PropTypes.shape({
-    setStartDate: PropTypes.func.isRequired,
-    setFieldValue: PropTypes.func.isRequired,
-  }),
+  setFieldValue: PropTypes.func.isRequired,
+  deadline: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
 };
 
 export default FormDeadlineField;

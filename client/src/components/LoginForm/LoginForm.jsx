@@ -1,9 +1,8 @@
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/auth/operations";
 import { setModalOpen } from "../../redux/modals/slice";
-import { getRegex, notifySuccess, notifyError } from "../../utils/utils";
+import { getValidationSchema, notify } from "../../utils/utils";
 import { Form, Formik } from "formik";
-import * as Yup from "yup";
 import AuthNavigation from "../common/AuthNavigation/AuthNavigation.styled";
 import FormTextField from "../common/FormTextField/FormTextField.styled";
 import FormPasswordField from "../common/FormPasswordField/FormPasswordField.styled";
@@ -16,44 +15,29 @@ const LoginForm = ({ className: styles }) => {
     email: "",
     password: "",
   };
-
-  const emailRegex = getRegex("email");
-
-  const validationSchema = Yup.object({
-    email: Yup.string()
-      .trim()
-      .matches(emailRegex, { message: "Invalid email address" })
-      .required("Required *"),
-    password: Yup.string().required("Required *"),
-  });
+  const validationSchema = getValidationSchema(["email", "loginPassword"]);
 
   const handleSubmit = (values, formikBag) => {
-    const { setSubmitting, setFieldError, resetForm } = formikBag;
     const { email, password } = values;
-
-    setSubmitting(true);
 
     dispatch(login({ email, password }))
       .unwrap()
-      .then((value) => {
-        resetForm();
-        notifySuccess(`Welcome, ${value.data.user.name} !`);
-      })
+      .then((value) => notify.success(`Welcome, ${value.data.user.name} !`))
       .catch((error) => {
-        notifyError(error);
+        notify.error(error);
 
         if (
           error?.response?.data?.message ===
           "There is no account associated with this email address"
         ) {
-          setFieldError("email", "Invalid email address");
+          formikBag.setFieldError("email", "Invalid email address");
         }
 
         if (error?.response?.data?.message === "Password is wrong") {
-          setFieldError("password", "Invalid password");
+          formikBag.setFieldError("password", "Invalid password");
         }
       })
-      .finally(() => setSubmitting(false));
+      .finally(() => formikBag.setSubmitting(false));
   };
 
   return (
@@ -71,7 +55,7 @@ const LoginForm = ({ className: styles }) => {
               name="email"
               placeholder="Email"
               errors={(errors.email && touched.email) || null}
-              isFocused={true}
+              isFocused
             />
             <FormPasswordField
               id="passwordInput"

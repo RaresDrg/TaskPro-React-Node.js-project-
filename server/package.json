@@ -8,7 +8,7 @@
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js",
-    "create-env": "mkdir environment && echo DB_HOST = JWT_SECRET = CLOUD_NAME = API_KEY = API_SECRET = EMAIL = PASSWORD = > environment/.env"
+    "create-env": "echo DB_HOST = SALT_ROUNDS = ACCESS_TOKEN_SECRET = RANDOM_BYTES_LENGTH = COOKIE_PARSER_SECRET = CLOUD_NAME = API_KEY = API_SECRET = EMAIL = PASSWORD = GOOGLE_CLIENT_ID = GOOGLE_CLIENT_SECRET = > .env"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

@@ -3,22 +3,12 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import usersService from "../service/usersService.js";
 
-function handleInvalidIdError(res) {
-  res
-    .status(400)
-    .json({ status: "error", code: 400, message: "invalid id value" });
+function sendSuccessResponse(res, statusCode, responseBody) {
+  res.status(statusCode).json({ status: "success", ...responseBody });
 }
 
-function handleValidationError(res, errorMessage) {
-  res.status(400).json({ status: "error", code: 400, message: errorMessage });
-}
-
-function handleDuplicateEmail(res) {
-  res.status(409).json({
-    status: "error",
-    code: 409,
-    message: "You can't use this email. It belongs to another account",
-  });
+function sendFailureResponse(res, statusCode, message) {
+  res.status(statusCode).json({ status: "failed", message });
 }
 
 function encrypt(text) {
@@ -181,10 +171,19 @@ function selectUserProperties(user) {
   };
 }
 
+function checkDeadline(deadline) {
+  const deadlineDate = new Date(deadline);
+  deadlineDate.setHours(0, 0, 0, 0);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return today <= deadlineDate;
+}
+
 const utils = {
-  handleInvalidIdError,
-  handleValidationError,
-  handleDuplicateEmail,
+  sendSuccessResponse,
+  sendFailureResponse,
   encrypt,
   handleBoardsSchema,
   getBackgroundSrc,
@@ -195,6 +194,7 @@ const utils = {
   getUserByRefreshToken,
   handleRedirect,
   selectUserProperties,
+  checkDeadline,
 };
 
 export default utils;
