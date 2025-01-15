@@ -1,9 +1,7 @@
 import { lazy, Suspense } from "react";
 import LoadingSpinner from "../components/common/LoadingSpinner/LoadingSpinner.styled";
 
-function lazyImport(path) {
-  const LazyComponent = lazy(() => import(path));
-
+function wrap(LazyComponent) {
   return (props) => (
     <Suspense fallback={<LoadingSpinner />}>
       <LazyComponent {...props} />
@@ -12,20 +10,30 @@ function lazyImport(path) {
 }
 
 // Pages
-const HomePage = lazyImport("../pages/HomePage/HomePage.styled");
-const RegisterPage = lazyImport("../pages/RegisterPage/RegisterPage.styled");
-const LoginPage = lazyImport("../pages/LoginPage/LoginPage.styled");
-const ResetPasswordPage = lazyImport(
-  "../pages/ResetPasswordPage/ResetPasswordPage.styled"
+const HomePage = wrap(lazy(() => import("../pages/HomePage/HomePage.styled")));
+const LoginPage = wrap(
+  lazy(() => import("../pages/LoginPage/LoginPage.styled"))
 );
-const DashboardPage = lazyImport("../pages/DashboardPage/DashboardPage.styled");
-const BoardPage = lazyImport("../pages/BoardPage/BoardPage.styled");
-const NotFoundPage = lazyImport("../pages/NotFoundPage/NotFoundPage.styled");
+const RegisterPage = wrap(
+  lazy(() => import("../pages/RegisterPage/RegisterPage.styled"))
+);
+const ResetPasswordPage = wrap(
+  lazy(() => import("../pages/ResetPasswordPage/ResetPasswordPage.styled"))
+);
+const DashboardPage = wrap(
+  lazy(() => import("../pages/DashboardPage/DashboardPage.styled"))
+);
+const BoardPage = wrap(
+  lazy(() => import("../pages/BoardPage/BoardPage.styled"))
+);
+const NotFoundPage = wrap(
+  lazy(() => import("../pages/NotFoundPage/NotFoundPage.styled"))
+);
 
 export {
   HomePage,
-  RegisterPage,
   LoginPage,
+  RegisterPage,
   ResetPasswordPage,
   DashboardPage,
   BoardPage,
@@ -33,45 +41,53 @@ export {
 };
 
 // Modals
-const BurgerMenu = lazyImport("../components/BurgerMenu/BurgerMenu.styled");
-const NeedHelpModal = lazyImport(
-  "../components/Modals/NeedHelpModal/NeedHelpModal.styled"
+const BurgerMenu = wrap(
+  lazy(() => import("../components/BurgerMenu/BurgerMenu.styled"))
 );
-const LogoutModal = lazyImport(
-  "../components/Modals/LogoutModal/LogoutModal.styled"
+const NeedHelpModal = wrap(
+  lazy(() => import("../components/Modals/NeedHelpModal/NeedHelpModal.styled"))
 );
-const EditUserModal = lazyImport(
-  "../components/Modals/EditUserModal/EditUserModal.styled"
+const LogoutModal = wrap(
+  lazy(() => import("../components/Modals/LogoutModal/LogoutModal.styled"))
 );
-const FiltersModal = lazyImport(
-  "../components/Modals/FiltersModal/FiltersModal.styled"
+const EditUserModal = wrap(
+  lazy(() => import("../components/Modals/EditUserModal/EditUserModal.styled"))
 );
-const AddBoardModal = lazyImport(
-  "../components/Modals/AddBoardModal/AddBoardModal"
+const FiltersModal = wrap(
+  lazy(() => import("../components/Modals/FiltersModal/FiltersModal.styled"))
 );
-const DeleteBoardModal = lazyImport(
-  "../components/Modals/DeleteBoardModal/DeleteBoardModal.styled"
+const AddBoardModal = wrap(
+  lazy(() => import("../components/Modals/AddBoardModal/AddBoardModal"))
 );
-const EditBoardModal = lazyImport(
-  "../components/Modals/EditBoardModal/EditBoardModal"
+const DeleteBoardModal = wrap(
+  lazy(() =>
+    import("../components/Modals/DeleteBoardModal/DeleteBoardModal.styled")
+  )
 );
-const AddColumnModal = lazyImport(
-  "../components/Modals/AddColumnModal/AddColumnModal"
+const EditBoardModal = wrap(
+  lazy(() => import("../components/Modals/EditBoardModal/EditBoardModal"))
 );
-const DeleteColumnModal = lazyImport(
-  "../components/Modals/DeleteColumnModal/DeleteColumnModal.styled"
+const AddColumnModal = wrap(
+  lazy(() => import("../components/Modals/AddColumnModal/AddColumnModal"))
 );
-const EditColumnModal = lazyImport(
-  "../components/Modals/EditColumnModal/EditColumnModal"
+const DeleteColumnModal = wrap(
+  lazy(() =>
+    import("../components/Modals/DeleteColumnModal/DeleteColumnModal.styled")
+  )
 );
-const AddCardModal = lazyImport(
-  "../components/Modals/AddCardModal/AddCardModal.styled"
+const EditColumnModal = wrap(
+  lazy(() => import("../components/Modals/EditColumnModal/EditColumnModal"))
 );
-const DeleteCardModal = lazyImport(
-  "../components/Modals/DeleteCardModal/DeleteCardModal.styled"
+const AddCardModal = wrap(
+  lazy(() => import("../components/Modals/AddCardModal/AddCardModal.styled"))
 );
-const EditCardModal = lazyImport(
-  "../components/Modals/EditCardModal/EditCardModal.styled"
+const DeleteCardModal = wrap(
+  lazy(() =>
+    import("../components/Modals/DeleteCardModal/DeleteCardModal.styled")
+  )
+);
+const EditCardModal = wrap(
+  lazy(() => import("../components/Modals/EditCardModal/EditCardModal.styled"))
 );
 
 export {
