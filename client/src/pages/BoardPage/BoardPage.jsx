@@ -9,8 +9,6 @@ import BoardColumns from "../../components/BoardColumns/BoardColumns.styled";
 import FilterBtn from "../../components/FilterBtn/FilterBtn.styled";
 import LoadingSpinner from "../../components/common/LoadingSpinner/LoadingSpinner.styled";
 
-// *intrebare => de ce mi se rerandeaza componenta cand deschid modala de edit sau delete (debugger)
-
 const BoardPage = ({ className: styles }) => {
   const [shouldWait, setShouldWait] = useState(true);
   const dispatch = useDispatch();
@@ -45,7 +43,7 @@ const BoardPage = ({ className: styles }) => {
   return (
     <section
       className={`${styles} animate__animated animate__fadeIn`}
-      key={`${board["_id"]} ${board.background.value}`}
+      key={board.background.value}
     >
       <Container>
         <BoardTitle

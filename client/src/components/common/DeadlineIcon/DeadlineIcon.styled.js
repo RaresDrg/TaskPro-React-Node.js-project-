@@ -12,7 +12,7 @@ const StyledDeadlineIcon = styled(DeadlineIcon)`
   filter: ${({ theme: { theme } }) => {
     const color =
       (theme === "dark" && "var(--green-color)") ||
-      (theme === "light" && "var(--green-color-active)") ||
+      (theme === "light" && "var(--green-color)") ||
       (theme === "violet" && "var(--violet-color)");
 
     return `drop-shadow(0 0 5px ${color}) 

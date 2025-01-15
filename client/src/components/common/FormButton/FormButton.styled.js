@@ -46,14 +46,14 @@ const StyledFormButton = styled(FormButton)`
   }
 
   &:hover:not(:disabled) {
-    transform: scale(1.02);
+    transform: ${(props) =>
+      props.variant === "blackBtn" ? "scale(1.02)" : "scale(1.005)"};
     border: ${(props) =>
       props.variant === "blackBtn"
         ? "1px solid var(--text-color-black)"
         : "1px solid var(--text-color-white)"};
     box-shadow: ${(props) =>
-      (props.variant === "blackBtn" &&
-        "0px 4px 10px 0px var(--text-color-black)") ||
+      (props.variant === "blackBtn" && "0px 0px 18px 0px grey") ||
       (props.variant === "greenBtn" &&
         "0px 0px 18px 0px var(--green-color-active)") ||
       (props.variant === "violetBtn" &&
@@ -64,10 +64,6 @@ const StyledFormButton = styled(FormButton)`
     &:before {
       width: 100%;
     }
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(1.05);
   }
 
   @media (min-width: 768px) {
