@@ -2,11 +2,16 @@ import { lazy, Suspense } from "react";
 import LoadingSpinner from "../components/common/LoadingSpinner/LoadingSpinner.styled";
 
 function wrap(LazyComponent) {
-  return (props) => (
+  const WrappedComponent = (props) => (
     <Suspense fallback={<LoadingSpinner />}>
       <LazyComponent {...props} />
     </Suspense>
   );
+
+  WrappedComponent.displayName =
+    LazyComponent.displayName || LazyComponent.name || "Component";
+
+  return WrappedComponent;
 }
 
 // Pages

@@ -9,10 +9,6 @@ import { notify } from "../../utils/notify.js";
 import { useDispatch } from "react-redux";
 import { handleGoogleAuth } from "../../redux/auth/operations.js";
 
-// todo: vercel
-// "http://localhost:3000/api/users/google-auth"
-// "https://taskproserver.vercel.app/api/users/google-auth";
-
 const HomePage = ({ className: styles }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

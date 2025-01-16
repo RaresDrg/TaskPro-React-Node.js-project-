@@ -5,6 +5,7 @@ import validateUploadedPhoto from "./validateUploadedPhoto.js";
 import validateToken from "./validateToken.js";
 import handleErrorResponses from "./handleErrorResponses.js";
 import handleMissingRoute from "./handleMissingRoute.js";
+import corsMiddleware from "./corsMiddleware.js";
 
 export {
   disableCache,
@@ -14,4 +15,5 @@ export {
   validateToken,
   handleErrorResponses,
   handleMissingRoute,
+  corsMiddleware,
 };

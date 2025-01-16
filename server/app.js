@@ -1,6 +1,5 @@
 import express from "express";
 import logger from "morgan";
-import cors from "cors";
 import cookieParser from "cookie-parser";
 import usersRouter from "./routes/api/users.js";
 import boardsRouter from "./routes/api/boards.js";
@@ -12,12 +11,13 @@ import {
   disableCache,
   handleErrorResponses,
   handleMissingRoute,
+  corsMiddleware,
 } from "./middlewares/middlewares.js";
 
 const app = express();
 
 app.use(logger("dev"));
-app.use(cors({ origin: true, credentials: true }));
+app.use(corsMiddleware);
 app.use(cookieParser(process.env.COOKIE_PARSER_SECRET));
 app.use(express.json());
 app.use(disableCache);

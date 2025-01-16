@@ -1,10 +1,6 @@
 import nodemailer from "nodemailer";
 import "dotenv/config";
 
-// todo: vercel
-// https://taskpro-umber.vercel.app/reset-password?validationToken=${data}
-// http://www.localhost:5173/reset-password?validationToken=${data}
-
 async function sendEmail(variant, user, data) {
   try {
     const transporter = nodemailer.createTransport({

@@ -45,14 +45,14 @@
  *                   properties:
  *                     board:
  *                       type: object
- *                       example: {background: {value: bg-1, sources: { mobile: https://res.cloudinary.com/mobile/bg-1, tablet: https://res.cloudinary.com/tablet/bg-1, desktop: https://res.cloudinary.com/desktop/bg-1, mobile_2x: https://res.cloudinary.com/mobile_2x/bg-1, tablet_2x: https://res.cloudinary.com/tablet_2x/bg-1, desktop_2x: https://res.cloudinary.com/desktop_2x/bg-1 } }, _id: 674b0617dc99327fbd2cf12b, title: Project One, icon: icon-project, columns: [{title: Column 1, _id: 856b0617dc99327fbd2cf12b, cards: [{_id: 67230674dc99327fbd2cf654, title: Card 1, description: The description of task 1, priority: low, deadline: Sat Nov 30 2024 } ] } ] }
+ *                       example: {background: {value: bg-1, sources: { mobile: https://res.cloudinary.com/mobile/bg-1, tablet: https://res.cloudinary.com/tablet/bg-1, desktop: https://res.cloudinary.com/desktop/bg-1, mobile_2x: https://res.cloudinary.com/mobile_2x/bg-1, tablet_2x: https://res.cloudinary.com/tablet_2x/bg-1, desktop_2x: https://res.cloudinary.com/desktop_2x/bg-1 } }, _id: 674b0617dc99327fbd2cf12b, title: Project One, icon: icon-project, columns: [] }
  *                     boardsList:
  *                       type: array
- *                       example: [{_id: 674b0617dc99327fbd2cf61b, title: Project One, icon: icon-project}, {_id: 321b0617dc99327fbd2cf61b, title: Project Two, icon: icon-lightning}, {_id: 456b0617dc99327fbd2cf61b, title: Project THREE, icon: icon-puzzlePiece}]
+ *                       example: [{_id: 674b0617dc99327fbd2cf61b, title: Project One, icon: icon-project}, {_id: 321b0617dc99327fbd2cf61b, title: Project Two, icon: icon-lightning}, {_id: 456b0617dc99327fbd2cf61b, title: Project Three, icon: icon-puzzlePiece}]
  *       400:
  *         description: Validation error - the submitted data does not meet the requirements
  *       401:
- *        description: Unauthorized - missing or invalid token
+ *        description: Unauthorized - missing or invalid access cookie/refresh cookie pair
  *       409:
  *         description: Conflict - the title you want to assign is already in use by another board
  *       500:
@@ -78,7 +78,7 @@
  *                   type: array
  *                   example: [{_id: 674b0617dc99327fbd2cf61b, title: Project One, icon: icon-project}, {_id: 321b0617dc99327fbd2cf61b, title: Project Two, icon: icon-lightning}, {_id: 456b0617dc99327fbd2cf61b, title: Project THREE, icon: icon-puzzlePiece}]
  *       401:
- *        description: Unauthorized - missing or invalid token
+ *         description: Unauthorized - missing or invalid access cookie/refresh cookie pair
  *       500:
  *         description: Internal server error
  */
@@ -105,11 +105,11 @@
  *               properties:
  *                 data:
  *                   type: object
- *                   example: {background: {value: bg-1, sources: { mobile: https://res.cloudinary.com/mobile/bg-1, tablet: https://res.cloudinary.com/tablet/bg-1, desktop: https://res.cloudinary.com/desktop/bg-1, mobile_2x: https://res.cloudinary.com/mobile_2x/bg-1, tablet_2x: https://res.cloudinary.com/tablet_2x/bg-1, desktop_2x: https://res.cloudinary.com/desktop_2x/bg-1 } }, _id: 674b0617dc99327fbd2cf12b, title: Project One, icon: icon-project, columns: [{title: Column 1, _id: 856b0617dc99327fbd2cf12b, cards: [{_id: 67230674dc99327fbd2cf654, title: Card 1, description: The description of task 1, priority: low, deadline: Sat Nov 30 2024 } ] } ] }
+ *                   example: {background: {value: bg-1, sources: { mobile: https://res.cloudinary.com/mobile/bg-1, tablet: https://res.cloudinary.com/tablet/bg-1, desktop: https://res.cloudinary.com/desktop/bg-1, mobile_2x: https://res.cloudinary.com/mobile_2x/bg-1, tablet_2x: https://res.cloudinary.com/tablet_2x/bg-1, desktop_2x: https://res.cloudinary.com/desktop_2x/bg-1 } }, _id: 674b0617dc99327fbd2cf12b, title: Project One, icon: icon-project, columns: [] }
  *       400:
  *         description: Cast Error - invalid ID value
  *       401:
- *         description: Unauthorized - missing or invalid token
+ *         description: Unauthorized - missing or invalid access cookie/refresh cookie pair
  *       404:
  *         description: Not found
  *       500:
@@ -143,7 +143,7 @@
  *       400:
  *         description: Cast Error - invalid ID value
  *       401:
- *         description: Unauthorized - missing or invalid token
+ *         description: Unauthorized - missing or invalid access cookie/refresh cookie pair
  *       404:
  *         description: Not found
  *       500:
@@ -203,7 +203,7 @@
  *                     board:
  *                       type: object
  *                       description: The updated board
- *                       example: {background: {value: bg-11, sources: { mobile: https://res.cloudinary.com/mobile/bg-11, tablet: https://res.cloudinary.com/tablet/bg-11, desktop: https://res.cloudinary.com/desktop/bg-11, mobile_2x: https://res.cloudinary.com/mobile_2x/bg-11, tablet_2x: https://res.cloudinary.com/tablet_2x/bg-11, desktop_2x: https://res.cloudinary.com/desktop_2x/bg-11 } }, _id: 674b0617dc99327fbd2cf12b, title: Project X, icon: icon-star, columns: [{title: Column 1, _id: 856b0617dc99327fbd2cf12b, cards: [{_id: 67230674dc99327fbd2cf654, title: Card 1, description: The description of task 1, priority: low, deadline: Sat Nov 30 2024 } ] } ] }
+ *                       example: {background: {value: bg-11, sources: { mobile: https://res.cloudinary.com/mobile/bg-11, tablet: https://res.cloudinary.com/tablet/bg-11, desktop: https://res.cloudinary.com/desktop/bg-11, mobile_2x: https://res.cloudinary.com/mobile_2x/bg-11, tablet_2x: https://res.cloudinary.com/tablet_2x/bg-11, desktop_2x: https://res.cloudinary.com/desktop_2x/bg-11 } }, _id: 674b0617dc99327fbd2cf12b, title: Project X, icon: icon-star, columns: [] }
  *                     boardsList:
  *                       type: array
  *                       description: Updated boards list
@@ -214,7 +214,7 @@
  *            - **Cast Error**: invalid ID value
  *            - **Validation error**: the submitted data does not meet the requirements
  *       401:
- *         description: Unauthorized - missing or invalid token
+ *         description: Unauthorized - missing or invalid access cookie/refresh cookie pair
  *       404:
  *         description: Not found
  *       409:
@@ -261,21 +261,17 @@
  *                 data:
  *                   type: object
  *                   properties:
- *                     column:
- *                       type: object
- *                       description: The column just added
- *                       example: {title: Column X, _id: 123b0617dc99327fbd2cf12b, cards: [] }
  *                     columns:
  *                       type: array
  *                       description: Updated board's columns
- *                       example: [{title: Column 1, _id: 856b0617dc99327fbd2cf12b, cards: [{_id: 67230674dc99327fbd2cf654, title: Card 1, description: The description of task 1, priority: low, deadline: Sat Nov 30 2024 } ] }, {title: Column 2, _id: 856b0617dc99327fbd2cf12b, cards: [{_id: 67230674dc99327fbd2cf654, title: Card 2, description: The description of task 2, priority: high, deadline: Sat Nov 30 2024 } ] }, {title: Column X, _id: 123b0617dc99327fbd2cf12b, cards: [] } ]
+ *                       example: [{title: Column 1, _id: 856b0617dc99327fbd2cf12b, cards: [] }, {title: Column 2, _id: 856b0617dc99327fbd2cf12b, cards: [] }, {title: Column X, _id: 123b0617dc99327fbd2cf12b, cards: [] } ]
  *       400:
  *         description: >
  *           Two possible cases:
  *            - **Cast Error**: invalid ID value
  *            - **Validation error**: missing or invalid data
  *       401:
- *         description: Unauthorized - missing or invalid token
+ *         description: Unauthorized - missing or invalid access cookie/refresh cookie pair
  *       404:
  *         description: Not found
  *       409:
@@ -306,7 +302,7 @@
  *               columns:
  *                 type: array
  *                 description: The columns to be updated
- *                 example: [{title: Column 1, _id: 856b0617dc99327fbd2cf12b, cards: [{_id: 67230674dc99327fbd2c1234, title: Card 1, description: The description of task 1, priority: low, deadline: Sat Nov 30 2024 } ] }, {title: Column 2, _id: 123b0617dc99327fbd2cf30c, cards: [{_id: 67230674dc99327fbd2cf654, title: Card 2, description: The description of task 2, priority: high, deadline: Sat Nov 30 2024 } ] } ]
+ *                 example: [{title: Column 1, _id: 856b0617dc99327fbd2cf12b, cards: [] }, {title: Column 2, _id: 123b0617dc99327fbd2cf30c, cards: [] } ]
  *     responses:
  *       200:
  *         description: Board's columns updated successfully
@@ -318,14 +314,14 @@
  *                 data:
  *                   type: array
  *                   description: The updated board's columns
- *                   example: [{title: Column 1, _id: 856b0617dc99327fbd2cf12b, cards: [{_id: 67230674dc99327fbd2cf654, title: Card 1, description: The description of task 1, priority: low, deadline: Sat Nov 30 2024 } ] }, {title: Column 2, _id: 856b0617dc99327fbd2cf12b, cards: [{_id: 67230674dc99327fbd2cf654, title: Card 2, description: The description of task 2, priority: high, deadline: Sat Nov 30 2024 } ] } ]
+ *                   example: [{title: Column 1, _id: 856b0617dc99327fbd2cf12b, cards: [] }, {title: Column 2, _id: 856b0617dc99327fbd2cf12b, cards: [] } ]
  *       400:
  *         description: >
  *           Two possible cases:
  *            - **Cast Error**: invalid ID value
  *            - **Validation error**: missing or invalid data
  *       401:
- *         description: Unauthorized - missing or invalid token
+ *         description: Unauthorized - missing or invalid access cookie/refresh cookie pair
  *       404:
  *         description: Not found
  *       500:
@@ -362,11 +358,11 @@
  *                     columns:
  *                       type: array
  *                       description: Updated board's columns
- *                       example: [{title: Column 1, _id: 856b0617dc99327fbd2cf12b, cards: [{_id: 67230674dc99327fbd2cf654, title: Card 1, description: The description of task 1, priority: low, deadline: Sat Nov 30 2024 } ] }, {title: Column 2, _id: 856b0617dc99327fbd2cf12b, cards: [{_id: 67230674dc99327fbd2cf654, title: Card 2, description: The description of task 2, priority: high, deadline: Sat Nov 30 2024 } ] }, {title: Column X, _id: 123b0617dc99327fbd2cf12b, cards: [] } ]
+ *                       example: [{title: Column 1, _id: 856b0617dc99327fbd2cf12b, cards: [] }, {title: Column 2, _id: 856b0617dc99327fbd2cf12b, cards: [] }, {title: Column X, _id: 123b0617dc99327fbd2cf12b, cards: [] } ]
  *       400:
  *         description: Cast Error - invalid board's or column's ID
  *       401:
- *         description: Unauthorized - missing or invalid token
+ *         description: Unauthorized - missing or invalid access cookie/refresh cookie pair
  *       404:
  *         description: Not found
  *       500:
@@ -415,21 +411,17 @@
  *                 data:
  *                   type: object
  *                   properties:
- *                     column:
- *                       type: object
- *                       description: The column just updated
- *                       example: {title: Column New, _id: 123b0617dc99327fbd2cf12b, cards: [] }
  *                     columns:
  *                       type: array
  *                       description: Updated board's columns
- *                       example: [{title: Column New, _id: 856b0617dc99327fbd2cf12b, cards: [{_id: 67230674dc99327fbd2cf654, title: Card 1, description: The description of task 1, priority: low, deadline: Sat Nov 30 2024 } ] }, {title: Column 2, _id: 856b0617dc99327fbd2cf12b, cards: [{_id: 67230674dc99327fbd2cf654, title: Card 2, description: The description of task 2, priority: high, deadline: Sat Nov 30 2024 } ] }, {title: Column X, _id: 123b0617dc99327fbd2cf12b, cards: [] } ]
+ *                       example: [{title: Column New, _id: 856b0617dc99327fbd2cf12b, cards: [] }, {title: Column 2, _id: 856b0617dc99327fbd2cf12b, cards: [] }, {title: Column X, _id: 123b0617dc99327fbd2cf12b, cards: [] } ]
  *       400:
  *         description: >
  *           Two possible cases:
  *            - **Cast Error**: invalid board's or column's ID
  *            - **Validation error**: missing or invalid data
  *       401:
- *         description: Unauthorized - missing or invalid token
+ *         description: Unauthorized - missing or invalid access cookie/refresh cookie pair
  *       404:
  *         description: Not found
  *       409:
@@ -508,7 +500,7 @@
  *            - **Cast Error**: invalid ID value
  *            - **Validation error**: missing or invalid data
  *       401:
- *         description: Unauthorized - missing or invalid token
+ *         description: Unauthorized - missing or invalid access cookie/refresh cookie pair
  *       404:
  *         description: Not found
  *       409:
@@ -556,7 +548,7 @@
  *       400:
  *         description: Cast Error - invalid board's, column's or card's ID
  *       401:
- *         description: Unauthorized - missing or invalid token
+ *         description: Unauthorized - missing or invalid access cookie/refresh cookie pair
  *       404:
  *         description: Not found
  *       500:
@@ -637,7 +629,7 @@
  *            - **Cast Error**: invalid ID value
  *            - **Validation error**: missing or invalid data
  *       401:
- *         description: Unauthorized - missing or invalid token
+ *         description: Unauthorized - missing or invalid access cookie/refresh cookie pair
  *       404:
  *         description: Not found
  *       409:

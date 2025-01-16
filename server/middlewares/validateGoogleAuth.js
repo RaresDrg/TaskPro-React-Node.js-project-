@@ -4,10 +4,6 @@ import usersService from "../service/usersService.js";
 import utils from "../utils/utils.js";
 import "dotenv/config";
 
-// todo: vercel
-// "http://localhost:3000/api/users/google-auth/callback"
-// "https://taskproserver.vercel.app/api/users/google-auth/callback";
-
 const opts = {
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,

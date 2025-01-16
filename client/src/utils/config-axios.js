@@ -1,10 +1,6 @@
 import axios from "axios";
 import { handleForceLogout } from "./utils";
 
-// todo: vercel
-// "http://localhost:3000"
-// "https://taskproserver.vercel.app";
-
 const apiClient = axios.create({
   baseURL: "https://taskproserver.vercel.app",
   withCredentials: true,

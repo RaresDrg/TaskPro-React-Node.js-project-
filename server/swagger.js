@@ -3,8 +3,6 @@ import utils from "./utils/utils.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// todo: la sfarsit mai verific ce inseamna filename,etc si mai verific in ui toate datele, daca mai trb sa agaug ceva
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const apiDocsDir = path.join(__dirname, "routes", "swaggerDocs");
@@ -16,11 +14,7 @@ const options = {
       title: "TaskPro API",
       version: "1.0.0",
       description:
-        '<hr></hr><strong>Base URL:</strong> => https://taskproserver.vercel.app <br></br> <strong>Important:</strong> In order to access this API, credentials must be included in the requests. Please ensure that <b>"withCredentials"</b> is set to <b>true</b>. Authentication is managed through HttpOnly cookies, which include a JWT access token (valid for 15 minutes) and a refresh token (valid for 1 day).<br></br>',
-      contact: {
-        name: "Rares Dragan",
-        url: "https://github.com/RaresDrg",
-      },
+        "<hr></hr><strong>Description:</strong> TaskPro is an intuitive Kanban board application designed to help users organize and manage their projects and tasks efficiently. Inspired by tools like Trello or Jira, TaskPro offers a seamless experience for tracking progress and staying productive. <br></br> <strong>Important:</strong> When it comes to logging into the app, users have two choices: either the traditional login/password or the Google authentication method. Once the user has successfully logged in using one of the two methods, they will depend on the token pair (accessToken, refreshToken) received in response to authentication to access <strong>protected endpoints</strong>. These tokens are sent as <strong>server-side cookies</strong>, so credentials must be included in the requests. <br></br><strong>Base URL:</strong> => <a href='https://taskproserver.vercel.app'>https://taskproserver.vercel.app<a/> ",
     },
     tags: [
       { name: "Users" },
@@ -64,6 +58,27 @@ const options = {
               description: "User's theme preference",
               enum: ["light", "dark", "violet"],
               example: "light",
+            },
+            isGoogleUser: {
+              type: "boolean",
+              description:
+                "User type: true => google account, false => login/password account",
+              example: false,
+            },
+            accessToken: {
+              type: "string",
+              description:
+                "It's a JSON Web Token (JWT) used for authentication strategy. Expiry time: 15 min",
+            },
+            refreshToken: {
+              type: "string",
+              description:
+                "It's a token used for authentication strategy: it refreshes the access token when it expires. Expiry time: 1 day",
+            },
+            validationToken: {
+              type: "string",
+              description:
+                "It's a token used for two purposes: Google authentication and password reset. Expiry time: 15 minutes.",
             },
           },
           required: ["name", "email", "password"],

@@ -156,9 +156,7 @@ function handleRedirect(res, variant, validationToken = null) {
     searchParams = `googleAuthSuccess=${validationToken}`;
   }
 
-  // todo: vercel
   res.redirect(`https://taskpro-umber.vercel.app/?${searchParams}`);
-  // res.redirect(`http://localhost:5173/?${searchParams}`);
 }
 
 function selectUserProperties(user) {
